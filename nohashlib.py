@@ -1,6 +1,5 @@
 import os
 import time
-import hashlib
 from datetime import datetime
 import random
 
@@ -18,16 +17,14 @@ products = {
 
 def create_account():
     """
-    Creates a new user account and stores the username and hashed password in the users dictionary.
+    Creates a new user account and stores the username and password in the users dictionary.
     """
     username = input("Enter your username: ")
     password = input("Enter your password: ")
     password2 = input("Reconfirm your password: ")
     if password == password2:
         try:
-            hashed_password = hashlib.pbkdf2_hmac(
-                'sha256', password.encode('utf-8'), b'salt', 100000)
-            users[username] = hashed_password
+            users[username] = password
             print("Account created successfully!\n")
         except Exception as e:
             print(f"An error occurred while creating your account: {e}")
@@ -44,9 +41,7 @@ def sign_in():
     while attempts < 3:
         username = input("Enter your username: ")
         password = input("Enter your password: ")
-        if username in users and hashlib.pbkdf2_hmac(
-            'sha256', password.encode('utf-8'),
-                b'salt', 100000) == users[username]:
+        if username in users and password == users[username]:
             print("Login successful!")
             print("[+] Date:", date.strftime("%d-%m-%Y %I:%M"))
             return True
@@ -55,6 +50,7 @@ def sign_in():
             attempts += 1
     print("Too many login attempts!")
     return False
+
 
 
 def deposit():
@@ -175,8 +171,6 @@ def sign_out():
     return False
 
 
-
-
 def main():
     """
     The main function.
@@ -238,4 +232,3 @@ def main():
 main()
 
 
-# add def function about checkng the product info so that the user can check the product info before buying it
