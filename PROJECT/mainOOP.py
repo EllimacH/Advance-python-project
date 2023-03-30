@@ -10,7 +10,6 @@ def main():
     # create an instance of the System class
     system = System()
     web = Web()
-    # load data
     user = None
     print("Welcome to the Internet Service Provider (B.A.T.E) system!")
     while True:
@@ -25,29 +24,29 @@ def main():
             choice = input("Enter your choice: ")
             if choice == "1":
                 system.clear_screen()
-                System.buy_product(user)
+                system.buy_product(user)
                 input("Press Enter to continue...")
                 system.clear_screen()
             elif choice == "2":
                 system.clear_screen()
-                System.check_balance(user)
+                system.check_balance(user)
                 input("Press Enter to continue...")
                 system.clear_screen()
             elif choice == "3":
                 system.clear_screen()
-                System.check_plan(user)
+                system.check_plan(user)
                 input("Press Enter to continue...")
                 system.clear_screen()
             elif choice == "4":
                 system.clear_screen()
-                System.top_up(user)
+                system.top_up(user)
                 input("Press Enter to continue...")
                 system.clear_screen()
             elif choice == "5":
                 user = system.sign_out()
             elif choice == "6":
                 system.clear_screen()
-                System.check_product()
+                system.check_product()
                 input("Press Enter to continue...")
                 system.clear_screen()
             elif choice == "7":

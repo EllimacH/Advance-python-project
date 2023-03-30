@@ -7,7 +7,6 @@ from domains.product import Product
 from domains.user import User
 
 
-
 class System:
     def __init__(self):
         self.users = {}
@@ -19,13 +18,29 @@ class System:
         ]
 
     def create_account(self):
+        # while True:
+        #     username = input("Enter your username: ")
+        #     if not os.path.isfile("users.txt"):
+        #         with open("users.txt", "w") as f:
+        #             f.write("username,password,balance,product_id\n")
+        #     with open("users.txt", "r") as f:
+        #         for line in f:
+        #             line = line.rstrip("\n").split(",")
+        #         if username == line[0]:
+        #             print("Username already exists! Please try again.\n")
+        #             return False
+
         while True:
             username = input("Enter your username: ")
-            if username in self.users:
-                print("Username already exists! Please try again.\n")
-            else:
-                break
-        while True:
+            if not os.path.isfile("users.txt"):
+                with open("users.txt", "w") as f:
+                    f.write("username,password,balance,product_id \n")
+            with open("users.txt", "r") as f:
+                for line in f:
+                    line = line.rstrip("\n").split(",")
+                    if username == line[0]:
+                        print("Username already exists! Please try again.\n")
+                        return False
             global password
             password = input("Enter your password: ")
             if len(password) < 8:
@@ -44,16 +59,6 @@ class System:
                 print(f"An error occurred while creating your account: {e}")
         else:
             print("Invalid information! Please try again.\n")
- 
-    def load_users(self):
-        with open("users.txt", "r") as f:
-            for line in f:
-                parts = line.strip().split(",", maxsplit=1) # split at most 1 time
-                if len(parts) == 2: # check the number of parts
-                    username, password = parts
-                    self.users[username] = User(username, password)
-                else:
-                    print(f"Invalid format in users.txt: {line.strip()}")
 
     def sign_in(self):
         attempts = 0
@@ -99,6 +104,29 @@ class System:
             print("Invalid input")
 
     def buy_product(self, user):
+        # try:
+        #     with open("users.txt", "r") as f:
+        #         lines = f.readlines()
+        #     for i in range(len(lines)):
+        #         line = lines[i].rstrip("\n").split(",")
+        #         if line[0] == username:
+        #             balance = int(line[2])
+        #             if len(line) >= 4 and line[3] != '0':
+        #                 print("You have already bought a product!")
+        #                 return
+        try:
+            with open("users.txt", "r") as f:
+                lines = f.readlines()
+            for line in lines:
+                fields = line.strip().split(',')
+                if fields[0] == user.username:
+                    user.balance = int(fields[2])
+                    if len(fields) >= 4 and fields[3] != '0':
+                        print("You have already bought a product!")
+                        return
+        except:
+            pass
+
         print("Choose a product to buy:")
         for product in self.products:
             print(
@@ -118,8 +146,6 @@ class System:
         else:
             print("Not enough balance!")
 
-            
-
     def check_balance(self, user):
         print(f"Your balance is {user.balance} VND")
 
@@ -127,7 +153,13 @@ class System:
         if user.current_plan:
             print(f"Your current plan is {user.current_plan.name}")
         else:
-            print("You don't have any plan yet!")
+            with open("users.txt", "r") as f:
+                lines = f.readlines()
+            for line in lines:
+                fields = line.strip().split(',')
+                if fields[0] == user.username:
+                    if len(fields) < 4 or not fields[3]:
+                        print("You have no plan at the moment.")
 
     # def top_up(self, user):
     #     while True:
@@ -174,17 +206,11 @@ class System:
                 else:
                     f.write(line)
 
-
         print("Top-up successfully!")
         print(f"Your new balance is {user.balance} VND")
-
-
 
     def clear_screen(self):
         if os.name == "nt":
             os.system("cls")
         else:
             os.system("clear")
-
-
-
