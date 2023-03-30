@@ -1,14 +1,16 @@
 import time
 import re
 from os import system, name
+import os
+
 
 class Web:
     def __init__(self):
         self.domain_list = []
         self.service = None
         self.vpn_package = None
-    
-    #Register a new domain and IP address
+
+    # Register a new domain and IP address
     def setDomain(self, domain):
         print("")
         print("1. Register a new domain")
@@ -29,7 +31,8 @@ class Web:
             print("How to type your IP address: a.b.c.d (a, b, c, d are numbers from 0 to 255)")
             ip_input = input("Type your IP address: ")
             while True:
-                if re.match (r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', ip_input):
+                if re.match(
+                        r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', ip_input):
                     break
                 else:
                     print("Invalid IP address")
@@ -53,18 +56,18 @@ class Web:
             time.sleep(1)
             print("Your domain has been registered successfully")
 
-            self.domain_list += [{"Domain": domain_input, 
-                                    "IP": ip_input,
-                                    "Password": password}]
+            self.domain_list += [{"Domain": domain_input,
+                                  "IP": ip_input,
+                                  "Password": password}]
             time.sleep(1)
             print("")
             input("Press Enter to continue...")
         else:
             print("")
             input("Press Enter to continue...")
-        
 
-    #Choose and buy a service package
+    # Choose and buy a service package
+
     def buy_service(self):
         print("")
         print("1. Buy a service package")
@@ -81,7 +84,7 @@ class Web:
             choose_service = int(input("Choose your package: "))
             match choose_service:
                 case 1:
-                    self.service = "Basic Package" 
+                    self.service = "Basic Package"
                 case 2:
                     self.service = "Advanced Package"
                 case 3:
@@ -93,7 +96,7 @@ class Web:
                 case _:
                     print("You have not entered a valid package")
                     choose_service = int(input("Choose your package: "))
-            
+
             print("Payment is in progress, please wait...")
             time.sleep(1)
             print("")
@@ -105,8 +108,8 @@ class Web:
             print("")
             input("Press Enter to continue...")
 
+    # Check domain info
 
-    #Check domain info
     def domain_info(self):
         print("")
         print(" == Domain Info == ")
@@ -139,9 +142,8 @@ class Web:
                     break
             break
 
+    # Buy VPN
 
-
-    #Buy VPN
     def vpn(self):
         print("")
         print("1. Buy a VPN package")
@@ -157,7 +159,7 @@ class Web:
             choose_vpn = int(input("Choose your package: "))
             match choose_vpn:
                 case 1:
-                    self.vpn_package = "Basic Package" 
+                    self.vpn_package = "Basic Package"
                 case 2:
                     self.vpn_package = "Advanced Package"
                 case 3:
@@ -169,7 +171,7 @@ class Web:
                 case _:
                     print("You have not entered a valid package")
                     choose_vpn = int(input("Choose your package: "))
-                
+
             print("Payment is in progress, please wait...")
             time.sleep(1)
             print("")
@@ -181,8 +183,8 @@ class Web:
             print("")
             input("Press Enter to continue...")
 
+    # Display VPN info
 
-    #Display VPN info
     def vpn_info(self):
         print(f"VPN Package: {self.vpn_package}")
         while True:
@@ -195,16 +197,14 @@ class Web:
         print("")
         input("Press Enter to continue...")
 
-
     def clear(self):
-        if name == 'nt':
-            _ = system('cls')
+        if os.name == "nt":
+            os.system("cls")
         else:
-            _ = system('clear')
+            os.system("clear")
 
 
-    #Main menu (Interface)
-    def main(self):
+    def web_domain_services(self):
         while True:
             print("")
             print(" == Main Menu == ")
@@ -236,9 +236,4 @@ class Web:
                     print("You have not entered a valid option")
                     self.clear()
                     choose = int(input("Choose your option: "))
-
-if __name__ == "__main__":
-    web = Web()
-    web.main()
-
 

@@ -1,29 +1,11 @@
+import re
 import os
 import time
 import hashlib
 from datetime import datetime
+from domains.product import Product
+from domains.user import User
 
-
-class User:
-    def __init__(self, username, password, balance=0, current_plan=None):
-        self.username = username
-        self.password = hashlib.pbkdf2_hmac(
-            'sha256', password.encode('utf-8'), b'salt', 100000)
-        self.balance = balance
-        self.current_plan = current_plan
-
-    def check_password(self, password):
-        return self.password == hashlib.pbkdf2_hmac(
-            'sha256', password.encode('utf-8'), b'salt', 100000)
-
-
-class Product:
-    def __init__(self, id, name, price, gb, months):
-        self.id = id
-        self.name = name
-        self.price = price
-        self.gb = gb
-        self.months = months
 
 
 class System:
@@ -44,6 +26,7 @@ class System:
             else:
                 break
         while True:
+            global password
             password = input("Enter your password: ")
             if len(password) < 8:
                 print("Password must be 8 or more characters! Please try again.")
@@ -61,15 +44,16 @@ class System:
                 print(f"An error occurred while creating your account: {e}")
         else:
             print("Invalid information! Please try again.\n")
-
-    # def load_users(self):
-    #     with open("users.txt", "r") as f:
-    #         for line in f:
-    #             line = line.rstrip("\n").split(",")
-    #             username = line[0]
-    #             password = line[1]
-    #             user = User(username, password)
-    #             self.users[username] = user
+ 
+    def load_users(self):
+        with open("users.txt", "r") as f:
+            for line in f:
+                parts = line.strip().split(",", maxsplit=1) # split at most 1 time
+                if len(parts) == 2: # check the number of parts
+                    username, password = parts
+                    self.users[username] = User(username, password)
+                else:
+                    print(f"Invalid format in users.txt: {line.strip()}")
 
     def sign_in(self):
         attempts = 0
@@ -134,6 +118,8 @@ class System:
         else:
             print("Not enough balance!")
 
+            
+
     def check_balance(self, user):
         print(f"Your balance is {user.balance} VND")
 
@@ -143,6 +129,34 @@ class System:
         else:
             print("You don't have any plan yet!")
 
+    # def top_up(self, user):
+    #     while True:
+    #         try:
+    #             amount = int(input("Enter amount to top_up: "))
+    #             break
+    #         except:
+    #             print("Invalid amount! Please try again.")
+    #     with open("users.txt", "r") as f:
+    #         lines = f.readlines()
+    #     for i in range(len(lines)):
+    #         line = lines[i].rstrip("\n").split(",")
+    #         if line[0] == user.username:
+    #             if len(line) >= 3: # check the length of the line list
+    #                 user.balance = int(line[2])
+    #             else:
+    #                 user.balance = 0 # set balance to zero if there are not enough elements
+    #             break
+    #     user.balance += amount
+
+    #     with open("users.txt", "r") as f:
+    #         lines = f.readlines()
+    #     with open("users.txt", "w") as f:
+    #         for line in lines:
+    #             if line.startswith(user.username):
+    #                 f.write(f"{user.username},{user.password},{user.balance}\n")
+    #             else:
+    #                 f.write(line)
+
     def top_up(self, user):
         while True:
             try:
@@ -151,8 +165,20 @@ class System:
             except:
                 print("Invalid amount! Please try again.")
         user.balance += amount
+        with open("users.txt", "r") as f:
+            lines = f.readlines()
+        with open("users.txt", "w") as f:
+            for line in lines:
+                if line.startswith(user.username):
+                    f.write(f"{user.username},{password},{user.balance}\n")
+                else:
+                    f.write(line)
+
+
         print("Top-up successfully!")
         print(f"Your new balance is {user.balance} VND")
+
+
 
     def clear_screen(self):
         if os.name == "nt":
@@ -160,67 +186,5 @@ class System:
         else:
             os.system("clear")
 
-    def main(self):
-        # self.load_users()
-        user = None
-        print("Welcome to the Internet Service Provider (B.A.T.E) system!")
-        while True:
-            if user:
-                print("1. Buy product")
-                print("2. Check balance")
-                print("3. Check current plan")
-                print("4. Top-up")
-                print("5. Sign out")
-                print("6. Check product")
-                choice = input("Enter your choice: ")
-                if choice == "1":
-                    self.clear_screen()
-                    self.buy_product(user)
-                    input("Press Enter to continue...")
-                    self.clear_screen()
-                elif choice == "2":
-                    self.clear_screen()            
-                    self.check_balance(user)
-                    input("Press Enter to continue...")
-                    self.clear_screen()
-                elif choice == "3":
-                    self.clear_screen()
-                    self.check_plan(user)
-                    input("Press Enter to continue...")
-                    self.clear_screen()
-                elif choice == "4":
-                    self.clear_screen()
-                    self.top_up(user)
-                    input("Press Enter to continue...")
-                    self.clear_screen()
-                elif choice == "5":
-                    user = self.sign_out()
-                elif choice == "6":
-                    self.clear_screen()
-                    self.check_product()
-                    input("Press Enter to continue...")
-                    self.clear_screen()
 
-                else:
-                    print("Invalid choice! Please try again.")
-                    self.clear_screen( )
-            else:
-                print("1. Create account")
-                print("2. Sign in")
-                print("3. Exit")
-                choice = input("Enter your choice: ")
-                self.clear_screen()
-                if choice == "1":
-                    self.create_account()
-                elif choice == "2":
-                    user = self.sign_in()
-                elif choice == "3":
-                    print("Goodbye!")
-                    break
-                else:
-                    print("Invalid choice! Please try again.")
-
-
-if __name__ == "__main__":
-    System().main()
 
