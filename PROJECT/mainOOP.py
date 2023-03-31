@@ -5,6 +5,8 @@ from datetime import datetime
 from domains.system import System
 from domains.web import Web
 
+#array thingy
+users = []
 
 def main():
     # create an instance of the System class
@@ -97,3 +99,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# sign in process: access user through users list and check if the password is correct
+# check balance test: access user object through users list 
+# change to only using txt files as saving data, access temporary data through memory 

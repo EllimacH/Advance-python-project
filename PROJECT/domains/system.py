@@ -6,7 +6,6 @@ from datetime import datetime
 from domains.product import Product
 from domains.user import User
 
-
 class System:
     def __init__(self):
         self.users = {}
@@ -17,19 +16,7 @@ class System:
             Product(4, 'Bronze', 50000, 5, 1)
         ]
 
-    def create_account(self):
-        # while True:
-        #     username = input("Enter your username: ")
-        #     if not os.path.isfile("users.txt"):
-        #         with open("users.txt", "w") as f:
-        #             f.write("username,password,balance,product_id\n")
-        #     with open("users.txt", "r") as f:
-        #         for line in f:
-        #             line = line.rstrip("\n").split(",")
-        #         if username == line[0]:
-        #             print("Username already exists! Please try again.\n")
-        #             return False
-
+    def create_account(self, users: list):
         while True:
             username = input("Enter your username: ")
             if not os.path.isfile("users.txt"):
@@ -51,7 +38,9 @@ class System:
         if password == password2:
             try:
                 user = User(username, password)
-                self.users[username] = user
+                # self.users[username] = user
+                # adding user to users array
+                users.append(user)
                 print("Account created successfully!\n")
                 with open("users.txt", "a") as f:
                     f.write(username+","+password+"\n")
@@ -65,10 +54,21 @@ class System:
         while attempts < 3:
             username = input("Enter your username: ")
             password = input("Enter your password: ")
-            if username in self.users and self.users[username].check_password(password):
+            found = False
+            # with open("users.txt", "r") as f:
+            #     for line in f:
+            #         line = line.rstrip("\n").split(",")
+            #         if username == line[0] and password == line[1]:
+            #             found = True
+            #             break
+            # if found:
+            #     print("Login successful!")
+            #     return username
+
+
+            if found:
                 print("Login successful!")
-                print("[+] Date:", datetime.now().strftime("%d-%m-%Y %I:%M"))
-                return self.users[username]
+                return username
             else:
                 print("Invalid username or password!")
                 attempts += 1
@@ -103,7 +103,7 @@ class System:
         else:
             print("Invalid input")
 
-    def buy_product(self, user):
+    def buy_product(self, user: User):
         # try:
         #     with open("users.txt", "r") as f:
         #         lines = f.readlines()
@@ -147,7 +147,9 @@ class System:
             print("Not enough balance!")
 
     def check_balance(self, user):
-        print(f"Your balance is {user.balance} VND")
+        print(f"Your balance is {user.get_balance()} VND")
+
+ 
 
     def check_plan(self, user):
         if user.current_plan:
@@ -192,11 +194,10 @@ class System:
     def top_up(self, user):
         while True:
             try:
-                amount = int(input("Enter amount to top_up: "))
+                amount = int(input("Enter amount to deposit: "))
                 break
             except:
                 print("Invalid amount! Please try again.")
-        user.balance += amount
         with open("users.txt", "r") as f:
             lines = f.readlines()
         with open("users.txt", "w") as f:
@@ -205,6 +206,8 @@ class System:
                     f.write(f"{user.username},{password},{user.balance}\n")
                 else:
                     f.write(line)
+
+        user.balance += amount
 
         print("Top-up successfully!")
         print(f"Your new balance is {user.balance} VND")

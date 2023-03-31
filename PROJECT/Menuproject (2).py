@@ -173,7 +173,12 @@ def buy_product(username):
                             f"Product {products[product_id]['name']} purchased successfully!")
                         print("Your current balance is:", balance)
                         print("[+] Date:", date.strftime("%d-%m-%Y %I:%M"))
-                        lines[i] = f"{line[0]},{line[1]},{balance},{product_id}\n"
+
+                        line[2] = str(balance)
+                        line.append(str(product_id))
+
+                        lines[i] = ','.join(line) + '\n'
+
                         with open("users.txt", "w") as f:
                             f.writelines(lines)
                     else:
@@ -213,17 +218,6 @@ def current_plan(username):
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-# The main function. There are 3 options: create account, sign in, and exit.
-# If the user chooses to create an account, the program will ask for the user's username and password.
-# If the user chooses to sign in, the program will ask for the user's username and password.
-# If the user enters the correct username and password, the program will display the user's balance and the list of available products. The user can then choose to deposit, check balance, check product, buy product, check current plan, or sign out.
-# If the user chooses to deposit, the program will ask for the amount of money to deposit.
-# If the user chooses to check balance, the program will display the user's balance.
-# If the user chooses to check product, the program will display the list of available products.
-# If the user chooses to buy product, the program will ask for the product ID.
-# If the user chooses to check current plan, the program will display the user's current plan.
-# If the user chooses to sign out, the program will return to the main menu.
-# If the user enters an invalid input, the program will notify the user that the input is invalid.
 
 
 def main():
