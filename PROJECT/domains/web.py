@@ -3,128 +3,45 @@ import re
 from os import system, name
 import os
 from domains.user import User
-
+from domains.system2 import System
 
 class Web:
+    """Managing web, domain and VPN services"""
+
     def __init__(self):
         self.domain_list = []
         self.service = None
         self.vpn_package = None
 
     # Register a new domain and IP address
-    def setDomain(self, user):
-        print("")
-        print("1. Register a new domain")
+    def buy_domain(self, user: User, system: System) -> bool:
+        """Register a new domain and IP address, return True if success, False otherwise"""
+        if user.balance < 200000:
+            print("You must have at least 200.000 VND to buy a domain")
+            return False
+
+        print("1. Register a new domain (200.000 VND)")
         print("2. Back to main menu")
-        choose = int(input("Enter your choice: "))
-        if choose == 1:
-            print("The price for a domain is 100.000VNĐ.")
-            confirm = input("Do you want to proceed? (Y/N) ")
-            if confirm == "Y" or confirm == "y":
-                # Check if user has enough money to buy a domain
-                if user.balance < 100000:
-                    print("You do not have enough money to buy a domain.")
-                else:
-                    user.balance -= 100000
-                    user.current_domain = domain_input
-                    print("You have successfully bought a domain.")
-                    print("Your balance is now: ", user.balance)
-                    print("Please enter the domain name you want to register.")
-                    print("How to type your domain: a-z, 0-9, - (a-z, 0-9, - are characters) \n For example: your-domain")
-                    domain_input = input("Type your domain: ")
-                    while True:
-                        if re.match(r'^[a-z0-9-]+$', domain_input):
-                            break
-                        else:
-                            print("Invalid domain name. Please try again.")
-                            domain_input = input("Type your domain: ")
-                    print("How to type your IP address: a.b.c.d (a, b, c, d are numbers from 0 to 255)")
-                    ip_input = input("Type your IP address: ")
-                    while True:
-                        if re.match(
-                                r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
-                                ip_input):
-                            break
-                        else:
-                            print("Invalid IP address")
-                            ip_input = input("Type your IP address: ")
-                    password = input("Set a password to protect your domain: ")
-                    while True:
-                        if password == "":
-                            print("You have not entered a password")
-                            password = input("Set a password to protect your domain: ")
-                        else:
-                            break
-                    self.domain_list.append([domain_input, ip_input, password])
-                    print("You have successfully registered a new domain.")
-                    print("Your domain list: ", self.domain_list)
-                    time.sleep(2)
-                    print("")
-                    input("Press Enter to continue...")
-            else:
-                print("You have cancelled the domain registration.")
-                time.sleep(2)
-                print("")
-                input("Press Enter to continue...")
-        elif choose == 2:
-            #return to domain menu
-            pass
-        else:
-            print("Invalid choice. Please try again.")
-            time.sleep(2)
-            print("")
-            input("Press Enter to continue...")
+        choose = input("Enter your choice: ")
+        match choose:
+            case "1":
+                domain_input = input("Make a unique domain of your own: ")
+                while True:
+                    domain_is_valid = re.match(r"^(?=.{1,255}$)[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$", domain_input)
+                    domain_is_available = system.is_domain_name_available(domain_input)
 
-        #             print(f" == Domain == ")
-        #             print("By default, your domain will be: www.yourdomain.com")
-        #             print("How to make your own domain: a-z, 0-9, - (a-z, 0-9, - are characters) \n For example: your-domain")
-        #             domain_input = input("Make a unique domain of your own: ")
-        #             while True:
-        #                 if domain_input == "":
-        #                     print("You have not entered a domain")
-        #                     domain_input = input("Make a unique domain of your own: ")
-        #                 else:
-        #                     break
+                    if domain_is_valid and domain_is_available:
+                        break
+                    domain_input = input("Domain is invalid or already taken. Press Enter to try again...")
 
-        #     print("How to type your IP address: a.b.c.d (a, b, c, d are numbers from 0 to 255)")
-        #     ip_input = input("Type your IP address: ")
-        #     while True:
-        #         if re.match(
-        #                 r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', ip_input):
-        #             break
-        #         else:
-        #             print("Invalid IP address")
-        #             ip_input = input("Type your IP address: ")
+                user.domain_name = domain_input
+                user.domain_ip = system.get_random_ip()
+                user.balance -= 200000
 
-        #     password = input("Set a password to protect your domain: ")
-        #     while True:
-        #         if password == "":
-        #             print("You have not entered a password")
-        #             password = input("Set a password to protect your domain: ")
-        #         else:
-        #             break
+                
 
-        #     print("Checking your domain...")
-        #     time.sleep(1)
-        #     print("Domain is valid")
-        #     print("Checking your IP address...")
-        #     time.sleep(1)
-        #     print("IP address is valid")
-        #     print("Saving your information...")
-        #     time.sleep(1)
-        #     print("Your domain has been registered successfully")
-
-        #     self.domain_list += [{"Domain": domain_input,
-        #                           "IP": ip_input,
-        #                           "Password": password}]
-        #     time.sleep(1)
-        #     print("")
-        #     input("Press Enter to continue...")
-        # else:
-        #     print("")
-        #     input("Press Enter to continue...")
-
-    # Choose and buy a service package
+            case "2": return True
+            case _: return False
 
     def buy_service(self):
         print("")
@@ -141,16 +58,11 @@ class Web:
             print("5. VIP+: 1.850.000đ/10 years")
             choose_service = int(input("Choose your package: "))
             match choose_service:
-                case 1:
-                    self.service = "Basic Package"
-                case 2:
-                    self.service = "Advanced Package"
-                case 3:
-                    self.service = "High End Package"
-                case 4:
-                    self.service = "VIP Package"
-                case 5:
-                    self.service = "VIP+ Package"
+                case 1: self.service = "Basic Package"
+                case 2: self.service = "Advanced Package"
+                case 3: self.service = "High End Package"
+                case 4: self.service = "VIP Package"
+                case 5: self.service = "VIP+ Package"
                 case _:
                     print("You have not entered a valid package")
                     choose_service = int(input("Choose your package: "))
@@ -261,7 +173,6 @@ class Web:
         else:
             os.system("clear")
 
-
     def web_domain_services(self):
         while True:
             print("")
@@ -275,16 +186,11 @@ class Web:
             choose = int(input("Choose your option: "))
             self.clear()
             match choose:
-                case 1:
-                    self.setDomain("Domain")
-                case 2:
-                    self.buy_service()
-                case 3:
-                    self.domain_info()
-                case 4:
-                    self.vpn()
-                case 5:
-                    self.vpn_info()
+                case 1: self.set_domain("Domain")
+                case 2: self.buy_service()
+                case 3: self.domain_info()
+                case 4: self.vpn()
+                case 5: self.vpn_info()
                 case 6:
                     print("Exiting...")
                     time.sleep(1)
@@ -294,8 +200,6 @@ class Web:
                     print("You have not entered a valid option")
                     self.clear()
                     choose = int(input("Choose your option: "))
-
-
 
     # def buy_domain():
     #     print("")
@@ -316,26 +220,5 @@ class Web:
     #     else:
     #         print("")
     #         input("Press Enter to continue...")
-            
-#write def buy_domain() using balance from class User 
 
-    def buy_domain(self):
-        print("")
-        print("1. Buy a domain")
-        print("2. Back to main menu")
-        choose = int(input("Enter your choice: "))
-        if choose == 1:
-            print("The price for a domain is 100.000VNĐ.")
-            confirm = input("Do you want to proceed? (Y/N) ")
-            if confirm == "Y":
-                if self.balance < 100000:
-                    print("You do not have enough money to buy a domain.")
-                else:
-                    self.balance -= 100000
-                    self.setDomain()
-            else:
-                print("Transaction canceled.")
-        else:
-            print("")
-            input("Press Enter to continue...")
-
+# write def buy_domain() using balance from class User
