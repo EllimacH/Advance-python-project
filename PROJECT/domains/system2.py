@@ -146,34 +146,6 @@ class System:
         else:
             print("Invalid input")
 
-    # def buy_product(self, username):
-    #     print("Enter the product number you want to buy: ")
-    #     for product in self.products:
-    #         print(
-    #             f"{product['id']}. {product['name']} - {product['price']} VND - {product['gb']} GB - {product['months']} month")
-    #     choice = int(input())
-    #     for user in self.users:
-    #         if user.username == username:
-    #             if user.balance < self.products[choice - 1]['price']:
-    #                 print("Not enough balance!")
-    #                 return
-    #             user.balance -= self.products[choice - 1]['price']
-    #             user.product_id = self.products[choice - 1]['id']
-    #             print("Purchase successful!")
-    #             print(f"Your balance: {user.balance} VND")
-    #             with open("users.txt", "r") as f:
-    #                 lines = f.readlines()
-    #             with open("users.txt", "w") as f:
-    #                 for line in lines:
-    #                     line = line.rstrip("\n").split(",")
-    #                     if line[0] == username:
-    #                         line[2] = str(user.balance)
-    #                         line[3] = str(user.product_id)
-    #                         line = ",".join(line)
-    #                     f.write(line + "\n")
-    #             return
-    #     print("User not found")
-    #enhance the code above by adding check if the user has already bought a plan or not and if the user has bought a plan, ask if they want to change the plan or not
     def buy_product(self, username):
         print("Enter the product number you want to buy: ")
         for product in self.products:
