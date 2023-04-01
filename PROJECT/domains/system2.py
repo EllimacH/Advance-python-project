@@ -203,6 +203,11 @@ class System:
                     line = ",".join(line)
                 f.write(f"{line}\n")
 
+    def get_user_object(self, username: str) -> User:
+        for user in self.users:
+            if user.username == username:
+                return user
+        return None
     def clear_screen(self):
         if os.name == "nt":
             os.system("cls")
