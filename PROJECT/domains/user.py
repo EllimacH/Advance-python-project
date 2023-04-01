@@ -28,3 +28,17 @@ class User:
 
     def get_username(self):
         return self.username
+    
+    def serialize(self) -> dict:
+        return {
+            "username": self.username,
+            "password": self.password,
+            "balance": self.balance,
+            "current_plan": self.current_plan,
+            "product_id": self.product_id,
+            "current_domain": self.current_domain,
+            "current_service": self.current_service,
+            "current_VPN": self.current_VPN,
+            "domain_name": self.domain_name,
+            "domain_ip": self.domain_ip
+        }
