@@ -21,8 +21,13 @@ class BATE:
         password = self.Password_bar.get()
         user = User(username, password)
         self.users[username] = user
-        messagebox.showinfo("Success", "Account created successfully!")
-        self.top.destroy()
+        if len(str(password)) >= 8:
+            messagebox.showinfo("B.A.T.E", "Account created successfully!")
+            self.top.destroy()
+        else:
+            messagebox.showerror("B.A.T.E", "Password must be at least 8 characters long!")   
+            self.Password_bar.delete(0, END)
+            self.Username_bar.delete(0, END)
 
     # Function to log in 
     def log_in(self):
@@ -30,12 +35,14 @@ class BATE:
         password = self.Password_bar.get()
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         if username in self.users and self.users[username].password == hashed_password:
-            messagebox.showinfo("Success", "Logged in successfully!")
+            messagebox.showinfo("B.A.T.E", "Logged in successfully!")
             self.top.destroy()
             self.root.destroy()
             import Main_Menu_GUI
         else:
-            messagebox.showerror("Error", "Invalid username or password")
+            messagebox.showerror("B.A.T.E", "Invalid username or password")
+            self.Password_bar.delete(0, END)
+            self.Username_bar.delete(0, END)
 
     # Function to open the account creation menu
     def open1(self):
@@ -59,7 +66,7 @@ class BATE:
 
         self.Password = Label(self.frame, text="Password", font="Bodoni")
         self.Password.grid(row=3, column=0)
-        self.Password_bar = Entry(self.frame, width=27, borderwidth=3, show="*")
+        self.Password_bar = Entry(self.frame, width=27, borderwidth=3)
         self.Password_bar.grid(row=3, column=1, columnspan=2, padx=3, pady=3)
 
         self.create_button = Button(self.top, text="Create account", font=("Bodoni",12,"bold"), command=self.create_account)

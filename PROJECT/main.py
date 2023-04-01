@@ -66,7 +66,7 @@ def main():
                 system.clear_screen()
                 match choose:
                     case 1:
-                        web.setDomain("Domain")
+                        web.setDomain(user)
                     case 2:
                         web.buy_service()
                     case 3:
