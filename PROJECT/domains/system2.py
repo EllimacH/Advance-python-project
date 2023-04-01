@@ -27,12 +27,12 @@ class System:
                         user = User(line[0], line[1], int(line[2]), int(line[3]))
                         self.users.append(user)
 
-    def create_account(self): # create account
+    def create_account(self):  # create account
         while True:
             username = input("Enter your username: ")
             if not os.path.isfile("users.txt"):
                 with open("users.txt", "w") as f:
-                    f.write("username,password,balance,product_id \n") # write to file
+                    f.write("username,password,balance,product_id \n")  # write to file
             with open("users.txt", "r") as f:
                 for line in f:
                     line = line.rstrip("\n").split(",")
@@ -40,7 +40,7 @@ class System:
                         print("Username already exists! Please try again.\n")
                         return False
             password = input("Enter your password: ")
-            if len(password) < 8: # check password length
+            if len(password) < 8:  # check password length
                 print("Password must be 8 or more characters! Please try again.")
             else:
                 break
@@ -59,14 +59,14 @@ class System:
 
     def sign_in(self):
         attempts = 0
-        while attempts < 3: # check attempts. if attempts > 3, return to main menu
+        while attempts < 3:  # check attempts. if attempts > 3, return to main menu
             username = input("Enter your username: ")
             password = input("Enter your password: ")
             found = False
             with open("users.txt", "r") as f:
                 for line in f:
-                    line = line.rstrip("\n").split(",") 
-                    if username == line[0] and password == line[1]: # check username and password in file to login
+                    line = line.rstrip("\n").split(",")
+                    if username == line[0] and password == line[1]:  # check username and password in file to login
                         found = True
                         break
             if found:
@@ -80,18 +80,18 @@ class System:
                 if choice == "Y" or choice == "y":
                     return None
                 if choice == "N" or choice == "n":
-                    print("you have", 3-attempts, "attempts left") # check attempts left
+                    print("you have", 3-attempts, "attempts left")  # check attempts left
                     continue
         print("You have exceeded the number of attempts. Please try again later.")
 
     def sign_out(self):
         print("Logout successful!")
-        return None # return to login menu
+        return None  # return to login menu
 
     def check_balance(self, username):
         for user in self.users:
-            if user.username == username: # check username in file to check balance
-                print(f"Your balance: {user.balance} VND") 
+            if user.username == username:  # check username in file to check balance
+                print(f"Your balance: {user.balance} VND")
                 return
         print("User not found")
 
@@ -99,36 +99,35 @@ class System:
         print("Enter the amount you want to recharge: ")
         amount = int(input())
         for user in self.users:
-            if user.username == username: # check username in file to top up balance 
-                user.balance += amount # add amount to balance
+            if user.username == username:  # check username in file to top up balance
+                user.balance += amount  # add amount to balance
                 print("Recharge successful!")
                 print(f"Your balance: {user.balance} VND")
                 with open("users.txt", "r") as f:
-                    lines = f.readlines() # read all lines in file
+                    lines = f.readlines()  # read all lines in file
                 with open("users.txt", "w") as f:
                     for line in lines:
                         line = line.rstrip("\n").split(",")
-                        if line[0] == username: # check username in file to update balance 
-                            line[2] = str(user.balance) 
-                            line = ",".join(line) # join line to string
-                        f.write(line + "\n") # write to file
+                        if line[0] == username:  # check username in file to update balance
+                            line[2] = str(user.balance)
+                            line = ",".join(line)  # join line to string
+                        f.write(line + "\n")  # write to file
                 return
         print("User not found")
 
     def check_plan(self, username):
-        for user in self.users: # check username in file to check plan that user is using
-            if user.username == username: 
-                if user.product_id == None: # check product_id in file to check plan that user is using. if product_id = 0, user is not using any plan
+        for user in self.users:  # check username in file to check plan that user is using
+            if user.username == username:
+                if user.product_id == None:  # check product_id in file to check plan that user is using. if product_id = 0, user is not using any plan
                     print("You have not subscribed to any plan yet!")
                     return
-                for product in self.products: # check product_id in file to check plan that user is using
+                for product in self.products:  # check product_id in file to check plan that user is using
                     if product["id"] == user.product_id:
                         print(f"Your current plan is: {product['name']}")
                         return
         print("User not found")
 
-
-    def check_product(self): # check product information
+    def check_product(self):  # check product information
         print("Available products: Product information will be displayed by the order: Name - Price - GB - Months")
         for product in self.products:
             print(
@@ -146,56 +145,60 @@ class System:
         else:
             print("Invalid input")
 
-    def buy_product(self, username): # buy product
-        print("Enter the product number you want to buy: ")
-        for product in self.products: # check product information
-            print(
-                f"{product['id']}. {product['name']} - {product['price']} VND - {product['gb']} GB - {product['months']} month")
-        choice = int(input())
-        for user in self.users:
-            if user.username == username: # check username in file to buy product
-                if user.balance < self.products[choice - 1]['price']:
-                    print("Not enough balance!")
-                    return
-                if user.product_id == None:
-                    user.balance -= self.products[choice - 1]['price']
-                    user.product_id = self.products[choice - 1]['id']
-                    print("Purchase successful!")
-                    print(f"Your balance: {user.balance} VND")
-                    with open("users.txt", "r") as f:
-                        lines = f.readlines()
-                    with open("users.txt", "w") as f:
-                        for line in lines:
-                            line = line.rstrip("\n").split(",")
-                            if line[0] == username:
-                                line[2] = str(user.balance)
-                                line[3] = str(user.product_id)
-                                line = ",".join(line)
-                            f.write(line + "\n")
-                    return
-                else:
-                    print("You have already bought a plan. Do you want to change your plan? (Y/N)")
-                    choice = input()
-                    if choice == "Y" or choice == "y":
-                        user.balance -= self.products[choice - 1]['price'] #error occurs here
-                        user.product_id = self.products[choice - 1]['id'] #error occurs here. TypeError: unsupported operand type(s) for -: 'str' and 'int'
-                        print("Purchase successful!")
-                        print(f"Your balance: {user.balance} VND")
-                        with open("users.txt", "r") as f:
-                            lines = f.readlines()
-                        with open("users.txt", "w") as f:
-                            for line in lines:
-                                line = line.rstrip("\n").split(",")
-                                if line[0] == username:
-                                    line[2] = str(user.balance)
-                                    line[3] = str(user.product_id)
-                                    line = ",".join(line)
-                                f.write(line + "\n")
-                        return
-                    if choice == "N" or choice == "n":
-                        return
-        print("User not found")
-        
+    def buy_product(self, username):
+        # Check if user already has a product
+        user = next((u for u in self.users if u.username == username), None)
+        if not user:
+            print("User not found.")
+            return
+        if user.product_id is not None:
+            current_product = next((p for p in self.products if p['id'] == user.product_id), None)
+            print(f"You currently have '{current_product['name']}' plan with {current_product['gb']}GB/month.")
+            change_plan = input("Do you want to change your plan? (y/n): ")
+            if change_plan.lower() == 'n':
+                print("Purchase cancelled.")
+                return
+
+        # Display list of available products
+        print("Available products:")
+        for product in self.products:
+            print(f"{product['id']}. {product['name']} ({product['gb']}GB/month) - {product['price']} VND")
+
+        # Prompt user to choose a product
+        while True:
+            product_id = int(input("Enter product ID to purchase (0 to cancel): "))
+            if product_id == 0:
+                print("Purchase cancelled.")
+                return
+            product = next((p for p in self.products if p['id'] == product_id), None)
+            if product:
+                break
+            else:
+                print("Invalid product ID. Please try again.")
+
+        # Check if user has sufficient balance
+        if user.balance < product['price']:
+            print("Insufficient balance.")
+            return
+
+        # Update user's product and balance
+        user.product_id = product_id
+        user.balance -= product['price']
+        print(f"Product '{product['name']}' purchased successfully!")
+        print(f"Your balance: {user.balance} VND")
+
+        # Update user information in file
+        with open("users.txt", "r") as f:
+            lines = f.readlines()
+        with open("users.txt", "w") as f:
+            for line in lines:
+                line = line.rstrip("\n").split(",")
+                if line[0] == username:
+                    line[2] = str(user.balance)
+                    line[3] = str(product_id)
+                    line = ",".join(line)
+                f.write(line + "\n")
+
     def clear_screen(self):
         if os.name == "nt":
             os.system("cls")
