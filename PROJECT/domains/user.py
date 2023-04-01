@@ -21,7 +21,7 @@ class User:
         self.current_service = current_service
         self.current_VPN = current_VPN
         self.domain_name = ""
-        self.domain_id = ""
+        self.domain_ip = ""
 
     def check_password(self, password):
         return self.password == hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), b'salt', 100000)
