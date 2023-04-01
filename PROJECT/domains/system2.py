@@ -1,11 +1,6 @@
-import re
 import os
-import time
-import hashlib
-from datetime import datetime
-from domains.product import Product
 from domains.user import User
-
+import random
 
 class System:
     def __init__(self):
