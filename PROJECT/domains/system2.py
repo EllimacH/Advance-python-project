@@ -34,11 +34,14 @@ class System:
                     if username == line[0]:
                         print("Username already exists! Please try again.\n")
                         return False
+            break
+        while True:
             password = input("Enter your password: ")
-            if len(password) < 8:  # check password length
+            if len(password) < 8:
                 print("Password must be 8 or more characters! Please try again.")
             else:
                 break
+            
         password2 = input("Reconfirm your password: ")
         if password == password2:
             try:
@@ -52,7 +55,7 @@ class System:
         else:
             print("Invalid information! Please try again.\n")
 
-    def sign_in(self):
+    def sign_in(self) -> str:
         attempts = 0
         while attempts < 3:  # check attempts. if attempts > 3, return to main menu
             username = input("Enter your username: ")
@@ -73,15 +76,17 @@ class System:
                 print("Do you want to return to login menu? (Y/N)")
                 choice = input()
                 if choice == "Y" or choice == "y":
-                    return None
+                    return ""
                 if choice == "N" or choice == "n":
                     print("you have", 3-attempts, "attempts left")  # check attempts left
                     continue
         print("You have exceeded the number of attempts. Please try again later.")
+        return ""
 
-    def sign_out(self):
+    def sign_out(self) -> bool:
+        """Set the status is False to logout"""
         print("Logout successful!")
-        return None  # return to login menu
+        return False
 
     def check_balance(self, username):
         for user in self.users:
