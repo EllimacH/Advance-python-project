@@ -111,7 +111,7 @@ class System:
                         if line[0] == username:  # check username in file to update balance
                             line[2] = str(user.balance)
                             line = ",".join(line)  # join line to string
-                        f.write(line + "\n")  # write to file
+                        f.write(f"{line}\n")
                 return
         print("User not found")
 
@@ -197,7 +197,7 @@ class System:
                     line[2] = str(user.balance)
                     line[3] = str(product_id)
                     line = ",".join(line)
-                f.write(line + "\n")
+                f.write(f"{line}\n")
 
     def clear_screen(self):
         if os.name == "nt":
