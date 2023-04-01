@@ -208,6 +208,21 @@ class System:
             if user.username == username:
                 return user
         return None
+    
+    def is_domain_name_available(self, domain_name: str) -> bool:
+        for user in self.users:
+            if user.domain_name == domain_name:
+                return False
+        return True
+
+    def get_random_ip(self):
+        while True:
+            random_ip = ".".join([str(random.randint(0, 255)) for _ in range(4)])
+            for user in self.users:
+                if user.domain_ip == random_ip:
+                    continue
+            return random_ip
+
     def clear_screen(self):
         if os.name == "nt":
             os.system("cls")
