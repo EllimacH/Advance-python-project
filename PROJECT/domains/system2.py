@@ -151,8 +151,12 @@ class System:
         if not user:
             print("User not found.")
             return
-        if user.product_id is not None:
-            current_product = next((p for p in self.products if p['id'] == user.product_id), None)
+        if user.product_id is not None:        
+            current_product = {}
+            for product in self.products:
+                if product['id'] == user.product_id:
+                    current_product = product
+                    break
             print(f"You currently have '{current_product['name']}' plan with {current_product['gb']}GB/month.")
             change_plan = input("Do you want to change your plan? (y/n): ")
             if change_plan.lower() == 'n':
