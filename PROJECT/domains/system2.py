@@ -1,8 +1,8 @@
+import re
 import os
-from domains.user import User
-import random
 import json
-
+import random
+from domains.user import User
 
 class System:
     def __init__(self):
