@@ -8,7 +8,7 @@ class System:
     def __init__(self):
         self.users: list[User] = []
 
-        self.products = {
+        self.mobile_plans = {
             1: {"name": "Diamond", "price": 200000, "gb": 20},
             2: {"name": "Gold", "price": 150000, "gb": 15},
             3: {"name": "Silver", "price": 100000, "gb": 10},
@@ -34,13 +34,13 @@ class System:
                     user_obj.password = user["password"]
                     user_obj.balance = user["balance"]
 
-                    user_obj.product_id = user["product_id"]
+                    user_obj.mobile_plan_id = user["mobile_plan_id"]
 
                     user_obj.domain_name = user["domain_name"]
                     user_obj.domain_ip = user["domain_ip"]
-                    user_obj.current_vpn_plan = user["current_vpn_plan"]
-                    user_obj.current_vps_plan = user["current_vps_plan"]
-                except:
+                    user_obj.current_vpn_plan_id = user["current_vpn_plan_id"]
+                    user_obj.current_vps_plan_id = user["current_vps_plan_id"]
+                except: # if the data is not complete, skip it
                     pass
 
                 # append to the list in System
