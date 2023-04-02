@@ -14,7 +14,6 @@ class System:
             3: {"name": "Silver", "price": 100000, "gb": 10},
             4: {"name": "Bronze", "price": 50000, "gb": 5},
         }
-        self.selected_product_plan = None
 
         if os.path.exists("users.json"):
             self.load_data_from_json("users.json")
