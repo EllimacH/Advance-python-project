@@ -18,7 +18,11 @@ class System:
         if os.path.exists("users.json"):
             self.load_data_from_json("users.json")
 
-        self.logged_in_user = User()
+        self.logged_in_user = User() # This is a blank user object, to be assigned to the logged in user object
+
+    # ==============================
+    # SAVE/LOAD PERSISTENT USER DATA
+    # ==============================
 
     def load_data_from_json(self, file_name: str) -> None:
         with open(file_name, "r") as f:
@@ -57,8 +61,11 @@ class System:
         with open("users.json", "w") as f:
             json.dump(data, f)
 
-    def create_account(self):
+    # ======================
+    # LOG-IN/LOG-OUT/SIGN-UP
+    # ======================
 
+    def create_account(self):
         # Handling username
         while True:
             username = input("Enter your username: ")
@@ -120,6 +127,10 @@ class System:
         print("Logout successful!")
         return False
 
+    # ==================
+    # BALANCE MANAGEMENT
+    # ==================
+
     def check_balance(self):
         print(f"Your balance: {self.logged_in_user.balance} VND")
 
@@ -135,6 +146,9 @@ class System:
         if self.logged_in_user.product_id == 0:
             print("You have not subscribed to any plan yet!")
             return
+    # ======================
+    # MOBILE PLAN MANAGEMENT
+    # ======================
 
         selected_plan = self.products[self.logged_in_user.product_id]
         print(f"Your current plan is: {selected_plan['name']}")
@@ -192,8 +206,10 @@ class System:
             self.logged_in_user.balance -= int(self.products[product_id]['price'])
             print("Purchase successful!")
             return
-        
 
+    # =================
+    # DOMAIN MANAGEMENT
+    # =================
 
 
     def get_user_object(self, username: str) -> User:
@@ -215,6 +231,10 @@ class System:
                 if user.domain_ip == random_ip:
                     continue
             return random_ip
+
+    # ========
+    # COSMETIC
+    # ========
 
     def clear_screen(self):
         if os.name == "nt":
