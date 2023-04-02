@@ -68,11 +68,11 @@ class System:
     def create_account(self):
         # Handling username
         while True:
-            username = input("Enter your username: ")
+            username = input("\nEnter your username: ")
             for user in self.users:
                 if username == user.username:
-                    print("Username already exists! Please try again.\n")
-                    continue        
+                    print("Username already exists! Please try again.")
+                    break
             else:
                 break
 
@@ -94,35 +94,39 @@ class System:
         user.password = user.encrypt_password(password)
         self.users.append(user)
 
-    def sign_in(self) -> bool:
+    def log_in(self) -> bool:
         attempts = 0
         while True:
-            input()
-            attempts += 1
+            # sign_in attempts handler
             if attempts >= 3:
                 print("You have exceeded the number of attempts. Please try again later.")
                 return False
-            username = input("Enter your username: ")
-            # if user accidentally hit login, they can return to main menu by not entering username
-            for user in self.users:
-                if not user.username == username:
-                    print("Invalid username, do you want to return to login menu? (Y/n)")
-                    choice = input().lower()
-                    if choice == "n":
-                        continue
-                    else:
-                        return False
+            input_username = input("\nEnter your username (leave blank to return to main menu): ")
 
-            password = input("Enter your password: ")
+            # if user accidentally hit login, they can return to main menu by not entering username
+            if input_username == "":
+                return False
+
+            # username handler
             for user in self.users:
-                if user.username == username and user.password == self.logged_in_user.encrypt_password(password):
+                if not user.username == input_username:
+                    print("Username does not exist!")
+                    return False
+
+            # password handler
+            input_password = input("Enter your password: ")
+            for user in self.users:
+                valid_username = user.username == input_username
+                valid_password = user.is_valid_password(input_password)
+                if valid_username and valid_password:
                     print("Login successful!")
-                    self.logged_in_user = user
+                    self.logged_in_user = user # so we don't have to loop through all users to find the logged in user every time we need to access their data
                     return True
 
-            print("Invalid username or password!")
+            attempts += 1
+            print("Invalid password!")
 
-    def sign_out(self) -> bool:
+    def log_out(self) -> bool:
         """Set the status is False to logout"""
         print("Logout successful!")
         return False
@@ -132,78 +136,104 @@ class System:
     # ==================
 
     def check_balance(self):
-        print(f"Your balance: {self.logged_in_user.balance} VND")
+        print(f"\nYour balance: {self.logged_in_user.balance} VND")
 
-    def top_up(self):
-        print("Enter the amount you want to recharge: ")
-        amount = int(input())
-        self.logged_in_user.balance += amount  # add amount to balance
+    def top_up(self) -> None:
+        amount = input("\nEnter the amount you want to recharge: ")
+
+        # amount handler
+        if not amount.isdigit():
+            print("Invalid amount!")
+            return
+
+        self.logged_in_user.balance += int(amount)  # add amount to balance
         print("Recharge successful!")
         print(f"Your balance: {self.logged_in_user.balance} VND")
 
-    def check_plan(self):
-        # check product_id in file to check plan that user is using. if product_id = 0, user is not using any plan
-        if self.logged_in_user.product_id == 0:
-            print("You have not subscribed to any plan yet!")
-            return
     # ======================
     # MOBILE PLAN MANAGEMENT
     # ======================
 
-        selected_plan = self.products[self.logged_in_user.product_id]
-        print(f"Your current plan is: {selected_plan['name']}")
+    def check_current_plan(self):
+        current_mobile_plan_id = self.logged_in_user.mobile_plan_id
 
-    def check_product(self):  # check product information
-        print("Available products: Product information will be displayed by the order: Name - Price - GB - Months")
-        for product in self.products:
-            print(f"{product}. {self.products[product]['name']} - {self.products[product]['price']} VND - {self.products[product]['gb']} GB")
-        print("Enter the product number to get more information about this product: ")
-        choice = int(input())
-        if choice == 1:
-            print("Diamond package: 200k VND for 1 month, suitable for small and medium companies. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
-        elif choice == 2:
-            print("Gold package: 150k VND for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
-        elif choice == 3:
-            print("Silver package: 100k VND for 1 month, suitable people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
-        elif choice == 4:
-            print("Bronze package: 50k VND for 1 month, suitable for students or pupils. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
-        else:
-            print("Invalid input")
+        # empty plan handler
+        if current_mobile_plan_id == 0:
+            print("You have not subscribed to any plan yet!")
+            return
 
-    def buy_product(self) -> None:
-      
-        # prints all products
-        print("Available products: Product information will be displayed by the order: Name - Price - GB - Months")
-        for product in self.products:
-                print(f"- {product}. {self.products[product]['name']} - {self.products[product]['price']} VND - {self.products[product]['gb']} GB")
+        current_plan = self.mobile_plans[current_mobile_plan_id]
+        plan_name = current_plan["name"]
+        plan_price = current_plan["price"]
+        plan_gb = current_plan["gb"]
+        print(f"Your current plan is: {plan_name} - {plan_price} VND - {plan_gb} GB")
 
-        # prompts user to choose a product
+    def list_mobile_plans(self) -> None:  # check product information
+        print("\n== Mobile plans ==")
+        for plan_id, plan in self.mobile_plans.items():
+            print(f"[{plan_id}] {plan['name']} - {plan['price']} VND - {plan['gb']} GB")
+        choice = input("Select the plan you want to check more information: ")
+
+        print()
+        match choice:
+            case "1":
+                print("Diamond package: 200k VND for 1 month, suitable for small and medium companies. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
+            case "2":
+                print("Gold package: 150k VND for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
+            case "3":
+                print("Silver package: 100k VND for 1 month, suitable people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
+            case "4":
+                print("Bronze package: 50k VND for 1 month, suitable for students or pupils. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
+            case _:
+                print("Invalid input")
+
+    def register_mobile_plan(self):
+        # list all mobile plans
+        print("\n== Mobile plans ==")
+        for plan_id, plan in self.mobile_plans.items():
+            print(f"[{plan_id}] {plan['name']} - {plan['price']} VND - {plan['gb']} GB")
+
+        input_mobile_plan_id = input("Enter product ID to purchase (0 to cancel): ")
         while True:
+            # get user input for mobile plan id
 
-            product_id = int(input("Enter product ID to purchase (0 to cancel): "))
-            if product_id == 0:
+            # checks if input is a number, converts to int
+            if not input_mobile_plan_id.isdigit(): # type: ignore (this comment is just for ignoring the error)
+                print("Invalid input. Please try again.")
+                continue
+            input_mobile_plan_id = int(input_mobile_plan_id)
+
+            # checks if user wants to cancel
+            if input_mobile_plan_id == 0:
                 print("Purchase cancelled.")
                 return
-            #if user already has a plan, print current plan and ask if they want to change plan
-            if self.logged_in_user.product_id != 0:
-                print(f"Your current plan is: {self.products[self.logged_in_user.product_id]['name']}. Do you want to change plan? (Y/n)")
-                choice = input().lower()
+
+            # check if entered mobile plan id is valid
+            if input_mobile_plan_id not in self.mobile_plans:
+                input_mobile_plan_id = input("Invalid product ID. Please try again: ")
+                continue
+
+            # checks if user has a current plan
+            if self.logged_in_user.mobile_plan_id != 0:
+                current_plan_name = self.mobile_plans[self.logged_in_user.mobile_plan_id]['name']
+                choice = input(f"Your current plan is: {current_plan_name}. Do you want to change? (Y/n)")
                 if choice == "n":
                     print("Purchase cancelled.")
                     return
-            # checks if product_id is valid
-            if product_id not in self.products:
+
+            # checks if mobile_plan is valid
+            if input_mobile_plan_id not in self.mobile_plans:
                 print("Invalid product ID. Please try again.")
                 continue
 
             # checks if user has sufficient balance
-            if self.logged_in_user.balance < int(self.products[product_id]['price']):
+            if self.logged_in_user.balance < int(self.mobile_plans[input_mobile_plan_id]['price']):
                 print("Insufficient balance.")
                 return
-            
+
             # updates user's product and balance
-            self.logged_in_user.product_id = product_id
-            self.logged_in_user.balance -= int(self.products[product_id]['price'])
+            self.logged_in_user.mobile_plan_id = input_mobile_plan_id
+            self.logged_in_user.balance -= int(self.mobile_plans[input_mobile_plan_id]['price'])
             print("Purchase successful!")
             return
 
@@ -211,25 +241,49 @@ class System:
     # DOMAIN MANAGEMENT
     # =================
 
+    def is_valid_domain(self, domain_name: str) -> bool:
+        """Check if domain is vaid + loop through all users and check if domain_name is available"""
 
-    def get_user_object(self, username: str) -> User:
-        for user in self.users:
-            if user.username == username:
-                return user
-        return None
+        # 2 conditions to check if domain_name is valid
+        is_valid = re.match(r"^(?=.{1,255}$)[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$", domain_name)
+        is_taken = False
 
-    def is_domain_name_available(self, domain_name: str) -> bool:
+        # iterate users to check if domain_name is taken
         for user in self.users:
             if user.domain_name == domain_name:
-                return False
-        return True
+                is_taken = True
+                break
+
+        # return True if both conditions are met
+        if is_valid and not is_taken:
+            return True
+        else:
+            return False
 
     def get_random_ip(self):
         while True:
-            random_ip = ".".join([str(random.randint(0, 255)) for _ in range(4)])
-            for user in self.users:
-                if user.domain_ip == random_ip:
-                    continue
+            # check if the random_ip is a private IP address
+            # - generate a list of 4 random numbers between 0 and 255
+            random_ip_list = [str(random.randint(0, 255)) for _ in range(4)]
+            # - merge elements in the list into a string separated by dots
+            random_ip = ".".join(random_ip_list)
+            # - a list of private IP ranges
+            private_ip_ranges = ["10.", "172.16.", "192.168."]
+            # - a list containing True or False depending on whether the random_ip starts with any of the private IP ranges
+            private_range_match = [random_ip.startswith(private_ip_range) for private_ip_range in private_ip_ranges]
+            if any(private_range_match): # if any of the private IP ranges match,
+                continue # skip the rest of the loop and start again
+
+            # check if the random_ip is already assigned to a user
+            ip_taken = False
+            for user in self.users: # loop through all users
+                if user.domain_ip == random_ip: # if the random_ip is already assigned to a user,
+                    ip_taken = True
+                    break # break out of the for loop
+            if ip_taken:
+                continue
+
+            # if the loop ends and no other user has the random_ip, return it
             return random_ip
 
     # ========
@@ -237,7 +291,7 @@ class System:
     # ========
 
     def clear_screen(self):
-        if os.name == "nt":
+        if os.name == "nt": # If the host OS is Windows
             os.system("cls")
         else:
             os.system("clear")
