@@ -1,7 +1,6 @@
 from domains.system2 import System
 from domains.web import Web
 
-
 class Menu:
     def __init__(self, system: System, web: Web):
         self.system = system
