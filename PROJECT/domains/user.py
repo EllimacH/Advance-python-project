@@ -2,43 +2,48 @@ import hashlib
 
 
 class User:
-    def __init__(
-        self, username: str,
-        password: str,
-        balance: float = 0,
-        product_id=None,
-        current_plan=None,
-        current_domain=None,
-        current_service=None,
-        current_VPN=None
-    ):
-        self.username = username
-        self.password = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), b'salt', 100000)
-        self.balance = balance
-        self.current_plan = current_plan
-        self.product_id = product_id
-        self.current_domain = current_domain
-        self.current_service = current_service
-        self.current_VPN = current_VPN
-        self.domain_name = ""
-        self.domain_ip = ""
+    def __init__(self):
+        # Basic info
+        self.username: str = ""
+        self.password: str = ""
+        self.balance: int = 0
+        
+        # In System
+        self.product_id: int = 0 # 0 means no product
 
-    def check_password(self, password):
-        return self.password == hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), b'salt', 100000)
+        # In Web
+        self.domain_name: str = ""
+        self.domain_ip: str = ""
+        self.current_vpn_plan: int = 0
+        self.current_vps_plan: int = 0
+
+    def encrypt_password(self, password: str) -> str:
+        """Only use when creating a new user"""
+        return str(hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), b'salt', 100000))
+
+    def is_valid_password(self, password: str) -> bool:
+        """Only use when logging in"""
+        return self.password == str(hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), b'salt', 100000))
 
     def get_username(self):
         return self.username
     
-    def serialize(self) -> dict:
-        return {
+    def serialize(self) -> dict[str, str | int]:
+        
+        # `: dict[str, str | int]`: a dictionary with keys are strings and values are either strings or integers
+        data: dict[str, str | int] = {
+            # Basic info
             "username": self.username,
             "password": self.password,
             "balance": self.balance,
-            "current_plan": self.current_plan,
+            
+            # In System
             "product_id": self.product_id,
-            "current_domain": self.current_domain,
-            "current_service": self.current_service,
-            "current_VPN": self.current_VPN,
+            
+            # In Web
             "domain_name": self.domain_name,
-            "domain_ip": self.domain_ip
+            "domain_ip": self.domain_ip,
+            "current_vpn_plan": self.current_vpn_plan,
+            "current_vps_plan": self.current_vps_plan,
         }
+        return data

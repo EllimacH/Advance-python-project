@@ -1,6 +1,6 @@
 import time
 import re
-from os import system, name
+# from os import system, name
 import os
 from domains.user import User
 from domains.system2 import System
@@ -9,11 +9,24 @@ class Web:
     """Managing web, domain and VPN services"""
 
     def __init__(self):
-        self.domain_list = []
-        self.service = None
-        self.vpn_package = None
+        self.vps_packages = {
+            1: {"name": "Basic", "price": 200000},
+            2: {"name": "Advanced", "price": 350000},
+            3: {"name": "High End", "price": 500000},
+            4: {"name": "VIP", "price": 800000},
+            5: {"name": "VIP+", "price": 1850000}
+        }
+        self.selected_vps_plan: int = 0
 
-    # Register a new domain and IP address
+        self.vpn_packages = {
+            1: {"name": "Basic", "price": 100000},
+            2: {"name": "Advanced", "price": 150000},
+            3: {"name": "High End", "price": 200000},
+            4: {"name": "VIP", "price": 300000},
+            5: {"name": "VIP+", "price": 500000}
+        }
+        self.selected_vpn_plan: int = 0
+
     def buy_domain(self, user: User, system: System) -> bool:
         """Register a new domain and IP address, return True if success, False otherwise"""
         if user.balance < 200000:
@@ -37,46 +50,72 @@ class Web:
                 user.domain_name = domain_input
                 user.domain_ip = system.get_random_ip()
                 user.balance -= 200000
-
-                
-
-            case "2": return True
+                return True
+            case "2": return False
             case _: return False
 
-    def buy_service(self):
+    def buy_vps(self, user: User, system: System) -> bool:
+        """Buy a service package, return True if success, False otherwise"""
         print("")
         print("1. Buy a service package")
         print("2. Back to main menu")
         choose = int(input("Enter your choice: "))
         if choose == 1:
-            print("")
-            print(" == Service Packages == ")
-            print("1. Basic: 200.000đ/year")
-            print("2. Advanced: 350.000đ/2 years")
-            print("3. High End: 500.000đ/3 years")
-            print("4. VIP: 800.000đ/5 years")
-            print("5. VIP+: 1.850.000đ/10 years")
-            choose_service = int(input("Choose your package: "))
-            match choose_service:
-                case 1: self.service = "Basic Package"
-                case 2: self.service = "Advanced Package"
-                case 3: self.service = "High End Package"
-                case 4: self.service = "VIP Package"
-                case 5: self.service = "VIP+ Package"
+            print(" == VPS tier list == ")
+            for id, package in self.vps_packages.items():
+                print(f"{id}. {package['name']} ({package['price']} VND)")
+            print("else. Back to main menu")
+
+            choice = input("Choose your package: ")
+            match choice:
+                case "1":
+                    # NOTE: splitting this into multiple lines to make it more readable
+                    if user.balance < int(self.vps_packages[int(choice)]['price']):
+                        print(f"You must have at least {self.vps_packages[int(choice)]['price']} VND to buy the {self.vps_packages[int(choice)]['name']} package")
+                        return False
+                    user.balance -= int(self.vps_packages[int(choice)]['price'])
+                    self.selected_vps_package = int(choice)
+                    return True
+                case "2":
+                    if user.balance < int(self.vps_packages[int(choice)]['price']):
+                        print("You must have at least 350.000 VND to buy the advanced package")
+                        return False
+                    user.balance -= int(self.vps_packages[int(choice)]['price'])
+                    self.selected_vps_package = int(choice)
+                    return True
+                case "3":
+                    if user.balance < int(self.vps_packages[int(choice)]['price']):
+                        print("You must have at least 500.000 VND to buy the high end package")
+                        return False
+                    user.balance -= int(self.vps_packages[int(choice)]['price'])
+                    self.selected_vps_package = int(choice)
+                case "4":
+                    if user.balance < int(self.vps_packages[int(choice)]['price']):
+                        print("You must have at least 800.000 VND to buy the VIP package")
+                        return False
+                    user.balance -= int(self.vps_packages[int(choice)]['price'])
+                    self.selected_vps_package = int(choice)
+                    return True
+                case "5":
+                    if user.balance < int(self.vps_packages[int(choice)]['price']):
+                        print("You must have at least 1.850.000 VND to buy the VIP+ package")
+                        return False
+                    user.balance -= int(self.vps_packages[int(choice)]['price'])
+                    self.selected_vps_package = int(choice)
+                    return True
+                case "6":
+                    pass
                 case _:
-                    print("You have not entered a valid package")
-                    choose_service = int(input("Choose your package: "))
+                    return False
 
             print("Payment is in progress, please wait...")
             time.sleep(1)
             print("")
             print("Payment Completed")
-            print(f"You have purchased {self.service}")
-            print("")
-            input("Press Enter to continue...")
+            print(f"You have purchased {self.vps_packages[self.selected_vps_package]['name']} package")
+            return True
         else:
-            print("")
-            input("Press Enter to continue...")
+            return False
 
     # Check domain info
 
@@ -114,58 +153,83 @@ class Web:
 
     # Buy VPN
 
-    def vpn(self):
+    def buy_vpn(self, user: User, system: System) -> bool:
         print("")
         print("1. Buy a VPN package")
         print("2. Back to main menu")
         choose = int(input("Enter your choice: "))
         if choose == 1:
-            print(" == VPN Packages == ")
-            print("1. Basic: 100.000đ/year")
-            print("2. Advanced: 150.000đ/2 years")
-            print("3. High End: 200.000đ/3 years")
-            print("4. VIP: 300.000đ/5 years")
-            print("5. VIP+: 500.000đ/10 years")
-            choose_vpn = int(input("Choose your package: "))
-            match choose_vpn:
-                case 1:
-                    self.vpn_package = "Basic Package"
-                case 2:
-                    self.vpn_package = "Advanced Package"
-                case 3:
-                    self.vpn_package = "High End Package"
-                case 4:
-                    self.vpn_package = "VIP Package"
-                case 5:
-                    self.vpn_package = "VIP+ Package"
-                case _:
-                    print("You have not entered a valid package")
-                    choose_vpn = int(input("Choose your package: "))
+            print(" == VPN tier list == ")
+            for id, package in self.vpn_packages.items():
+                print(f"{id}. {package['name']} ({package['price']} VND)")
+            print("else. Back to main menu")
 
+            choice = input("Choose your package: ")
+            match choice:
+                case "1":
+                    # NOTE: splitting this into multiple lines to make it more readable
+                    if user.balance < int(self.vpn_packages[int(choice)]['price']):
+                        print(f"You must have at least {self.vpn_packages[int(choice)]['price']} VND to buy the {self.vpn_packages[int(choice)]['name']} package")
+                        return False
+                    user.balance -= int(self.vpn_packages[int(choice)]['price'])
+                    self.selected_vpn_package = int(choice)
+                    return True
+                case "2":
+                    if user.balance < int(self.vpn_packages[int(choice)]['price']):
+                        print("You must have at least 350.000 VND to buy the advanced package")
+                        return False
+                    user.balance -= int(self.vpn_packages[int(choice)]['price'])
+                    self.selected_vpn_package = int(choice)
+                    return True
+                case "3":
+                    if user.balance < int(self.vpn_packages[int(choice)]['price']):
+                        print("You must have at least 500.000 VND to buy the high end package")
+                        return False
+                    user.balance -= int(self.vpn_packages[int(choice)]['price'])
+                    self.selected_vpn_package = int(choice)
+                case "4":
+                    if user.balance < int(self.vpn_packages[int(choice)]['price']):
+                        print("You must have at least 800.000 VND to buy the VIP package")
+                        return False
+                    user.balance -= int(self.vpn_packages[int(choice)]['price'])
+                    self.selected_vpn_package = int(choice)
+                    return True
+                case "5":
+                    if user.balance < int(self.vpn_packages[int(choice)]['price']):
+                        print("You must have at least 1.850.000 VND to buy the VIP+ package")
+                        return False
+                    user.balance -= int(self.vpn_packages[int(choice)]['price'])
+                    self.selected_vpn_package = int(choice)
+                    return True
+                case "6":
+                    pass
+                case _:
+                    return False
+                
             print("Payment is in progress, please wait...")
             time.sleep(1)
             print("")
             print("Payment Completed")
-            print(f"You have purchased {self.vpn_package}")
-            print("")
-            input("Press Enter to continue...")
+            print(f"You have purchased {self.vpn_packages[self.selected_vpn_package]['name']} package")
+            return True
         else:
-            print("")
-            input("Press Enter to continue...")
+            return False
+        
 
     # Display VPN info
 
     def vpn_info(self):
-        print(f"VPN Package: {self.vpn_package}")
-        while True:
-            if self.vpn_package == None:
-                print("Status: Offline")
-                break
-            else:
-                print("Status: Online")
-            break
-        print("")
-        input("Press Enter to continue...")
+        # print(f"VPN Package: {self.vpn_packages}")
+        # while True:
+        #     if self.vpn_packages == None:
+        #         print("Status: Offline")
+        #         break
+        #     else:
+        #         print("Status: Online")
+        #     break
+        # print("")
+        # input("Press Enter to continue...")
+        pass
 
     def clear(self):
         if os.name == "nt":
@@ -173,10 +237,10 @@ class Web:
         else:
             os.system("clear")
 
-    def web_domain_services(self):
+    def web_domain_services(self, system: System):
         while True:
             print("")
-            print(" == Main Menu == ")
+            print(" == Web services menu == ")
             print("1. Buy Domain")
             print("2. Buy Service")
             print("3. Check Domain Info")
@@ -186,10 +250,10 @@ class Web:
             choose = int(input("Choose your option: "))
             self.clear()
             match choose:
-                case 1: self.set_domain("Domain")
-                case 2: self.buy_service()
+                case 1: self.buy_domain(system=system, user=system.logged_in_user)
+                case 2: self.buy_vps(system=system, user=system.logged_in_user)
                 case 3: self.domain_info()
-                case 4: self.vpn()
+                case 4: self.buy_vpn(system=system, user=system.logged_in_user)
                 case 5: self.vpn_info()
                 case 6:
                     print("Exiting...")
@@ -200,25 +264,3 @@ class Web:
                     print("You have not entered a valid option")
                     self.clear()
                     choose = int(input("Choose your option: "))
-
-    # def buy_domain():
-    #     print("")
-    #     print("1. Buy a domain")
-    #     print("2. Back to main menu")
-    #     choose = int(input("Enter your choice: "))
-    #     if choose == 1:
-    #         print("The price for a domain is 100.000VNĐ.")
-    #         confirm = input("Do you want to proceed? (Y/N) ")
-    #         if confirm == "Y":
-    #             if self.balance < 100000:
-    #                 print("You do not have enough money to buy a domain.")
-    #             else:
-    #                 self.balance -= 100000
-    #                 self.setDomain()
-    #         else:
-    #             print("Transaction canceled.")
-    #     else:
-    #         print("")
-    #         input("Press Enter to continue...")
-
-# write def buy_domain() using balance from class User
