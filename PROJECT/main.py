@@ -1,10 +1,5 @@
-# import os
-# import time
-# import hashlib
-# from datetime import datetime
 from domains.system2 import System
 from domains.web import Web
-# from domains.user import User
 
 
 class Menu:
@@ -55,37 +50,6 @@ class Menu:
                 case "7": self.web.web_domain_services(system = self.system)
                 case _:
                     print("Invalid choice! Please try again.")
-            #         print("== Main Menu ==")
-            #         print("1. Buy Domain")
-            #         print("2. Buy Service")
-            #         print("3. Check Domain Info")
-            #         print("4. Buy VPN")
-            #         print("5. Check VPN Info")
-            #         print("6. Return to main menu")
-            #         while True:
-            #             try:
-            #                 choose = int(input("Choose your option: "))
-            #                 break
-            #             except ValueError:
-            #                 print("Invalid input! Please enter a valid integer.")
-            #         self.system.clear_screen()
-            #         match choose:
-            #             case 1: self.web.buy_domain(self.system)
-            #             case 2: self.web.buy_vps(system=system, user=user)
-            #             case 3: self.web.domain_info()
-            #             case 4: self.web.buy_vpn()
-            #             case 5: self.web.vpn_info()
-            #             case 6: return True
-            #             case _:
-            #                 print("You have not entered a valid option")
-            #                 self.system.clear_screen()
-            #                 choose = int(input("Choose your option: "))
-            #         self.system.clear_screen()
-            #     # else:
-            #     case _:
-            #         print("Invalid choice! Please try again.")
-            #         self.system.clear_screen()
-
             input("Press Enter to continue...")
 
 

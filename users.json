@@ -1,12 +1,1 @@
-[
-    {
-        "username": "r",
-        "password": "b'~\\xec\\x8bwA\\xab\\x9a\\x91\\x07\\x11\\xc1D\\x18\\n\\x99\\xa7\\xa8\\xad\\x15\\x7f:s\\xc9!\\x9fJb\\x9c$\\xbf$\\x1d'",
-        "balance": 400000,
-        "product_id": 1,
-        "domain_name": "r.com",
-        "domain_ip": "177.197.80.64",
-        "current_vpn_plan": 1,
-        "current_vps_plan": 0
-    }
-]
+[{"username": "r", "password": "b'~\\xec\\x8bwA\\xab\\x9a\\x91\\x07\\x11\\xc1D\\x18\\n\\x99\\xa7\\xa8\\xad\\x15\\x7f:s\\xc9!\\x9fJb\\x9c$\\xbf$\\x1d'", "balance": 650000, "product_id": 1, "domain_name": "e.com", "domain_ip": "240.117.14.37", "current_vpn_plan": 3, "current_vps_plan": 0}]

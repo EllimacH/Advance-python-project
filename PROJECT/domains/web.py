@@ -114,14 +114,10 @@ class Web:
                     pass
                 case _:
                     return False
-            print("Payment is in progress, please wait...")
-            time.sleep(1)
-            print("")
-            print("Payment Completed")
-            print(f"You have purchased {self.vps_packages[self.selected_vps_package]['name']} package")
-            return True
-        else:
-            return False
+                #if user already has a VPS package, ask if they want to upgrade
+            if user.current_vps_package != 0:
+                
+    
 
     # Check domain info
 
@@ -147,7 +143,6 @@ class Web:
             for id, package in self.vpn_packages.items():
                 print(f"{id}. {package['name']} ({package['price']} VND)")
             print("else. Back to main menu")
-
             choice = input("Choose your package: ")
             match choice:
                 case "1":
