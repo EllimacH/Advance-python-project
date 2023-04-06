@@ -1,14 +1,16 @@
 from domains.system2 import System
 from domains.web import Web
-
+from domains.admin import Admin
 class Menu:
-    def __init__(self, web: Web):
+    def __init__(self, web: Web , admin: Admin):
         self.web = web
         self.system = web.system
+        self.admin = admin
 
     def is_not_logged_in(self) -> bool:
         """Return True if user is logged in, False otherwise"""
         while True:
+
             self.system.clear_screen()
             print("== Internet Service Provider (B.A.T.E) ==")
             print("[1] Sign-up")
@@ -37,6 +39,8 @@ class Menu:
             print("[6] Web domain service")
             print("-"*10)
             print("[7] Log-out")
+            if self.admin.is_admin(): # check if the current user is an admin
+                print("[8] Admin menu") # show an extra option for the admin to interact with the database
 
             choice = input("Enter your choice: ")
             match choice:
@@ -47,8 +51,10 @@ class Menu:
                 case "5": self.system.top_up()
                 case "6": self.web.web_domain_service_menu()
                 case "7": return self.system.log_out() # Here's the exit point of this method's loop. `log_out()` return False, assign to `is_logged_in` in `main()` function to get back to `is_not_logged_in()` menu.
-                case _:
-                    print("Invalid choice! Please try again.")
+                case "8": 
+                    if self.admin.is_admin(): # only allow the admin to access this option
+                        self.admin.admin_menu()
+                case _: print("Invalid choice! Please try again.")
             input("\nPress Enter to continue...")
 
 
@@ -69,12 +75,12 @@ def main():
     # - for VPN/VPS service, each user is independent, only need the "current logged in user" to modify their data
     # - for Domain service, each user has a distinct domain name, we need to have a function-can-access-all-users-data to check if the domain name is already taken or not
     # - on another side, the "current logged in user" is already in the System object for us to manage VPN/VPS infos anyway
-
+    admin = Admin(system, web)
     # Split the main menu into 2 parts:
     # - Not signed in (create account, sign in, exit)
     # - Signed in (everything else)
     # Originally, we have to pass both System and Web object to the Menu object, but we can just pass Web object, because Web object already contains System object
-    menu = Menu(web)
+    menu = Menu(web,admin)
     is_logged_in = False
 
     while True:
@@ -88,6 +94,7 @@ def main():
 
         input("\nPress Enter to continue...")
 
+    #create admin account
 
 if __name__ == "__main__":
     try:
