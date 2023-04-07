@@ -9,10 +9,10 @@ class System:
         self.users: list[User] = []
 
         self.mobile_plans = {
-            1: {"name": "Diamond", "price": 200000, "gb": 20},
-            2: {"name": "Gold", "price": 150000, "gb": 15},
-            3: {"name": "Silver", "price": 100000, "gb": 10},
-            4: {"name": "Bronze", "price": 50000, "gb": 5},
+            1: {"name": "Diamond", "price": 2500000, "gb": 500},
+            2: {"name": "Gold", "price": 500000, "gb": 100},
+            3: {"name": "Silver", "price": 250000, "gb": 50},
+            4: {"name": "Bronze", "price": 150000, "gb": 30},
         }
 
         if os.path.exists("users.json"):
@@ -177,13 +177,13 @@ class System:
         print()
         match choice:
             case "1":
-                print("Diamond package: 200k VND for 1 month, suitable for small and medium companies. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
+                print("Diamond package: 2500000 VND with 500GB for 1 month, suitable for small and medium companies. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
             case "2":
-                print("Gold package: 150k VND for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
+                print("Gold package: 500000 VND  with 100GB for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
             case "3":
-                print("Silver package: 100k VND for 1 month, suitable people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
+                print("Silver package: 250000 VND with 50GB for 1 month, suitable people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
             case "4":
-                print("Bronze package: 50k VND for 1 month, suitable for students or pupils. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
+                print("Bronze package: 150000 VND with 30GB for 1 month, suitable for students or pupils. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
             case _:
                 print("Invalid input")
 
