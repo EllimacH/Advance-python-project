@@ -1,4 +1,4 @@
-from domains.system2 import System
+from domains.system import System
 from domains.web import Web
 from domains.admin import Admin
 class Menu:
