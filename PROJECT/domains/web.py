@@ -82,7 +82,7 @@ class Web:
         print(f"Price: {service_info[select_id]['price']} VND")
         print(f"Description: {service_info[select_id]['description']}")
 
-
+    
 
     def buy_a_service(self, type: str) -> None:
         match type:
@@ -191,8 +191,8 @@ class Web:
             print("[4] VPS Service Information Center")
             print("[5] Check VPS Info")
             print("-"*10)
-            print("[5] Buy VPN")
-            print("[6] Check VPN Info")
+            print("[6] Buy VPN")
+            print("[7] Check VPN Info")
             print("-"*10)
             print("[else] Back to main menu")
             choose = input("\nChoose your option: ")
