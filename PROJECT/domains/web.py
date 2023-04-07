@@ -61,26 +61,32 @@ class Web:
                 service_info = self.vps_packages
             case _: return
 
-        print(f"\n== {type} Service Packages Information Center ==")
-        for id, package in service_info.items():
-            print(f"[{id}] {package['name']}")
-        print("[else] Back to main menu")
+        while True:
+            print(f"\n== {type} Service Packages Information Center ==")
+            for id, package in service_info.items():
+                print(f"[{id}] {package['name']}")
+            print("[else] Back to main menu")
 
-        # get user choice for service package id
-        select_id = input("\nChoose a package to see more details: ")
-        if not select_id.isdigit():
-            return
-        
-        # validate user choice
-        select_id = int(select_id)
-        if select_id not in service_info.keys():
-            print("Invalid package id")
-            return
-        
-        # print selected package details
-        print(f"\n== {service_info[select_id]['name']} Package ==")
-        print(f"Price: {service_info[select_id]['price']} VND")
-        print(f"Description: {service_info[select_id]['description']}")
+            # get user choice for service package id
+            select_id = input("\nChoose a package to see more details: ")
+            if not select_id.isdigit():
+                break
+
+            # validate user choice
+            select_id = int(select_id)
+            if select_id not in service_info.keys():
+                print("Invalid package id")
+                input("Press enter to continue...")
+                continue
+
+            print(f"\n== {service_info[select_id]['name']} ==")
+            print(f"Price: {service_info[select_id]['price']} VND")
+            print(service_info[select_id]['description'])
+            input("[1] Keep browsing\n[else] Back to main menu")
+            select_id = input("Enter your choice: ")
+            match select_id:
+                case "1": continue
+                case _: break
 
     
 
