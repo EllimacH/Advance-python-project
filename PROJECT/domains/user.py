@@ -17,6 +17,8 @@ class User:
         self.current_vpn_plan_id: int = 0
         self.current_vps_plan_id: int = 0
 
+
+
     def encrypt_password(self, password: str) -> str:
         """Only use when creating a new user"""
         return str(hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), b'salt', 100000))
@@ -46,3 +48,4 @@ class User:
             "current_vpn_plan_id": self.current_vpn_plan_id,
             "current_vps_plan_id": self.current_vps_plan_id,
         }
+    

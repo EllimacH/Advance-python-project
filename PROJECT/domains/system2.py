@@ -295,3 +295,6 @@ class System:
             os.system("cls")
         else:
             os.system("clear")
+
+
+#create an admin class that can access the admin menu and access existing users data
