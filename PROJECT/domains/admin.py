@@ -1,5 +1,5 @@
 from domains.user import User
-from domains.system2 import System
+from domains.system import System
 from domains.web import Web
 
 class Admin(User):
@@ -8,13 +8,6 @@ class Admin(User):
         self.system: System = system
         self.web: Web = web
         
-    def is_admin(self) -> bool:
-        return self.username == "admin" and self.password == "admin"
-
-        # Check if the current user is an admin by checking with a syntax like this: username is "admin" and password is "admin"
-
-    def is_admin_user(self) -> bool:
-        return self.is_admin()
 
     def admin_menu(self) -> bool:
         while True:
@@ -61,12 +54,3 @@ class Admin(User):
                 break
         else:
             print("User not found")
-
-    def create_admin_account(self) -> None:
-        self.username = "admin"
-        self.password = "admin"
-        self.balance = 0
-        self.mobile_plan_id = 0
-        self.system.users.append(self)
-        print("Admin account created!")
-

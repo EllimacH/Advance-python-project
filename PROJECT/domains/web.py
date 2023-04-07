@@ -1,4 +1,4 @@
-from domains.system2 import System
+from domains.system import System
 
 class Web:
     """Managing web, domain and VPN services"""
