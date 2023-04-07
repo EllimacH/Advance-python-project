@@ -1,5 +1,5 @@
 from domains.user import User
-from domains.system2 import System
+from domains.system import System
 from domains.web import Web
 
 class Admin(User):
@@ -7,35 +7,25 @@ class Admin(User):
         super().__init__()
         self.system: System = system
         self.web: Web = web
-        
-    def is_admin(self) -> bool:
-        return self.username == "admin" and self.password == "admin"
 
-        # Check if the current user is an admin by checking with a syntax like this: username is "admin" and password is "admin"
+    def admin_menu(self):
 
-    def is_admin_user(self) -> bool:
-        return self.is_admin()
 
-    def admin_menu(self) -> bool:
         while True:
+            self.system.flush_data_to_json()
             self.system.clear_screen()
+
             print(f"== Welcome {self.system.logged_in_user.username}! ==")
             print("[1] Check all users")
             print("[2] Delete user")
             print("[3] Delete user plan")
-            print("[4] Log-out")
-            choice: str = input("Enter your choice: ")
+            print("[else] Go back")
+            choice: str = input("\nEnter your choice: ")
             match choice:
-                case "1":
-                    self.check_all_users()
-                case "2":
-                    self.delete_user()
-                case "3":
-                    self.delete_user_mobile_plan()
-                case "4":
-                    return self.system.log_out()
-                case _:
-                    print("Invalid choice! Please try again.")
+                case "1": self.check_all_users()
+                case "2": self.delete_user()
+                case "3": self.delete_user_mobile_plan()
+                case _: return
             input("\nPress Enter to continue...")
 
     def check_all_users(self) -> None:
@@ -46,6 +36,9 @@ class Admin(User):
         username: str = input("Enter username account that you want to delete: ")
         for user in self.system.users:
             if user.username == username:
+                confirm = input(f"Are you sure you want to delete {user.username} account? (y/N): ")
+                if confirm.lower() != "y":
+                    return
                 self.system.users.remove(user)
                 print("User deleted")
                 break
@@ -56,17 +49,8 @@ class Admin(User):
         username: str = input("Enter username that you want to delete mobile plan: ")
         for user in self.system.users:
             if user.username == username:
-                user.mobile_plan_id = 0 
+                user.mobile_plan_id = 0
                 print("User plan deleted")
                 break
         else:
             print("User not found")
-
-    def create_admin_account(self) -> None:
-        self.username = "admin"
-        self.password = "admin"
-        self.balance = 0
-        self.mobile_plan_id = 0
-        self.system.users.append(self)
-        print("Admin account created!")
-
