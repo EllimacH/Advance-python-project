@@ -36,6 +36,7 @@ class System:
                     user_obj.username = user["username"]
                     user_obj.password = user["password"]
                     user_obj.balance = user["balance"]
+                    user_obj.is_admin = user["is_admin"]
 
                     user_obj.mobile_plan_id = user["mobile_plan_id"]
 
@@ -43,6 +44,7 @@ class System:
                     user_obj.domain_ip = user["domain_ip"]
                     user_obj.current_vpn_plan_id = user["current_vpn_plan_id"]
                     user_obj.current_vps_plan_id = user["current_vps_plan_id"]
+
                 except: # if the data is not complete, skip it
                     pass
 
@@ -70,6 +72,8 @@ class System:
         while True:
             username = input("\nEnter your username: ")
             for user in self.users:
+                if username == "":
+                    return
                 if username == user.username:
                     print("Username already exists! Please try again.")
                     break
@@ -79,6 +83,8 @@ class System:
         # Handling password
         password = input("Enter your password: ")
         while True:
+            if password == "":
+                return
             if len(password) < 8:
                 password = input("Password must be 8 or more characters! Please try again: ")
             else:
@@ -88,10 +94,16 @@ class System:
                 else:
                     password = input("Password does not match! Please try again: ")
 
+        # Check if this is the first user to be created
+        is_admin = False
+        if len(self.users) == 0:
+            is_admin = True
+
         # Save the new user to the list
         user = User()
         user.username = username
         user.password = user.encrypt_password(password)
+        user.is_admin = is_admin
         self.users.append(user)
 
     def log_in(self) -> bool:
@@ -108,10 +120,14 @@ class System:
                 return False
 
             # username handler
+            username_exists = False
             for user in self.users:
-                if not user.username == input_username:
-                    print("Username does not exist!")
-                    return False
+                if user.username == input_username:
+                    username_exists = True
+                    break
+            if not username_exists:
+                print("Username does not exist! Please try again.")
+                continue
 
             # password handler
             input_password = input("Enter your password: ")
@@ -179,7 +195,7 @@ class System:
             case "1":
                 print("Diamond package: 2500000 VND with 500GB for 1 month, suitable for small and medium companies. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
             case "2":
-                print("Gold package: 500000 VND  with 100GB for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
+                print("Gold package: 500000 VND with 100GB for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
             case "3":
                 print("Silver package: 250000 VND with 50GB for 1 month, suitable people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
             case "4":
@@ -295,6 +311,3 @@ class System:
             os.system("cls")
         else:
             os.system("clear")
-
-
-#create an admin class that can access the admin menu and access existing users data

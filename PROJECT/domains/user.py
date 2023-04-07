@@ -7,6 +7,7 @@ class User:
         self.username: str = ""
         self.password: str = ""
         self.balance: int = 0
+        self.is_admin: bool = False
 
         # In System
         self.mobile_plan_id: int = 0
@@ -16,7 +17,6 @@ class User:
         self.domain_ip: str = ""
         self.current_vpn_plan_id: int = 0
         self.current_vps_plan_id: int = 0
-
 
 
     def encrypt_password(self, password: str) -> str:
@@ -38,6 +38,7 @@ class User:
             "username": self.username,
             "password": self.password,
             "balance": self.balance,
+            "is_admin": self.is_admin,
 
             # In System
             "mobile_plan_id": self.mobile_plan_id,
@@ -48,4 +49,3 @@ class User:
             "current_vpn_plan_id": self.current_vpn_plan_id,
             "current_vps_plan_id": self.current_vps_plan_id,
         }
-    

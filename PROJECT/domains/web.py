@@ -18,7 +18,7 @@ class Web:
             4: {"name": "VIP", "price": 300000},
             5: {"name": "VIP+", "price": 500000}
         }
-        self.system = system
+        self.system: System = system
 
     def buy_domain(self) -> bool:
         """Register a new domain and IP address, return True if success, False otherwise"""
@@ -151,6 +151,7 @@ class Web:
         while True:
             self.system.flush_data_to_json() # flush data to json file every time user return to this menu
             self.system.clear_screen()
+
             print("== Web services menu ==")
             print("[1] Buy Domain")
             print("[2] Check Domain Info")
