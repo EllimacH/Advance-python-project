@@ -5,11 +5,11 @@ class Web:
 
     def __init__(self, system: System):
         self.vps_packages = {
-            1: {"name": "Basic", "price": 200000},
-            2: {"name": "Advanced", "price": 350000},
-            3: {"name": "High End", "price": 500000},
-            4: {"name": "VIP", "price": 800000},
-            5: {"name": "VIP+", "price": 1850000}
+            1: {"name": "Basic", "price": 500000, "description": "- CPU: Intel® Xeon® Six CoreProcessor E5-2620 2.0 GHz\n- Ram: 01GB\n- HDD: 50GB\n- Bandwidth: 100Mbps/10Mbps"},
+            2: {"name": "Advanced", "price": 700000, "description": "- CPU: Intel® Xeon® Six CoreProcessor E5-2620 2.0 GHz\n- Ram: 02GB\n- HDD: 100GB\n- Bandwidth: 100Mbps/10Mbps"},
+            3: {"name": "High End", "price": 1000000, "description": "- CPU: Intel® Xeon® Six CoreProcessor E5-2620 2.0 GHz\n- Ram: 04GB\n- HDD: 200GB\n- Bandwidth: 100Mbps/10Mbps"},
+            4: {"name": "VIP", "price": 1500000, "description": "- CPU: Intel® Xeon® Six CoreProcessor E5-2620 2.0 GHz\n- Ram: 08GB\n- HDD: 400GB\n- Bandwidth: 100Mbps/10Mbps"},
+            5: {"name": "VIP+", "price": 2000000, "description": "- CPU: Intel® Xeon® Six CoreProcessor E5-2620 2.0 GHz\n- Ram: 16GB\n- HDD: 800GB\n- Bandwidth: 100Mbps/10Mbps"}
         }
         self.vpn_packages = {
             1: {"name": "Basic", "price": 100000},
@@ -51,6 +51,38 @@ class Web:
 
         print("Domain registered successfully!")
         return True
+    
+    def service_info(self, type: str) -> None:
+        """Print informations of each service package"""
+        match type:
+            case "VPN":
+                service_info = self.vpn_packages
+            case "VPS":
+                service_info = self.vps_packages
+            case _: return
+
+        print(f"\n== {type} Service Packages Information Center ==")
+        for id, package in service_info.items():
+            print(f"[{id}] {package['name']}")
+        print("[else] Back to main menu")
+
+        # get user choice for service package id
+        select_id = input("\nChoose a package to see more details: ")
+        if not select_id.isdigit():
+            return
+        
+        # validate user choice
+        select_id = int(select_id)
+        if select_id not in service_info.keys():
+            print("Invalid package id")
+            return
+        
+        # print selected package details
+        print(f"\n== {service_info[select_id]['name']} Package ==")
+        print(f"Price: {service_info[select_id]['price']} VND")
+        print(f"Description: {service_info[select_id]['description']}")
+
+
 
     def buy_a_service(self, type: str) -> None:
         match type:
@@ -156,7 +188,8 @@ class Web:
             print("[2] Check Domain Info")
             print("-"*10)
             print("[3] Buy VPS")
-            print("[4] Check VPS Info")
+            print("[4] VPS Service Information Center")
+            print("[5] Check VPS Info")
             print("-"*10)
             print("[5] Buy VPN")
             print("[6] Check VPN Info")
@@ -167,9 +200,10 @@ class Web:
                 case "1": self.buy_domain()
                 case "2": self.domain_info()
                 case "3": self.buy_a_service("VPS")
-                case "4": self.check_service_info("VPS")
-                case "5": self.buy_a_service("VPN")
-                case "6": self.check_service_info("VPN")
+                case "4": self.service_info("VPS")
+                case "5": self.check_service_info("VPS")
+                case "6": self.buy_a_service("VPN")
+                case "7": self.check_service_info("VPN")
                 case _:
                     return
             input("\nPress Enter to continue...")
