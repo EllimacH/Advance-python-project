@@ -70,7 +70,7 @@ class System:
     def create_account(self):
         # Handling username
         while True:
-            username = input("\nEnter your username: ")
+            username = input("\nEnter your username (leave blank to cancel): ")
             for user in self.users:
                 if username == "":
                     return
@@ -81,7 +81,7 @@ class System:
                 break
 
         # Handling password
-        password = input("Enter your password: ")
+        password = input("Enter your password (leave blank to cancel): ")
         while True:
             if password == "":
                 return
@@ -130,7 +130,9 @@ class System:
                 continue
 
             # password handler
-            input_password = input("Enter your password: ")
+            input_password = input("Enter your password (leave blank to return to main menu): ")
+            if input_password == "":
+                return False
             for user in self.users:
                 valid_username = user.username == input_username
                 valid_password = user.is_valid_password(input_password)
