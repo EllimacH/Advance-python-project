@@ -10,7 +10,6 @@ class Admin(User):
 
     def admin_menu(self):
 
-
         while True:
             self.system.flush_data_to_json()
             self.system.clear_screen()
@@ -20,8 +19,10 @@ class Admin(User):
             print("[2] Delete user")
             print("[3] Delete user plan")
             print("[4] Change balance ")
-            # print("[5] Add Domain")
-            # print("[6] Remove Domain")
+            print("[5] Add Domain")
+            print("[6] Remove Domain")
+            print("[7] Add plan") 
+            print("[8] Remove plan")
             print("[else] Go back")
             choice: str = input("\nEnter your choice: ")
             match choice:
@@ -29,8 +30,10 @@ class Admin(User):
                 case "2": self.delete_user()
                 case "3": self.delete_user_mobile_plan()
                 case "4": self.change_balance()
-                # case "5": self.add_domain()
-                # case "6": self.remove_domain()
+                case "5": self.add_domain()
+                case "6": self.remove_domain()
+                case "7": self.add_plan()
+                case "8": self.remove_plan()
                 case _: return
             input("\nPress Enter to continue...")
 
@@ -81,26 +84,49 @@ class Admin(User):
         else:
             print("User not found")
 
-    # def add_domain(self) -> None:
-    #     username: str = input("Enter username of the user whose domain you want to change: ")
-    #     for user in self.system.users:
-    #         if user.username == username:
-    #             domain_name: str = input("Enter domain name: ")
-    #             domain_ip: str = input("Enter domain IP: ")
-    #             user.domain_name.append((domain_name, domain_ip)) # type: ignore
-    #             print("Domain added")
-    #             break
-    #     else:
-    #         print("User not found")
 
-    # def remove_domain(self) -> None:
-    #     username: str = input("Enter username of the user whose domain you want to change: ")
-    #     for user in self.system.users:
-    #         if user.username == username:
-    #             domain_name: str = input("Enter domain name: ")
-    #             domain_ip: str = input("Enter domain IP: ")
-    #             user.domain_name.remove((domain_name, domain_ip)) # type: ignore
-    #             print("Domain removed")
-    #             break
-    #     else:
-    #         print("User not found")
+    def add_domain(self) -> None:     
+        username: str = input("Enter username of the user whose domain you want to change: ")
+        for user in self.system.users:
+            if user.username == username:
+                domain_name: str = input("Enter domain name: ")
+                domain_ip: str = input("Enter domain IP: ")
+                user.domain_name.append((domain_name, domain_ip)) 
+                print("Domain added") 
+                break
+            else:
+                print("User not found")
+
+    def remove_domain(self) -> None:
+        username: str = input("Enter username of the user whose domain you want to change: ")
+        for user in self.system.users:
+            if user.username == username:
+                domain_name: str = input("Enter domain name: ")
+                domain_ip: str = input("Enter domain IP: ")
+                user.domain_name.remove((domain_name, domain_ip)) 
+                print("Domain removed")
+                break
+        else:
+            print("User not found")
+
+    def add_plan(self) -> None:
+        plan_id: str = input("Enter plan id: ")
+        plan_name: str = input("Enter plan name: ")
+        plan_price: int = int(input("Enter plan price: "))
+        plan_data: int = int(input("Enter plan data: "))
+        self.system.mobile_plans.append((plan_id, plan_name, plan_price, plan_data, ))
+        print("Plan added")
+
+
+    def remove_plan(self) -> None:
+        plan_id: str = input("Enter plan id : ")
+        for plan in self.system.mobile_plans:
+            if plan[0] == plan_id:
+                confirm = input(f"Are you sure you want to delete {plan[1]} plan? (y/N): ")
+                if confirm.lower() != "y":
+                    return
+                self.system.mobile_plans.remove(plan)
+                print("plan deleted")
+                break
+        else:
+            print("plan not found")
