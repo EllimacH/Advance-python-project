@@ -91,11 +91,11 @@ class Admin(User):
             if user.username == username:
                 domain_name: str = input("Enter domain name: ")
                 domain_ip: str = input("Enter domain IP: ")
-                user.domain_name.append((domain_name, domain_ip)) 
-                print("Domain added") 
+                user.domain_name.append((domain_name, domain_ip))  
+                print("Domain added")
                 break
-            else:
-                print("User not found")
+        else:
+            print("User not found")
 
     def remove_domain(self) -> None:
         username: str = input("Enter username of the user whose domain you want to change: ")
@@ -109,24 +109,63 @@ class Admin(User):
         else:
             print("User not found")
 
-    def add_plan(self) -> None:
-        plan_id: str = input("Enter plan id: ")
-        plan_name: str = input("Enter plan name: ")
-        plan_price: int = int(input("Enter plan price: "))
-        plan_data: int = int(input("Enter plan data: "))
-        self.system.mobile_plans.append((plan_id, plan_name, plan_price, plan_data, ))
-        print("Plan added")
+    # def add_mobile_plan(self) -> None:
+    #     plan_id: str = input("Enter plan id: ")
+    #     plan_name: str = input("Enter plan name: ")
+    #     plan_price: int = int(input("Enter plan price: "))
+    #     plan_data: int = int(input("Enter plan data: "))
+    #     self.system.mobile_plans.append((plan_id, plan_name, plan_price, plan_data))
+    #     print("Plan added")
+
+    # def remove_mobile_plan(self) -> None:
+    #     plan_id: str = input("Enter plan id : ")
+    #     for plan in self.system.mobile_plans:
+    #         if plan[0] == plan_id:
+    #             confirm = input(f"Are you sure you want to delete {plan[1]} plan? (y/N): ")
+    #             if confirm.lower() != "y":
+    #                 return
+    #             self.system.mobile_plans.remove(plan)
+    #             print("plan deleted")
+    #             break
+    #     else:
+    #         print("plan not found")
 
 
-    def remove_plan(self) -> None:
-        plan_id: str = input("Enter plan id : ")
-        for plan in self.system.mobile_plans:
-            if plan[0] == plan_id:
-                confirm = input(f"Are you sure you want to delete {plan[1]} plan? (y/N): ")
-                if confirm.lower() != "y":
-                    return
-                self.system.mobile_plans.remove(plan)
-                print("plan deleted")
-                break
-        else:
-            print("plan not found")
+    # def remove_vpn_package(self) -> None:
+    #     package_id: str = input("Enter the package id : ")
+    #     for package in self.web.vpn_packages:
+    #         if package[0] == package_id:
+    #             confirm = input(f"Are you sure you want to delete {package[1]} vpn package? (y/N): ")
+    #             if confirm.lower() != "y":
+    #                 return
+    #             self.web.vpn_packages.remove(package)
+    #             print("VPN package deleted")
+    #             break
+    #     else:
+    #         print("VPN package not found")
+
+    # def add_vpn_package(self) -> None:
+    #     vpn_package_name: str = input("Enter package name: ")
+    #     vpn_package_price: int = int(input("Enter package price: "))
+    #     self.web.vpn_packages.append((vpn_package_name, vpn_package_price))
+    #     print("VPN package added")
+
+    # def add_vps_package(self) -> None:
+    #     vps_package_name: str = input("Enter package name: ")
+    #     vps_package_price: int = int(input("Enter package price: "))
+    #     vps_package_description: str = input("Enter package description: ")
+    #     self.web.vps_packages.append((vps_package_name, vps_package_price, vps_package_description))
+    #     print("VPS package added")
+    
+    # def remove_vps_package(self) -> None:
+    #     vps_package_id: str = input("Enter vps packages id : ")
+    #     for package in self.web.vps_packages:
+    #         if package[0] == vps_package_id:
+    #             confirm = input(f"Are you sure you want to delete {package[1]} vps package? (y/N): ")
+    #             if confirm.lower() != "y":
+    #                 return
+    #             self.web.vps_packages.remove(package)
+    #             print("VPS Package deleted")
+    #             break
+    #     else:
+    #         print("VPS Package not found")
