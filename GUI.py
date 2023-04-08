@@ -11,11 +11,13 @@ class BateInternet:
         self.create_options_frame()
         self.create_buy_product_frame()
         self.create_mobile_frame()
-        self.current_frame = self.mobile_frame  
+        self.create_vps_frame()
+        self.current_frame = self.mobile_frame  # Default page is Mobile Plans
 
 
     # Function to create the menu selections
     def create_options_frame(self):
+        # Creating the frame for the menu selections
         self.options_frame = Frame(self.root, width=160, bg="light cyan")
         self.options_frame.pack(side=LEFT, fill="y")
         self.options_frame.pack_propagate(FALSE)
@@ -40,6 +42,18 @@ class BateInternet:
         # Creating a messagebox to ask for user conformation 
         # After confirming, if the balance is enough, the purchase will be made and the "Purchase" button will be disabled, replaced with "Purchased"
         rep = messagebox.askyesno("Purchase Confirmation", "Are you sure you want to purchase this plan?")
+        if rep == True:
+            # If the balance is enough, the purchase will be made and the "Purchase" button will be disabled, replaced with "Purchased"
+            # If the balance is not enough, a messagebox will appear saying "Not enough balance"
+            pass
+        else:
+            # If the user clicks "No", the messagebox will close
+            pass
+
+    def purchase_vps_package(self):
+        # Creating a messagebox to ask for user conformation 
+        # After confirming, if the balance is enough, the purchase will be made and the "Purchase" button will be disabled, replaced with "Purchased"
+        rep = messagebox.askyesno("Purchase Confirmation", "Are you sure you want to purchase this package?")
         if rep == True:
             # If the balance is enough, the purchase will be made and the "Purchase" button will be disabled, replaced with "Purchased"
             # If the balance is not enough, a messagebox will appear saying "Not enough balance"
@@ -79,6 +93,8 @@ class BateInternet:
         self.buy_product_frame = Frame(self.root, width=740, bg="light blue")
         self.buy_product_frame.pack(side=LEFT, fill="y")
         self.buy_product_frame.pack_propagate(FALSE)
+        self.buy_product_title = Label(self.buy_product_frame, text="---Purchase Page---", font=("Bodoni",20,"bold"), bg="light blue").pack(pady=12)
+        # Creating the items of the purchase page
 
 
     # Function to create the frame for the Mobile Plans page
@@ -122,6 +138,50 @@ class BateInternet:
         for Mobile in [self.Mobile_Item1, self.Mobile_Item2, self.Mobile_Item3, self.Mobile_Item4]:
             self.purchase_button = Button(Mobile, text="Purchase", bg="light cyan", width=10, state="normal" ,command=self.purchase_mobile_plan).place(x=50, y=90)
 
+
+    # Function to create the frame for the VPS Packages page
+    def create_vps_frame(self):
+        self.vps_frame = Frame(self.buy_product_frame, bg="light blue", width=740)
+        self.vps_frame.pack(side=LEFT, fill="y")
+        self.vps_frame.pack_propagate(FALSE)
+        self.vps_title = Label(self.vps_frame, text="---VPS Packages---", font=("Bodoni",20,"bold"), bg="light blue").pack(pady=12)
+
+        # Creating the items of VPS Packages
+        self.VPS_Item1 = Frame(self.vps_frame, width=180, height=132, bg="cyan")
+        self.VPS_Item1.place(x=30, y=100)
+        self.VPS_Item1.pack_propagate(FALSE)
+        self.VPS_Item1_title = Label(self.VPS_Item1, text="Basic", font=("Bodoni",16,"bold"), bg="cyan").pack()
+        self.VPS_Item1_text = Label(self.VPS_Item1, text="500,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=5)
+
+        self.VPS_Item2 = Frame(self.vps_frame, width=180, height=132, bg="cyan")
+        self.VPS_Item2.place(x=290, y=100)
+        self.VPS_Item2.pack_propagate(FALSE)
+        self.VPS_Item2_title = Label(self.VPS_Item2, text="Advanced", font=("Bodoni",16,"bold"), bg="cyan").pack()
+        self.VPS_Item2_text = Label(self.VPS_Item2, text="700,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=5)
+
+        self.VPS_Item3 = Frame(self.vps_frame, width=180, height=132, bg="cyan")
+        self.VPS_Item3.place(x=30, y=300)
+        self.VPS_Item3.pack_propagate(FALSE)
+        self.VPS_Item3_title = Label(self.VPS_Item3, text="High End", font=("Bodoni",16,"bold"), bg="cyan").pack()
+        self.VPS_Item3_text = Label(self.VPS_Item3, text="1,000,000 VND", font=("Helvetica",13,"italic"), bg="cyan").pack(pady=5)
+
+        self.VPS_Item4 = Frame(self.vps_frame, width=180, height=132, bg="cyan")
+        self.VPS_Item4.place(x=290, y=300)
+        self.VPS_Item4.pack_propagate(FALSE)
+        self.VPS_Item4_title = Label(self.VPS_Item4, text="VIP", font=("Bodoni",15,"bold"), bg="cyan").pack()
+        self.VPS_Item4_text = Label(self.VPS_Item4, text="1,500,000 VND", font=("Helvetica",13,"italic"), bg="cyan").pack(pady=5)
+
+        self.VPS_Item5 = Frame(self.vps_frame, width=180, height=132, bg="cyan")
+        self.VPS_Item5.place(x=30, y=500)
+        self.VPS_Item5.pack_propagate(FALSE)
+        self.VPS_Item5_title = Label(self.VPS_Item5, text="VIP+", font=("Bodoni",15,"bold"), bg="cyan").pack()
+        self.VPS_Item5_text = Label(self.VPS_Item5, text="2,000,000 VND", font=("Helvetica",13,"italic"), bg="cyan").pack(pady=5)
+
+        # Creating a button to purchase selected item
+        for VPS in [self.VPS_Item1, self.VPS_Item2, self.VPS_Item3, self.VPS_Item4, self.VPS_Item5]:
+            self.purchase_button = Button(VPS, text="Purchase", bg="light cyan", width=10, state="normal" ,command=self.purchase_vps_package).place(x=50, y=90)
+
+        # 
     #pur
 
 
@@ -129,6 +189,8 @@ class BateInternet:
 
     def run(self):
         self.root.mainloop()
+
+
 
 
 bate = BateInternet()
