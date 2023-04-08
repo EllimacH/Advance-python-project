@@ -5,14 +5,14 @@ class BateInternet:
     def __init__(self):
         self.root = Tk()
         self.root.title("B.A.T.E Internet")
-        self.root.geometry("900x520")
+        self.root.geometry("700x520")
         self.root.resizable(0,0)
 
         self.create_options_frame()
         self.create_buy_product_frame()
         self.create_mobile_frame()
-        self.current_frame = self.mobile_frame  
-
+        # Set current frame to mobile frame
+        self.current_frame = self.mobile_frame
 
     # Function to create the menu selections
     def create_options_frame(self):
@@ -23,12 +23,12 @@ class BateInternet:
         self.title.place(x=2, y=10)
 
         # Creating buttons for the 3 options
-        self.mobile_plans = Button(self.options_frame, text="Mobile Plans", font=("Bodoni",12,"bold"), bg="light cyan", width=14, height=2, command=self.go_to_mobile, state=DISABLED)
-        self.mobile_plans.place(x=4, y=110)
-        self.vps_packages = Button(self.options_frame, text="VPS Packages", font=("Bodoni",12,"bold"), bg="light cyan", width=14, height=2, command=self.go_to_vps)
-        self.vps_packages.place(x=4, y=210)
-        self.vpn_packages = Button(self.options_frame, text="VPN Packages", font=("Bodoni",12,"bold"), bg="light cyan", width=14, height=2, command=self.go_to_vpn)
-        self.vpn_packages.place(x=4, y=310)
+        self.select_mobile_plans = Button(self.options_frame, text="Mobile Plans", font=("Bodoni",12,"bold"), bg="light cyan", width=14, height=2, command=self.go_to_mobile, state=DISABLED)
+        self.select_mobile_plans.place(x=4, y=110)
+        self.select_vps_packages = Button(self.options_frame, text="VPS Packages", font=("Bodoni",12,"bold"), bg="light cyan", width=14, height=2, command=self.go_to_vps)
+        self.select_vps_packages.place(x=4, y=210)
+        self.select_vpn_packages = Button(self.options_frame, text="VPN Packages", font=("Bodoni",12,"bold"), bg="light cyan", width=14, height=2, command=self.go_to_vpn)
+        self.select_vpn_packages.place(x=4, y=310)
 
         # Creating the return button
         self.return_button = Button(self.options_frame, text="Return", bg="light cyan", width=5, command=self.root.quit)
@@ -37,16 +37,17 @@ class BateInternet:
 
     # Creating a function for the purchase button
     def purchase_item(self):
-        # Creating a messagebox to ask for user conformation 
-        # After confirming, if the balance is enough, the purchase will be made and the "Purchase" button will be disabled, replaced with "Purchased"
+        # MISSING CODE HERE, NEED TO ADD THE PURCHASE FUNCTIONALITY ASAP
+        # Creating a messagebox to ask for user conformation
+        # After confirming, the purchase will be made and the "Purchase" button will be disabled, replaced with "Purchased"
         return
 
 
     def go_to_mobile(self):
         # Disable the "Mobile Plans" button and enable the rest of the buttons
-        self.mobile_plans.config(state=DISABLED)
-        self.vps_packages.config(state=NORMAL)
-        self.vpn_packages.config(state=NORMAL)
+        self.select_mobile_plans.config(state=DISABLED)
+        self.select_vps_packages.config(state=NORMAL)
+        self.select_vpn_packages.config(state=NORMAL)
         # Erasing the current frame
         self.current_frame.pack_forget()
         # Adding the Mobile Plans page
@@ -57,9 +58,9 @@ class BateInternet:
 
     def go_to_vps(self):
         # Disable the "VPS Packages" button and enable the rest of the buttons
-        self.vps_packages.config(state=DISABLED)
-        self.mobile_plans.config(state=NORMAL)
-        self.vpn_packages.config(state=NORMAL)
+        self.select_vps_packages.config(state=DISABLED)
+        self.select_mobile_plans.config(state=NORMAL)
+        self.select_vpn_packages.config(state=NORMAL)
 
         # Erasing the current frame
         self.current_frame.pack_forget()
@@ -72,9 +73,9 @@ class BateInternet:
 
     def go_to_vpn(self):
         # Disable the "VPN Packages" button and enable the rest of the buttons
-        self.vpn_packages.config(state=DISABLED)
-        self.mobile_plans.config(state=NORMAL)
-        self.vps_packages.config(state=NORMAL)
+        self.select_vpn_packages.config(state=DISABLED)
+        self.select_mobile_plans.config(state=NORMAL)
+        self.select_vps_packages.config(state=NORMAL)
         # Erasing the current frame
         self.current_frame.pack_forget()
         # Creating a new frame for the VPN Packages page
@@ -104,28 +105,28 @@ class BateInternet:
         self.Mobile_Item1.place(x=30, y=100)
         self.Mobile_Item1.pack_propagate(0)
         self.Mobile_Item1_title = Label(self.Mobile_Item1, text="Bronze", font=("Bodoni",16,"bold"), bg="cyan").pack()
-        self.Mobile_Item1_text = Label(self.Mobile_Item1, text="5GB/month\n50,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=3)
+        self.Mobile_Item1_text = Label(self.Mobile_Item1, text="30GB/month\n150,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=3)
                 
         # Silver Plan
         self.Mobile_Item2 = Frame(self.mobile_frame, width=180, height=132, bg="cyan")
         self.Mobile_Item2.place(x=290, y=100)
         self.Mobile_Item2.pack_propagate(0)
         self.Mobile_Item2_title = Label(self.Mobile_Item2, text="Silver", font=("Bodoni",16,"bold"), bg="cyan").pack()
-        self.Mobile_Item2_text = Label(self.Mobile_Item2, text="10GB/month\n100,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=3)
+        self.Mobile_Item2_text = Label(self.Mobile_Item2, text="50GB/month\n250,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=3)
 
         # Gold Plan
         self.Mobile_Item3 = Frame(self.mobile_frame, width=180, height=132, bg="cyan")
         self.Mobile_Item3.place(x=30, y=300)
         self.Mobile_Item3.pack_propagate(0)
         self.Mobile_Item3_title = Label(self.Mobile_Item3, text="Gold", font=("Bodoni",16,"bold"), bg="cyan").pack()
-        self.Mobile_Item3_text = Label(self.Mobile_Item3, text="15GB/month\n150,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=3)
+        self.Mobile_Item3_text = Label(self.Mobile_Item3, text="100GB/month\n500,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=3)
 
         # Diamond Plan
         self.Mobile_Item4 = Frame(self.mobile_frame, width=180, height=132, bg="cyan")
         self.Mobile_Item4.place(x=290, y=300)
         self.Mobile_Item4.pack_propagate(0)
         self.Mobile_Item4_title = Label(self.Mobile_Item4, text="Diamond", font=("Bodoni",15,"bold"), bg="cyan").pack()
-        self.Mobile_Item4_text = Label(self.Mobile_Item4, text="20GB/month\n200,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=3)
+        self.Mobile_Item4_text = Label(self.Mobile_Item4, text="500GB/month\n2,500,000 VND", font=("Helvetica",14,"italic"), bg="cyan").pack(pady=3)
 
         # Creating a button to purchase selected item
         for Mobile in [self.Mobile_Item1, self.Mobile_Item2, self.Mobile_Item3, self.Mobile_Item4]:
