@@ -9,10 +9,10 @@ class System:
         self.users: list[User] = []
 
         self.mobile_plans = {
-            1: {"name": "Diamond", "price": 2500000, "gb": 500},
-            2: {"name": "Gold", "price": 500000, "gb": 100},
-            3: {"name": "Silver", "price": 250000, "gb": 50},
-            4: {"name": "Bronze", "price": 150000, "gb": 30},
+            1: {"name": "Diamond", "price": 2500000, "gb": 500, "description": "Diamond package: 2500000 VND with 500GB for 1 month, suitable for small and medium companies. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price."},
+            2: {"name": "Gold", "price": 500000, "gb": 100, "description": "Gold package: 500000 VND with 100GB for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price."},
+            3: {"name": "Silver", "price": 250000, "gb": 50, "description": "Silver package: 250000 VND with 50GB for 1 month, suitable people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price."},
+            4: {"name": "Bronze", "price": 150000, "gb": 30, "description": "Bronze package: 150000 VND with 30GB for 1 month, suitable for students or pupils. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price."},
         }
 
         if os.path.exists("users.json"):
@@ -187,23 +187,31 @@ class System:
         print(f"Your current plan is: {plan_name} - {plan_price} VND - {plan_gb} GB")
 
     def list_mobile_plans(self) -> None:  # check product information
-        print("\n== Mobile plans ==")
-        for plan_id, plan in self.mobile_plans.items():
-            print(f"[{plan_id}] {plan['name']} - {plan['price']} VND - {plan['gb']} GB")
-        choice = input("Select the plan you want to check more information: ")
-
-        print()
-        match choice:
-            case "1":
-                print("Diamond package: 2500000 VND with 500GB for 1 month, suitable for small and medium companies. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
-            case "2":
-                print("Gold package: 500000 VND with 100GB for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
-            case "3":
-                print("Silver package: 250000 VND with 50GB for 1 month, suitable people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
-            case "4":
-                print("Bronze package: 150000 VND with 30GB for 1 month, suitable for students or pupils. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.")
-            case _:
-                print("Invalid input")
+        while True:
+            print("\n== Mobile plans ==")
+            for plan_id, plan in self.mobile_plans.items():
+                print(f"[{plan_id}] {plan['name']} - {plan['price']} VND - {plan['gb']} GB")
+            choice = input("Select the plan you want to check more information: ")
+            if not choice.isdigit():
+                print("Invalid input!")
+                break
+            
+            choice = int(choice)
+            if choice not in self.mobile_plans:
+                print("Invalid input!")
+                input("Press enter to continue...")
+                continue
+            print(f"Name: {self.mobile_plans[choice]['name']}")
+            print(f"Price: {self.mobile_plans[choice]['price']} VND")
+            print(f"Data: {self.mobile_plans[choice]['gb']} GB")
+            print(f"Description: {self.mobile_plans[choice]['description']}")
+            print()
+            print("[1] Keep browsing")
+            print("[else] Return to main menu")
+            choice = input("Enter your choice: ")
+            match choice:
+                case "1": continue
+                case _: break
 
     def register_mobile_plan(self):
         # list all mobile plans
