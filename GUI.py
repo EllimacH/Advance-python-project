@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 
 class BateInternet:
+    balance = 0
     def __init__(self):
         self.root = Tk()
         self.root.title("B.A.T.E Internet")
@@ -36,6 +37,7 @@ class BateInternet:
 
 
     # Creating a function for the purchase button
+    balance = 1000000 # Creating a variable for the balance
     def purchase_mobile_plan(self):
         # Creating a messagebox to ask for user conformation 
         # After confirming, if the balance is enough, the purchase will be made and the "Purchase" button will be disabled, replaced with "Purchased"
@@ -43,7 +45,33 @@ class BateInternet:
         if rep == True:
             # If the balance is enough, the purchase will be made and the "Purchase" button will be disabled, replaced with "Purchased"
             # If the balance is not enough, a messagebox will appear saying "Not enough balance"
-            pass
+            global Mobile # Making the variable "Mobile" global
+            for Mobile in [self.Mobile_Item1, self.Mobile_Item2, self.Mobile_Item3, self.Mobile_Item4]:
+                # make the function to display only the selected item
+                if Mobile == self.Mobile_Item1:
+                    self.balance -= 50000
+                    if self.balance < 50000:
+                        messagebox.showinfo("Purchase Information" ,"You do not have enough balance to purchase this plan")
+                    else:
+                        messagebox.showinfo("Purchase Information" , "Purchase successful!\nYour balance is now: " + str(self.balance))
+                elif Mobile == self.Mobile_Item2:
+                    self.balance -= 100000
+                    if self.balance < 100000:
+                        messagebox.showinfo("You do not have enough balance to purchase this plan")
+                    else:
+                        messagebox.showinfo("Purchase Information" , "Purchase successful!\nYour balance is now: " + str(self.balance))
+                elif Mobile == self.Mobile_Item3:
+                    self.balance -= 150000
+                    if self.balance < 200000:
+                        messagebox.showinfo("You do not have enough balance to purchase this plan")
+                    else:
+                        messagebox.showinfo("Purchase Information" , "Purchase successful!\nYour balance is now: " + str(self.balance))
+                elif Mobile == self.Mobile_Item4:
+                    self.balance -= 200000
+                    if self.balance < 200000:
+                        messagebox.showinfo("You do not have enough balance to purchase this plan")
+                    else:
+                        messagebox.showinfo("Purchase Information" , "Purchase successful!\nYour balance is now: " + str(self.balance))
         else:
             # If the user clicks "No", the messagebox will close
             pass
@@ -55,7 +83,7 @@ class BateInternet:
         self.vps_packages.config(state=NORMAL)
         self.vpn_packages.config(state=NORMAL)
         # Creating a new frame for the Mobile Plans page
-    
+
 
     def go_to_vps(self):
         # Disable the "VPS Packages" button and enable the rest of the buttons
@@ -119,6 +147,7 @@ class BateInternet:
         self.Mobile_Item4_text = Label(self.Mobile_Item4, text="20GB/month\n200,000 VND", font=("Helvetica",13,"italic"), bg="cyan").pack(pady=5)
 
         # Creating a button to purchase selected item
+        global Mobile # Making the variable "Mobile" global so that it can be used in the purchase_mobile_plan function
         for Mobile in [self.Mobile_Item1, self.Mobile_Item2, self.Mobile_Item3, self.Mobile_Item4]:
             self.purchase_button = Button(Mobile, text="Purchase", bg="light cyan", width=10, state="normal" ,command=self.purchase_mobile_plan).place(x=50, y=90)
 
