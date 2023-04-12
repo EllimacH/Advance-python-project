@@ -3,6 +3,7 @@ import os
 import json
 import random
 from domains.user import User
+from tkinter import messagebox as mb
 
 class System:
     def __init__(self):
@@ -20,9 +21,11 @@ class System:
 
         self.logged_in_user = User() # This is a blank user object, to be assigned to the logged in user object
 
-    # ==============================
-    # SAVE/LOAD PERSISTENT USER DATA
-    # ==============================
+    # ===================================================================
+    #
+    #      FOR PERSISTENCE DATA STORAGE, DO NOT MODIFY BELOW THIS LINE
+    #
+    # ===================================================================
 
     def load_data_from_json(self, file_name: str) -> None:
         with open(file_name, "r") as f:
@@ -63,9 +66,19 @@ class System:
         with open("users.json", "w") as f:
             json.dump(data, f)
 
-    # ======================
+    # ===================================================================
+    #
+    #      FOR PERSISTENCE DATA STORAGE, DO NOT MODIFY ABOVE THIS LINE
+    #
+    # ===================================================================
+
+    # ============================================================
+    #
+    #      METHODS FOR CLI [BELOW] THIS LINE - DO NOT MODIFY
+    #
+    # ============================================================
+
     # LOG-IN/LOG-OUT/SIGN-UP
-    # ======================
 
     def create_account(self):
         # Handling username
@@ -149,9 +162,7 @@ class System:
         print("Logout successful!")
         return False
 
-    # ==================
     # BALANCE MANAGEMENT
-    # ==================
 
     def check_balance(self):
         print(f"\nYour balance: {self.logged_in_user.balance} VND")
@@ -168,9 +179,7 @@ class System:
         print("Recharge successful!")
         print(f"Your balance: {self.logged_in_user.balance} VND")
 
-    # ======================
     # MOBILE PLAN MANAGEMENT
-    # ======================
 
     def check_current_plan(self):
         current_mobile_plan_id = self.logged_in_user.mobile_plan_id
@@ -195,7 +204,7 @@ class System:
             if not choice.isdigit():
                 print("Invalid input!")
                 break
-            
+
             choice = int(choice)
             if choice not in self.mobile_plans:
                 print("Invalid input!")
@@ -212,6 +221,8 @@ class System:
             match choice:
                 case "1": continue
                 case _: break
+
+    # DOMAIN MANAGEMENT
 
     def register_mobile_plan(self):
         # list all mobile plans
@@ -263,9 +274,57 @@ class System:
             print("Purchase successful!")
             return
 
-    # =================
-    # DOMAIN MANAGEMENT
-    # =================
+    # COSMETIC
+
+    def clear_screen(self):
+        if os.name == "nt": # If the host OS is Windows
+            os.system("cls")
+        else:
+            os.system("clear")
+
+    # ============================================================
+    #
+    #      METHODS FOR CLI [ABOVE] THIS LINE - DO NOT MODIFY
+    #
+    # ============================================================
+
+    # ==========================================
+    #
+    #      METHODS FOR GUI [BELOW] THIS LINE
+    #
+    # ==========================================
+
+    def purchase_mobile_plan(self, mobile_plan_id):
+        # checks if user has a current plan
+        if self.logged_in_user.mobile_plan_id != 0:
+            current_plan_name = self.mobile_plans[self.logged_in_user.mobile_plan_id]['name']
+            choice = mb.askyesno("Bate", f"Your current plan is: {current_plan_name}. Do you want to change?")
+            if not choice:
+                mb.showinfo("Bate", "Purchase cancelled.")
+                return
+
+        # checks if user has sufficient balance
+        if self.logged_in_user.balance < int(self.mobile_plans[mobile_plan_id]['price']):
+            messagebox.showerror("Bate", "Insufficient balance.")
+            return
+
+        # updates user's product and balance
+        self.logged_in_user.mobile_plan_id = mobile_plan_id
+        self.logged_in_user.balance -= int(self.mobile_plans[mobile_plan_id]['price'])
+        mb.showinfo("Bate", "Purchase successful!")
+        return
+
+    # ===========================================
+    #
+    #      METHODS FOR GUI [ABOVE] THIS LINE
+    #
+    # ===========================================
+
+    # =================================================
+    #
+    #      METHODS FOR THIS CLASS [BELOW] THIS LINE
+    #
+    # =================================================
 
     def is_valid_domain(self, domain_name: str) -> bool:
         """Check if domain is vaid + loop through all users and check if domain_name is available"""
@@ -312,12 +371,8 @@ class System:
             # if the loop ends and no other user has the random_ip, return it
             return random_ip
 
-    # ========
-    # COSMETIC
-    # ========
-
-    def clear_screen(self):
-        if os.name == "nt": # If the host OS is Windows
-            os.system("cls")
-        else:
-            os.system("clear")
+    # =================================================
+    #
+    #      METHODS FOR THIS CLASS [ABOVE] THIS LINE
+    #
+    # =================================================

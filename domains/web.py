@@ -1,4 +1,6 @@
 from domains.system import System
+from tkinter import messagebox as mb
+from domains.user import User
 
 class Web:
     """Managing web, domain and VPN services"""
@@ -11,18 +13,23 @@ class Web:
             4: {"name": "VIP", "price": 1500000, "description": "- CPU: Intel® Xeon® Six CoreProcessor E5-2620 2.0 GHz\n- Ram: 08GB\n- HDD: 400GB\n- Bandwidth: 100Mbps/10Mbps"},
             5: {"name": "VIP+", "price": 2000000, "description": "- CPU: Intel® Xeon® Six CoreProcessor E5-2620 2.0 GHz\n- Ram: 16GB\n- HDD: 800GB\n- Bandwidth: 100Mbps/10Mbps"}
         }
-        self.vpn_packages = {
-            1: {"name": "Basic", "price": 100000},
-            2: {"name": "Advanced", "price": 150000},
-            3: {"name": "High End", "price": 200000},
-            4: {"name": "VIP", "price": 300000},
-            5: {"name": "VIP+", "price": 500000}
+        self.vpn_packages: dict[int, dict[str, str | int]] = {
+            1: {"name": "Basic", "price": 100000, "description": "Basic VPN service"},
+            2: {"name": "Advanced", "price": 150000, "description": "Advanced VPN service"},
+            3: {"name": "High End", "price": 200000, "description": "High End VPN service"},
+            4: {"name": "VIP", "price": 300000, "description": "VIP VPN service"},
+            5: {"name": "VIP+", "price": 500000, "description": "VIP+ VPN service"}
         }
         self.system: System = system
 
+    # ============================================================
+    #
+    #      METHODS FOR CLI [BELOW] THIS LINE - DO NOT MODIFY
+    #
+    # ============================================================
+
     def buy_domain(self) -> bool:
         """Register a new domain and IP address, return True if success, False otherwise"""
-
         # Check balance
         if self.system.logged_in_user.balance < 200000:
             print("You must have at least 200.000 VND to buy a domain")
@@ -51,7 +58,7 @@ class Web:
 
         print("Domain registered successfully!")
         return True
-    
+
     def service_info(self, type: str) -> None:
         """Print informations of each service package"""
         match type:
@@ -89,9 +96,36 @@ class Web:
                 case "1": continue
                 case _: break
 
-    
+    def domain_info(self) -> None:
+        domain_name = self.system.logged_in_user.domain_name
+        domain_ip = self.system.logged_in_user.domain_ip
+        if domain_name == "":
+            print("You don't have a domain yet")
+        else:
+            print(f"Domain name: {domain_name} | Domain IP: {domain_ip}")
+
+    def check_service_info(self, type: str) -> None:
+        """Print user's service package info"""
+        match type:
+            case "VPN":
+                user_service_id = self.system.logged_in_user.current_vpn_plan_id
+                services = self.vpn_packages
+            case "VPS":
+                user_service_id = self.system.logged_in_user.current_vps_plan_id
+                services = self.vps_packages
+            case _: return
+
+        # check if user has a service package
+        if user_service_id == 0:
+            print(f"You don't have any {type} service package")
+            return
+
+        # print user service package info
+        service = services[user_service_id]
+        print(f"Your {type}: {service['name']} | Price: {service['price']} VND")
 
     def buy_a_service(self, type: str) -> None:
+        """Buy a service package (VPN or VPS)"""
         match type:
             case "VPN":
                 packages = self.vpn_packages
@@ -159,33 +193,6 @@ class Web:
         print(f"\nYou have purchased {package_name} package")
         return
 
-    def domain_info(self) -> None:
-        domain_name = self.system.logged_in_user.domain_name
-        domain_ip = self.system.logged_in_user.domain_ip
-        if domain_name == "":
-            print("You don't have a domain yet")
-        else:
-            print(f"Domain name: {domain_name} | Domain IP: {domain_ip}")
-
-    def check_service_info(self, type: str) -> None:
-        match type:
-            case "VPN":
-                user_service_id = self.system.logged_in_user.current_vpn_plan_id
-                services = self.vpn_packages
-            case "VPS":
-                user_service_id = self.system.logged_in_user.current_vps_plan_id
-                services = self.vps_packages
-            case _: return
-
-        # check if user has a service package
-        if user_service_id == 0:
-            print(f"You don't have any {type} service package")
-            return
-
-        # print user service package info
-        service = services[user_service_id]
-        print(f"Your {type}: {service['name']} | Price: {service['price']} VND")
-
     def web_domain_service_menu(self) -> None:
         while True:
             self.system.flush_data_to_json() # flush data to json file every time user return to this menu
@@ -215,3 +222,57 @@ class Web:
                 case _:
                     return
             input("\nPress Enter to continue...")
+
+    # =======================================================
+    #
+    #     METHODS FOR CLI [ABOVE] THIS LINE - DO NOT MODIFY
+    #
+    # =======================================================
+
+    # ========================================
+    #
+    #     METHODS FOR GUI [BELOW] THIS LINE
+    #
+    # ========================================
+
+    def buy_a_service_gui(self, service_type: str, service_id: int) -> None:
+        service_type = service_type.upper()
+
+        # this variable is just for convenience variable calling, DO NOT ASSIGN NEW VALUE TO IT
+        current_package_id: int = 0
+        match service_type:
+            case "VPN":
+                current_package_id = self.system.logged_in_user.current_vpn_plan_id
+            case "VPS":
+                current_package_id = self.system.logged_in_user.current_vps_plan_id
+            case _:
+                return
+
+        # check if user already has this service plan
+        if current_package_id == service_id:
+            mb.showinfo("Bate", f"You already have {service_type} plan {self.vpn_packages[service_id]['name']}")
+            return
+
+        # check if user has enough balance to purchase this service plan
+        # if self.system.logged_in_user.balance < int(self.vpn_packages[service_id]['price']):
+        #     mb.showinfo("Bate","You don't have enough balance to purchase this product")
+        #     return
+
+        # check if user already has a service plan and ask for confirmation to upgrade
+        if current_package_id != 0:
+            choice = mb.askyesno("Bate",f"You current {service_type} plan is {self.vpn_packages[current_package_id]['name']}. Do you want to upgrade?")
+            if not choice:
+                mb.showinfo("Bate","Purchase cancelled")
+                return
+
+        # deduct user balance and assign new service plan to user
+        self.system.logged_in_user.balance -= int(self.vpn_packages[service_id]['price'])
+        match service_type:
+            case "VPN":
+                self.system.logged_in_user.current_vpn_plan_id = service_id
+            case "VPS":
+                self.system.logged_in_user.current_vps_plan_id = service_id
+            case _:
+                return
+
+        mb.showinfo("Bate",f"You have purchase your {service_type} plan")
