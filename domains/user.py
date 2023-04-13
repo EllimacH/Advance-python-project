@@ -1,6 +1,5 @@
 import hashlib
 
-
 class User:
     def __init__(self):
         # Basic info
@@ -31,6 +30,12 @@ class User:
     def get_username(self):
         return self.username
 
+    # ===================================================================
+    #
+    #      FOR PERSISTENCE DATA STORAGE, DO NOT MODIFY BELOW THIS LINE
+    #
+    # ===================================================================
+
     def serialize(self) -> dict[str, str | int]:
         # `: dict[str, str | int]`: a dictionary with keys are strings and values are either strings or integers
         return {
@@ -49,3 +54,9 @@ class User:
             "current_vpn_plan_id": self.current_vpn_plan_id,
             "current_vps_plan_id": self.current_vps_plan_id,
         }
+
+    # ===================================================================
+    #
+    #      FOR PERSISTENCE DATA STORAGE, DO NOT MODIFY ABOVE THIS LINE
+    #
+    # ===================================================================
