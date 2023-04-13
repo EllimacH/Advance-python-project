@@ -1,29 +1,31 @@
+import hashlib
 import customtkinter as ctk
 from customtkinter import *
 from tkinter import messagebox
-import hashlib
-import time
+from domains.gui_helpers.BateMain import BateMain
+from domains.system import System
+from domains.web import Web
+from domains.user import User
 
-# Constructor class
-class User:
-    def __init__(self, username, password):
-        self.username = username
-        self.password = hashlib.sha256(password.encode()).hexdigest()
-
-
-# Main class with everything
 class BateSignIn:
-    def __init__(self):
+    """Sign in GUI for B.A.T.E Internet"""
+    def __init__(self, system: System, web: Web):
         self.users = {}
         ctk.set_appearance_mode("light")
         ctk.set_default_color_theme("blue")
+
+        self.system = system
+        self.web = web
     
     # Function to create an account
     def create_account(self):
         username = self.Username_bar.get()
         password = self.Password_bar.get()
-        user = User(username, password)
-        self.users[username] = user
+
+        user = User()
+        user.username = username
+        user.password = user.encrypt_password(password)
+
         if str(self.Re_Password_bar.get()) == str(self.Password_bar.get()):
             if len(str(password)) >= 8:
                 messagebox.showinfo("B.A.T.E", "Account created successfully!")
@@ -35,7 +37,7 @@ class BateSignIn:
                 self.Username_bar.delete(0, END)
                 self.Re_Password_bar.delete(0, END)
             # If the username is already taken
-            elif username in self.users:
+            elif username in self.system.users:
                 messagebox.showerror("B.A.T.E", "Username already taken!")
                 self.Password_bar.delete(0, END)
                 self.Username_bar.delete(0, END)
@@ -46,21 +48,35 @@ class BateSignIn:
             self.Username_bar.delete(0, END)
             self.Re_Password_bar.delete(0, END)
 
+        # Add the user to the database
+        self.system.users.append(user)
+        self.system.flush_data_to_json()
+
     # Function to log in 
     def log_in(self):
-        username = self.Username_bar.get()
-        password = self.Password_bar.get()
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        if username in self.users and self.users[username].password == hashed_password:
-            messagebox.showinfo("B.A.T.E", "Logged in successfully!")
-            self.top.destroy()
-            self.root.destroy()
-            import updated_main_menu_GUI
-            self.log_in.BateMain().run()
-        else:
-            messagebox.showerror("B.A.T.E", "Invalid username or password")
+        user = User() # just to use the encrypt_password method
+
+        input_username = self.Username_bar.get()
+        input_password = self.Password_bar.get()
+        hashed_password = user.encrypt_password(input_password)
+
+        if input_username not in [user.username for user in self.system.users]:
+            messagebox.showerror("B.A.T.E", "Invalid username")
             self.Password_bar.delete(0, END)
             self.Username_bar.delete(0, END)
+            return
+        
+        if [user for user in self.system.users if user.username == input_username][0].password != hashed_password:
+            messagebox.showerror("B.A.T.E", "Invalid password")
+            self.Password_bar.delete(0, END)
+            self.Username_bar.delete(0, END)
+            return
+
+        messagebox.showinfo("B.A.T.E", "Logged in successfully!")
+        self.top.destroy()
+        self.root.destroy()
+        # BateInternet(system=self.system, web=self.web).run()
+        BateMain(system=self.system, web=self.web).run()
 
     # Function to open the account creation menu
     def open1(self):
@@ -256,7 +272,13 @@ class BateSignIn:
         self.root.mainloop()
 
 
+def main():
+    system = System()
+    web = Web(system)
 
-bate = BateSignIn()
-#if __name__ == "__main__":
-bate.run()
+    main_menu = BateSignIn(web=web, system=system)
+    main_menu.run()
+
+
+if __name__ == "__main__":
+    main()

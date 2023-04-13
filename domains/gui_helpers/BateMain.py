@@ -1,15 +1,28 @@
+if __name__ == "__main__":
+    import sys
+    print("\nTHIS FILE IS NOT INTENDED TO BE RUN DIRECTLY.\n")
+    sys.exit(1)
+
 from tkinter import *
 import customtkinter as ctk
 import datetime
+from domains.system import System
+from domains.web import Web
+from domains.gui_helpers.BateMarket import BateMarket
+from domains.gui_helpers.BateInfo import BateInfo
+from domains.gui_helpers.BateMoney import BateMoney
 
 class BateMain:
-    def __init__(self):
+    def __init__(self, system: System, web: Web):
         self.root1 = ctk.CTk()
         self.root1.title("B.A.T.E Internet")
         self.root1.geometry("620x390")
         self.root1.resizable(FALSE, FALSE)
         self.main_frame()
-    
+
+        self.system = system
+        self.web = web
+
     def greeting(self):
         self.currentTime = datetime.datetime.now()
         self.currentTime.hour
@@ -31,18 +44,17 @@ class BateMain:
         pass
 
     def market(self):
-        import market_GUI
         self.root1.destroy()
-        self.market.BateMarket().run()
+        market_screen = BateMarket(system=self.system, web=self.web)
+        market_screen.run()
 
     def user_info(self):
-        import check_info_GUI
         self.root1.destroy()
-        self.user_info.BateInfo().run()
+        # self.user_info.BateInfo().run()
+        BateInfo().run()
 
     # Import the Sign In GUI with the correct class name
     def sign_out(self):
-        import sign_in_GUI
         self.root1.destroy()
         self.sign_out.BateSignIn().run()
 
@@ -58,9 +70,9 @@ class BateMain:
         self.main_menu_title.pack(pady=12)
         self.greeting()
         
-        self.go_to_deposit = ctk.CTkButton(self.m_frame, text="Deposit Menu", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10)
+        self.go_to_deposit = ctk.CTkButton(self.m_frame, text="Deposit Menu", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10, command=self.deposit)
         self.go_to_deposit.pack(pady=10)
-        self.go_to_market = ctk.CTkButton(self.m_frame, text="Market Menu", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10)
+        self.go_to_market = ctk.CTkButton(self.m_frame, text="Market Menu", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10, command=self.market)
         self.go_to_market.pack(pady=10)
         self.go_to_user_info = ctk.CTkButton(self.m_frame, text="User Info", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10, command=self.user_info)
         self.go_to_user_info.pack(pady=10)
@@ -71,6 +83,3 @@ class BateMain:
 
     def run(self):
         self.root1.mainloop()
-        
-bate = BateMain()
-bate.run()

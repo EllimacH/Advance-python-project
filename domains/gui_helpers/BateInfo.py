@@ -1,5 +1,11 @@
-from tkinter import *
+if __name__ == "__main__":
+    import sys
+    print("\nTHIS FILE IS NOT INTENDED TO BE RUN DIRECTLY.\n")
+    sys.exit(1)
+
+
 import customtkinter as ctk
+from customtkinter import *
 
 class BateInfo:
     def __init__(self):
@@ -14,22 +20,22 @@ class BateInfo:
 
 
     def main_frame(self):
-        self.main_frame = ctk.CTkFrame(self.root)
-        self.main_frame.pack(fill=BOTH, expand=1)
-        self.main_frame.configure(fg_color="dark cyan")
-        self.main_frame.pack_propagate(FALSE)
+        screen = ctk.CTkFrame(self.root)
+        screen.pack(fill=BOTH, expand=1)
+        screen.configure(fg_color="dark cyan")
+        screen.pack_propagate(FALSE)
 
 
     def info_frame(self):
-        self.info_title_frame = ctk.CTkFrame(self.main_frame, height=80, width=650, fg_color="light blue")
-        self.info_title_frame.pack(side=TOP,pady=20)
-        self.info_title_frame.pack_propagate(FALSE)
-        self.title = ctk.CTkLabel(self.info_title_frame, text="---User's Information Menu---", font=("Bodoni",30,"bold"), fg_color="light blue", text_color="black")
-        self.title.pack(expand=1, pady=10)
+        info_title_frame = ctk.CTkFrame(self.main_frame, height=80, width=650, fg_color="light blue")
+        info_title_frame.pack(side=TOP,pady=20)
+        info_title_frame.pack_propagate(FALSE)
+        title = ctk.CTkLabel(info_title_frame, text="---User's Information Menu---", font=("Bodoni",30,"bold"), fg_color="light blue", text_color="black")
+        title.pack(expand=1, pady=10)
 
-        self.info_frame = ctk.CTkFrame(self.main_frame, height=390, width=650, fg_color="light blue")
-        self.info_frame.place(x=74, y=120)
-        self.info_frame.pack_propagate(FALSE)
+        info_frame = ctk.CTkFrame(self.main_frame, height=390, width=650, fg_color="light blue")
+        info_frame.place(x=74, y=120)
+        info_frame.pack_propagate(FALSE)
         self.text1 = ctk.CTkLabel(self.info_frame, text="-Please check your personal information-", font=("Bodoni",18,"bold"), fg_color="light blue", text_color="black")
         self.text1.pack(pady=10)
         self.text2 = ctk.CTkLabel(self.info_frame, text="If there is any problems, please contact an admin for help!", font=("Helvetica",18,"italic"), fg_color="light blue", text_color="black")
@@ -57,6 +63,3 @@ class BateInfo:
 
     def run(self):
         self.root.mainloop()
-
-bate = BateInfo()
-bate.run()

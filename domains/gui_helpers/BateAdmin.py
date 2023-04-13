@@ -1,18 +1,28 @@
+if __name__ == "__main__":
+    import sys
+    print("\nTHIS FILE IS NOT INTENDED TO BE RUN DIRECTLY.\n")
+    sys.exit(1)
+
 import customtkinter as ctk
-from customtkinter import *
 #from tkinter import *
 from tkinter import messagebox
 
+FALSE = ctk.FALSE
+LEFT = ctk.LEFT
+BOTTOM = ctk.BOTTOM
+NORMAL = ctk.NORMAL
+DISABLED = ctk.DISABLED
+
 class BateAdmin:
     def __init__(self):
-        #self.root = Tk()
-        self.root = ctk.CTk()
-        self.root.title("B.A.T.E Internet")
-        self.root.geometry("980x560")
-        self.root.resizable(FALSE, FALSE)
+        self.screen = ctk.CTk()
+        self.screen.title("B.A.T.E Internet")
+        self.screen.geometry("980x560")
+        self.screen.resizable(FALSE, FALSE)
         
         ctk.set_appearance_mode("system")
         ctk.set_default_color_theme("blue")
+
         # Frame for option buttons (buttons to change frames)
         self.options_frame()
         # Frame for the main screen
@@ -24,7 +34,7 @@ class BateAdmin:
     
 
     def options_frame(self):
-        self.frame1 = ctk.CTkFrame(self.root, width=185, fg_color="dark cyan")
+        self.frame1 = ctk.CTkFrame(self.screen, width=185, fg_color="dark cyan")
         self.frame1.pack(side=LEFT, fill="y")
         self.frame1.pack_propagate(FALSE)
 
@@ -42,7 +52,7 @@ class BateAdmin:
         self.change_to_change_plan.pack(padx=10, pady=50)
 
         # Creating a "Return" button
-        self.return_button = ctk.CTkButton(self.frame1, text="Return", width=80, command=self.root.quit)
+        self.return_button = ctk.CTkButton(self.frame1, text="Return", width=80, command=self.screen.quit)
         self.return_button.pack(side=BOTTOM, pady=10)
 
 
@@ -86,7 +96,7 @@ class BateAdmin:
 
     
     def create_main_frame(self):
-        self.main_frame = ctk.CTkFrame(self.root,width=795)
+        self.main_frame = ctk.CTkFrame(self.screen,width=795)
         self.main_frame.pack(side=LEFT, fill="y")
         self.main_frame.configure(fg_color="dark cyan")
         self.main_frame.pack_propagate(FALSE)
@@ -117,7 +127,4 @@ class BateAdmin:
 
     
     def run(self):
-        self.root.mainloop()
-
-bate = BateAdmin()
-bate.run()
+        self.screen.mainloop()

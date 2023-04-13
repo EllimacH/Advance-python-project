@@ -74,6 +74,63 @@ class System:
     #
     # ===================================================================
 
+    # =================================================
+    #
+    #      METHODS FOR THIS CLASS [BELOW] THIS LINE
+    #
+    # =================================================
+
+    def is_valid_domain(self, domain_name: str) -> bool:
+        """Check if domain is vaid + loop through all users and check if domain_name is available"""
+
+        # 2 conditions to check if domain_name is valid
+        is_valid = re.match(r"^(?=.{1,255}$)[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$", domain_name)
+        is_taken = False
+
+        # iterate users to check if domain_name is taken
+        for user in self.users:
+            if user.domain_name == domain_name:
+                is_taken = True
+                break
+
+        # return True if both conditions are met
+        if is_valid and not is_taken:
+            return True
+        else:
+            return False
+
+    def get_random_ip(self):
+        while True:
+            # check if the random_ip is a private IP address
+            # - generate a list of 4 random numbers between 0 and 255
+            random_ip_list = [str(random.randint(0, 255)) for _ in range(4)]
+            # - merge elements in the list into a string separated by dots
+            random_ip = ".".join(random_ip_list)
+            # - a list of private IP ranges
+            private_ip_ranges = ["10.", "172.16.", "192.168."]
+            # - a list containing True or False depending on whether the random_ip starts with any of the private IP ranges
+            private_range_match = [random_ip.startswith(private_ip_range) for private_ip_range in private_ip_ranges]
+            if any(private_range_match): # if any of the private IP ranges match,
+                continue # skip the rest of the loop and start again
+
+            # check if the random_ip is already assigned to a user
+            ip_taken = False
+            for user in self.users: # loop through all users
+                if user.domain_ip == random_ip: # if the random_ip is already assigned to a user,
+                    ip_taken = True
+                    break # break out of the for loop
+            if ip_taken:
+                continue
+
+            # if the loop ends and no other user has the random_ip, return it
+            return random_ip
+        
+    # =================================================
+    #
+    #      METHODS FOR THIS CLASS [ABOVE] THIS LINE
+    #
+    # =================================================
+
     # ============================================================
     #
     #      METHODS FOR CLI [BELOW] THIS LINE - DO NOT MODIFY
@@ -316,68 +373,14 @@ class System:
         messagebox.showinfo("Bate", "Purchase successful!")
         return
 
+    def add_user(self, username, hashed_password):
+        user = User()
+        user.username = username
+        user.password = hashed_password
+        self.users.append(user)
+
     # ===========================================
     #
     #      METHODS FOR GUI [ABOVE] THIS LINE
     #
     # ===========================================
-
-    # =================================================
-    #
-    #      METHODS FOR THIS CLASS [BELOW] THIS LINE
-    #
-    # =================================================
-
-    def is_valid_domain(self, domain_name: str) -> bool:
-        """Check if domain is vaid + loop through all users and check if domain_name is available"""
-
-        # 2 conditions to check if domain_name is valid
-        is_valid = re.match(r"^(?=.{1,255}$)[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$", domain_name)
-        is_taken = False
-
-        # iterate users to check if domain_name is taken
-        for user in self.users:
-            if user.domain_name == domain_name:
-                is_taken = True
-                break
-
-        # return True if both conditions are met
-        if is_valid and not is_taken:
-            return True
-        else:
-            return False
-
-    def get_random_ip(self):
-        while True:
-            # check if the random_ip is a private IP address
-            # - generate a list of 4 random numbers between 0 and 255
-            random_ip_list = [str(random.randint(0, 255)) for _ in range(4)]
-            # - merge elements in the list into a string separated by dots
-            random_ip = ".".join(random_ip_list)
-            # - a list of private IP ranges
-            private_ip_ranges = ["10.", "172.16.", "192.168."]
-            # - a list containing True or False depending on whether the random_ip starts with any of the private IP ranges
-            private_range_match = [random_ip.startswith(private_ip_range) for private_ip_range in private_ip_ranges]
-            if any(private_range_match): # if any of the private IP ranges match,
-                continue # skip the rest of the loop and start again
-
-            # check if the random_ip is already assigned to a user
-            ip_taken = False
-            for user in self.users: # loop through all users
-                if user.domain_ip == random_ip: # if the random_ip is already assigned to a user,
-                    ip_taken = True
-                    break # break out of the for loop
-            if ip_taken:
-                continue
-
-            # if the loop ends and no other user has the random_ip, return it
-            return random_ip
-        
-
-    # =================================================
-    #
-    #      METHODS FOR THIS CLASS [ABOVE] THIS LINE
-    #
-    # =================================================
-
-    # def create_account_gui

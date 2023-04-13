@@ -1,3 +1,9 @@
+if __name__ == "__main__":
+    import sys
+    print("\nTHIS FILE IS NOT INTENDED TO BE RUN DIRECTLY.\n")
+    sys.exit(1)
+
+
 import customtkinter as ctk
 from customtkinter import *
 from tkinter import messagebox
@@ -101,7 +107,3 @@ class BateMoney:
 
     def run(self):
         self.root.mainloop()
-
-
-bate = BateMoney()
-bate.run()
