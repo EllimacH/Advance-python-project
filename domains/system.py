@@ -3,7 +3,9 @@ import os
 import json
 import random
 from domains.user import User
-from tkinter import messagebox as mb
+import customtkinter as ctk
+from customtkinter import *
+from tkinter import messagebox
 
 class System:
     def __init__(self):
@@ -298,9 +300,9 @@ class System:
         # checks if user has a current plan
         if self.logged_in_user.mobile_plan_id != 0:
             current_plan_name = self.mobile_plans[self.logged_in_user.mobile_plan_id]['name']
-            choice = mb.askyesno("Bate", f"Your current plan is: {current_plan_name}. Do you want to change?")
+            choice = messagebox.askyesno("Bate", f"Your current plan is: {current_plan_name}. Do you want to change?")
             if not choice:
-                mb.showinfo("Bate", "Purchase cancelled.")
+                messagebox.showinfo("Bate", "Purchase cancelled.")
                 return
 
         # checks if user has sufficient balance
@@ -311,7 +313,7 @@ class System:
         # updates user's product and balance
         self.logged_in_user.mobile_plan_id = mobile_plan_id
         self.logged_in_user.balance -= int(self.mobile_plans[mobile_plan_id]['price'])
-        mb.showinfo("Bate", "Purchase successful!")
+        messagebox.showinfo("Bate", "Purchase successful!")
         return
 
     # ===========================================
@@ -370,9 +372,12 @@ class System:
 
             # if the loop ends and no other user has the random_ip, return it
             return random_ip
+        
 
     # =================================================
     #
     #      METHODS FOR THIS CLASS [ABOVE] THIS LINE
     #
     # =================================================
+
+    # def create_account_gui
