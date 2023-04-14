@@ -6,6 +6,7 @@ if __name__ == "__main__":
 from customtkinter import *
 import customtkinter as ctk
 from tkinter import messagebox
+import domains.gui_helpers.BateMain
 from domains.web import Web
 from domains.system import System
 from domains.admin import AdminGUI
@@ -52,8 +53,13 @@ class BateMarket:
         self.select_vpn_packages.pack(padx=10, pady=40)
 
         # Creating the return button
-        self.return_button = ctk.CTkButton(self.options_frame, text="Return", fg_color="dark cyan", width=80, command=self.screen.quit)
+        self.return_button = ctk.CTkButton(self.options_frame, text="Return", fg_color="dark cyan", width=80, command=self.back_to_main)
         self.return_button.pack(side=BOTTOM, pady=10)
+    
+    # Function to return to the main menu
+    def back_to_main(self):
+        self.screen.destroy()
+        domains.gui_helpers.BateMain.BateMain(system=self.system, web=self.web).run()
 
     def go_to_mobile(self):
         # Disable the "Mobile Plans" button and enable the rest of the buttons
