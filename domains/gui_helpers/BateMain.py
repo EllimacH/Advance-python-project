@@ -39,9 +39,8 @@ class BateMain:
     # Import the correct GUI with the correct class name
     def deposit(self):
         #import deposit_GUI
-        #self.root.destroy()
-        #money.BateMoney().run()
-        pass
+        self.root1.destroy()
+        BateMoney(system=self.system, web=self.web).run()
 
     def market(self):
         self.root1.destroy()
@@ -51,7 +50,7 @@ class BateMain:
     def user_info(self):
         self.root1.destroy()
         # self.user_info.BateInfo().run()
-        BateInfo().run()
+        BateInfo(system=self.system, web=self.web).run()
 
     # Import the Sign In GUI with the correct class name
     def sign_out(self):
