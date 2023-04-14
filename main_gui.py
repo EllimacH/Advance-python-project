@@ -29,7 +29,7 @@ class BateSignIn:
         if str(self.Re_Password_bar.get()) == str(self.Password_bar.get()):
             if len(str(password)) >= 8:
                 messagebox.showinfo("B.A.T.E", "Account created successfully!")
-                self.top.destroy()
+                self.back_to_home()
             # If the password is not long enough
             elif len(str(password)) < 8:
                 messagebox.showerror("B.A.T.E", "Password must be at least 8 characters long!")
@@ -146,9 +146,10 @@ class BateSignIn:
         self.create_button = ctk.CTkButton(self.top, text="Create account", font=("Bodoni",12,"bold"), command=self.create_account)
         self.create_button.pack(padx=5, pady=5)
 
-        self.exit_button = ctk.CTkButton(self.top, text="Return", command=self.top.destroy)
+        self.exit_button = ctk.CTkButton(self.top, text="Return", command=self.back_to_home)
         self.exit_button.pack(padx=5, pady=5)
         
+        self.root.iconify()
         
     
 
@@ -209,8 +210,32 @@ class BateSignIn:
         self.login_button = ctk.CTkButton(self.top, text="Login", font=("Bodoni",12,"bold"), command=self.log_in)
         self.login_button.pack(padx=5, pady=5)
 
-        self.exit_button = ctk.CTkButton(self.top, text="Return", command=self.top.destroy)
+        self.exit_button = ctk.CTkButton(self.top, text="Return", command=self.back_to_home)
         self.exit_button.pack(padx=5, pady=5)
+
+        
+        self.root.iconify()
+
+    # Function to re-open the home menu
+    def back_to_home(self):
+        self.root.deiconify()
+        self.top.destroy()
+        self.Create_Acc_Menu.configure(state=NORMAL)
+        self.Login_Menu.configure(state=NORMAL)
+
+    # Function to open the create account menu
+    def run_open1(self):
+        self.open1()
+        # Avoid create account menu and login menu to be opened multiple times
+        self.Create_Acc_Menu.configure(state=DISABLED)
+        self.Login_Menu.configure(state=DISABLED)
+
+    # Function to open the login menu
+    def run_open2(self):
+        self.open2()
+        # Avoid create account menu and login menu to be opened multiple times
+        self.Create_Acc_Menu.configure(state=DISABLED)
+        self.Login_Menu.configure(state=DISABLED)
 
 
     # Function to exit the program
@@ -261,10 +286,10 @@ class BateSignIn:
         self.SubTitle1 = ctk.CTkLabel(self.frame, text="Welcome customer! Please select your action!")
         self.SubTitle1.grid(row=1, column=0, columnspan=2)
 
-        self.Create_Acc_Menu = ctk.CTkButton(self.frame, text="Register", font=("Bodoni",12,"bold"), command=self.open1)
+        self.Create_Acc_Menu = ctk.CTkButton(self.frame, text="Register", font=("Bodoni",12,"bold"), command=self.run_open1)
         self.Create_Acc_Menu.grid(row=2, column=0, padx=5, pady=10)
 
-        self.Login_Menu =ctk.CTkButton(self.frame, text="Login", font=("Bodoni",12,"bold"), command=self.open2)
+        self.Login_Menu =ctk.CTkButton(self.frame, text="Login", font=("Bodoni",12,"bold"), command=self.run_open2)
         self.Login_Menu.grid(row=2, column=1, padx=5, pady=10)
 
         self.exit_button = ctk.CTkButton(self.root, text="Exit", height=20, width=50, command=self.exit).pack()
