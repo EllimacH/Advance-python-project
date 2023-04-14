@@ -16,7 +16,7 @@ class BateSignIn:
 
         self.system = system
         self.web = web
-    
+
     # Function to create an account
     def create_account(self):
         username = self.Username_bar.get()

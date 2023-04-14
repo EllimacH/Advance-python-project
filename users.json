@@ -17,18 +17,7 @@
         "balance": 16100000,
         "is_admin": false,
         "mobile_plan_id": 1,
-        "transaction_history": [
-            {
-                "date": "14/04/2023 20:23:52",
-                "amount": 2500000,
-                "description": "Purchase Diamond"
-            },
-            {
-                "date": "14/04/2023 20:24:06",
-                "amount": 200000,
-                "description": "Buy VPN package: High End"
-            }
-        ],
+        "transaction_history": [],
         "domain_name": "",
         "domain_ip": "",
         "current_vpn_plan_id": 3,

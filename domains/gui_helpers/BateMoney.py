@@ -28,29 +28,27 @@ class BateMoney:
         self.balance_menu()
         self.history_menu()
 
- 
+
     def deposit(self):
-        global amount
-        global balance
-        self.balance = 0
-        self.amount = self.deposit_bar.get()
-        if int(self.amount) >= 100000 and int(self.amount) <= 100000000:
-            self.rep = messagebox.askyesno("B.A.T.E", "Do you want to deposit: " + self.amount + " VND?")
-            if self.rep == 1:
-                self.balance += int(self.amount)
-                messagebox.showinfo("B.A.T.E", "Deposit Successful!")
-                self.deposit_bar.delete(0, END)
-            else:
-                self.deposit_bar.delete(0, END)
-        elif int(self.amount) < 100000:
-            messagebox.showerror("B.A.T.E", "Insufficient amount! Please try again")
+        amount_input_field = self.deposit_bar.get() # get the input box object
+        try:
+            amount = int(amount_input_field) # convert the input box object to an integer to get the amount
+        except:
+            messagebox.showerror("B.A.T.E", "Invalid input! Please try again")
             self.deposit_bar.delete(0, END)
-        elif int(self.amount) > 100000000:
-            messagebox.showerror("B.A.T.E", "Exceeded maximum amount! Please try again")
+            return
+
+        if amount < 100000 or amount > 100000000:
+            messagebox.showerror("B.A.T.E", "Invalid amount! Please try again")
             self.deposit_bar.delete(0, END)
-        else:
-            messagebox.showerror("B.A.T.E","Invalid input! Please try again")
+            return
+
+        self.rep = messagebox.askyesno("B.A.T.E", f"Do you want to deposit: {amount} VND?")
+        if self.rep == 1:
+            self.system.logged_in_user.balance += amount
+            messagebox.showinfo("B.A.T.E", "Deposit Successful!")
             self.deposit_bar.delete(0, END)
+            self.system.flush_data_to_json()
 
 
     def main_frame(self):
@@ -115,6 +113,12 @@ class BateMoney:
         self.history_title = ctk.CTkLabel(self.history_frame, text="---Transaction History---", font=("Bodoni",25,"bold"), text_color="black", fg_color="light blue")
         self.history_title.pack(pady=3)
         # NEED TO ADD FUNCTION TO SHOW HISTORY (PRINT OUT MONEY DEPOSITED AND WITHDRAWN WITH CORRECT TIME AND DATE)
+
+        transactions = self.system.logged_in_user.transaction_history
+        for i in range(len(transactions)):
+            print(transactions[i])
+            transaction = transactions[i]
+            self.history = ctk.CTkLabel(self.history_frame, text="Transaction " + str(i + 1) + ": " + str(transaction["amount"]) + " VND", font=("Helvetica",16,"bold"), text_color="black").pack(pady=5)
 
     def run(self):
         self.root.mainloop()

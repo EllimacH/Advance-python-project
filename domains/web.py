@@ -294,4 +294,11 @@ class Web:
             case _:
                 return
 
+        # add transaction to user's transaction history
+        self.system.logged_in_user.transaction_history.append({
+            "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            "amount": int(self.vpn_packages[service_id]['price']),
+            "description": f"Buy {service_type} package: {self.vpn_packages[service_id]['name']}"
+        })
+
         mb.showinfo("Bate",f"You have purchase your {service_type} plan")

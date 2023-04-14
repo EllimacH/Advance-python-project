@@ -377,7 +377,7 @@ class System:
 
         # checks if user has sufficient balance
         if self.logged_in_user.balance < int(self.mobile_plans[mobile_plan_id]['price']):
-            messagebox.showerror("Bate", "Insufficient balance.")
+            messagebox.showerror("Bate", f"Insufficient balance. Your balance: {self.logged_in_user.balance} VND")
             return
 
         # updates user's product and balance

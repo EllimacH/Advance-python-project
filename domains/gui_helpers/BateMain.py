@@ -49,8 +49,8 @@ class BateMain:
 
     def user_info(self):
         self.root1.destroy()
-        # self.user_info.BateInfo().run()
-        BateInfo(system=self.system, web=self.web).run()
+        BateInfo().run()
+        # BateInfo(system=self.system, web=self.web).run()
 
     # Import the Sign In GUI with the correct class name
     def sign_out(self):

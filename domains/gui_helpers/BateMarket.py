@@ -33,7 +33,7 @@ class BateMarket:
     def back_to_main(self):
         self.screen.destroy()
         domains.gui_helpers.BateMain.BateMain(system=self.system, web=self.web).run()
-        
+
     # Function to create the menu selections
     def create_options_frame(self):
         self.options_frame = ctk.CTkFrame(self.screen, width=200, fg_color="light blue")
@@ -60,11 +60,6 @@ class BateMarket:
         # Creating the return button
         self.return_button = ctk.CTkButton(self.options_frame, text="Return", fg_color="dark cyan", width=80, command=self.back_to_main)
         self.return_button.pack(side=BOTTOM, pady=10)
-    
-    # Function to return to the main menu
-    def back_to_main(self):
-        self.screen.destroy()
-        domains.gui_helpers.BateMain.BateMain(system=self.system, web=self.web).run()
 
     def go_to_mobile(self):
         # Disable the "Mobile Plans" button and enable the rest of the buttons
