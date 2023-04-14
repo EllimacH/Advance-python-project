@@ -10,7 +10,7 @@ from domains.web import Web
 from domains.system import System
 from domains.admin import AdminGUI
 from domains.user import User
-
+import domains.gui_helpers.BateMain
 
 class BateMarket:
     def __init__(self, web: Web, system: System):
@@ -28,6 +28,11 @@ class BateMarket:
         # Set current frame to mobile frame
         self.current_frame = self.mobile_frame
 
+
+    def back_to_main(self):
+        self.screen.destroy()
+        domains.gui_helpers.BateMain.BateMain(system=self.system, web=self.web).run()
+        
     # Function to create the menu selections
     def create_options_frame(self):
         self.options_frame = ctk.CTkFrame(self.screen, width=200, fg_color="light blue")
@@ -53,6 +58,7 @@ class BateMarket:
 
         # Creating the return button
         self.return_button = ctk.CTkButton(self.options_frame, text="Return", fg_color="dark cyan", width=80, command=self.screen.quit)
+        self.return_button = ctk.CTkButton(self.options_frame, text="Return", fg_color="dark cyan", width=80, command=self.back_to_main)
         self.return_button.pack(side=BOTTOM, pady=10)
 
     def go_to_mobile(self):

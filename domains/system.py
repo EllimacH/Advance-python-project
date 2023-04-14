@@ -6,6 +6,7 @@ from domains.user import User
 import customtkinter as ctk
 from customtkinter import *
 from tkinter import messagebox
+from datetime import datetime
 
 class System:
     def __init__(self):
@@ -58,7 +59,7 @@ class System:
 
     def flush_data_to_json(self) -> None:
         # Create a temporary list to store the serialized data
-        data: list[dict[str, str | int]] = []
+        data: list[dict[str, str | int | list[dict[str, str | int]]]] = []
 
         # Loop through all users and append the serialized data to the temporary list
         for user in self.users:
@@ -331,8 +332,20 @@ class System:
             self.logged_in_user.mobile_plan_id = input_mobile_plan_id
             self.logged_in_user.balance -= int(self.mobile_plans[input_mobile_plan_id]['price'])
             print("Purchase successful!")
+            print(f"Your balance: {self.logged_in_user.balance} VND")
+            # adds transaction to user's transaction history
+            self.logged_in_user.transaction_history.append({
+                "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                "amount": int(self.mobile_plans[input_mobile_plan_id]['price']),
+                "description": f"Purchase {self.mobile_plans[input_mobile_plan_id]['name']}"
+            })
             return
 
+
+    def transaction_history(self):
+        print("\n== Transaction history ==")
+        for transaction in self.logged_in_user.transaction_history:
+            print(f"{transaction['date']} - {transaction['amount']} VND - {transaction['description']}")
     # COSMETIC
 
     def clear_screen(self):

@@ -47,6 +47,7 @@ class Menu:
             print("[6] Web domain service menu")
             print("-"*10)
             print("[7] Log-out")
+            print("[8]: Transaction history")
             if self.system.logged_in_user.is_admin:
                 print("[*] Admin menu")
 
@@ -59,6 +60,7 @@ class Menu:
                 case "5": self.system.top_up()
                 case "6": self.web.web_domain_service_menu()
                 case "7": return self.system.log_out() # Here's the exit point of this method's loop. `log_out()` return False, assign to `is_logged_in` in `main()` function to get back to `is_not_logged_in()` menu.
+                case "8": self.system.transaction_history()
                 case "*":
                     if self.system.logged_in_user.is_admin:
                         self.admin.admin_menu()

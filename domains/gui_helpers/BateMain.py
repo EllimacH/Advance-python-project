@@ -69,7 +69,7 @@ class BateMain:
         self.main_menu_title = ctk.CTkLabel(self.main_menu_title_frame, text="---Welcome to B.A.T.E Internet---", font=("Bodoni",26,"bold"), fg_color="light blue", text_color="black")
         self.main_menu_title.pack(pady=12)
         self.greeting()
-        
+
         self.go_to_deposit = ctk.CTkButton(self.m_frame, text="Deposit Menu", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10, command=self.deposit)
         self.go_to_deposit.pack(pady=10)
         self.go_to_market = ctk.CTkButton(self.m_frame, text="Market Menu", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10, command=self.market)

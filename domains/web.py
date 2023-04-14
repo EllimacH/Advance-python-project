@@ -1,6 +1,10 @@
 from domains.system import System
 from tkinter import messagebox as mb
 from domains.user import User
+from domains.system import System
+from datetime import datetime
+
+system = System()
 
 class Web:
     """Managing web, domain and VPN services"""
@@ -55,6 +59,11 @@ class Web:
         self.system.logged_in_user.domain_name = domain_input
         self.system.logged_in_user.domain_ip = self.system.get_random_ip()
         self.system.logged_in_user.balance -= 200000
+        self.system.logged_in_user.transaction_history.append( {
+            "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            "amount": -200000,
+            "description": "Register a new domain"
+        } )
 
         print("Domain registered successfully!")
         return True
@@ -188,8 +197,18 @@ class Web:
         match type:
             case "VPN":
                 self.system.logged_in_user.current_vpn_plan_id = selected_package_id
+                self.system.logged_in_user.transaction_history.append({
+                    "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                    "amount": int(selected_package['price']),
+                    "description": f"Buy VPN package: {selected_package['name']}"
+                })
             case "VPS":
                 self.system.logged_in_user.current_vps_plan_id = selected_package_id
+                self.system.logged_in_user.transaction_history.append({
+                    "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                    "amount": int(selected_package['price']),
+                    "description": f"Buy VPS package: {selected_package['name']}"
+                })
         print(f"\nYou have purchased {package_name} package")
         return
 

@@ -10,6 +10,7 @@ class User:
 
         # In System
         self.mobile_plan_id: int = 0
+        self.transaction_history: list[dict[str, str | int]] = []
 
         # In Web
         self.domain_name: str = ""
@@ -36,7 +37,7 @@ class User:
     #
     # ===================================================================
 
-    def serialize(self) -> dict[str, str | int]:
+    def serialize(self) -> dict[str, str | int | list[dict[str, str | int]]]:
         # `: dict[str, str | int]`: a dictionary with keys are strings and values are either strings or integers
         return {
             # Basic info
@@ -47,6 +48,7 @@ class User:
 
             # In System
             "mobile_plan_id": self.mobile_plan_id,
+            "transaction_history": self.transaction_history,
 
             # In Web
             "domain_name": self.domain_name,

@@ -7,14 +7,20 @@ if __name__ == "__main__":
 import customtkinter as ctk
 from customtkinter import *
 from tkinter import messagebox
+import domains.gui_helpers.BateMain
+from domains.system import System
+from domains.web import Web
 
 class BateMoney:
-    def __init__(self):
+    def __init__(self, system: System, web: Web):
         self.root = ctk.CTk()
         self.root.title("B.A.T.E Internet")
         self.root.geometry("820x500")
         self.root.resizable(FALSE, FALSE)
         self.root._apply_appearance_mode("system")
+
+        self.system = system
+        self.web = web
 
         global balance
         self.main_frame()
@@ -59,9 +65,14 @@ class BateMoney:
         self.main_title = ctk.CTkLabel(self.main_title_frame, text="---Money Management System---", font=("Bodoni",32,"bold"), text_color="black")
         self.main_title.pack(pady=20)
 
-        self.return_button = ctk.CTkButton(self.content_frame, text="Return", width=5, command=self.root.quit, fg_color="light blue", text_color="black")
+        #self.return_button = ctk.CTkButton(self.content_frame, text="Return", width=5, command=self.root.quit, fg_color="light blue", text_color="black")
+        self.return_button = ctk.CTkButton(self.content_frame, text="Return", width=5, command=self.back_to_main, fg_color="light blue", text_color="black")
         self.return_button.pack(side=BOTTOM, pady=10)
 
+    #Function to return to main menu
+    def back_to_main(self):
+        self.root.destroy()
+        domains.gui_helpers.BateMain.BateMain(system=self.system, web=self.web).run()
 
     def deposit_menu(self):
         self.deposit_frame = ctk.CTkFrame(self.content_frame, height=160, width=350, corner_radius=10, fg_color="light blue")
