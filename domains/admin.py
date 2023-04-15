@@ -123,10 +123,10 @@ class AdminCLI(User):
         print(" ==Edit plan== ")
         add_id = input("[1] Add mobile plan\n[2] Add VPS plan\n[3] Add VPN Plan\n[4] Back to Mod Plan Menu\n[else] Return to menu\nEnter your choice: ")
         match add_id:
-            case 1: self.add_mobile_plan()
-            case 2: self.add_vps_plan()
-            case 3: self.add_vpn_plan()
-            case 4: self.modify_plan()
+            case "1": self.add_mobile_plan()
+            case "2": self.add_vps_plan()
+            case "3": self.add_vpn_plan()
+            case "4": self.modify_plan()
             case _: self.admin_menu()
 
     def add_mobile_plan(self) -> None:
@@ -229,10 +229,10 @@ class AdminCLI(User):
         print(" ==Remove plan== ")
         remove_id = input("[1] Remove mobile plan\n[2] Remove VPS plan\n[3] Remove VPN Plan\n[4] Back to Mod plan Menu\n[else] Return to menu \n Enter your choice: ")
         match remove_id:
-            case 1: self.remove_mobile_plan()
-            case 2: self.remove_vps_plan()
-            case 3: self.remove_vpn_plan()
-            case 3: self.modify_plan()
+            case "1": self.remove_mobile_plan()
+            case "2": self.remove_vps_plan()
+            case "3": self.remove_vpn_plan()
+            case "4": self.modify_plan()
             case _: self.admin_menu()
 
 
@@ -246,7 +246,11 @@ class AdminCLI(User):
                     return
                 del self.system.mobile_plans[key]
                 print("plan deleted")
-                break
+                choice = input("[1] Remove more mobile plan\n[2] Back to Mod plan Menu\n[else] Return to menu\nEnter your choice: ")
+                match choice:
+                    case "1": self.remove_mobile_plan()
+                    case "2": self.modify_plan()
+                    case _: self.admin_menu()
         else:
             print("plan not found")
             remove_id = int(input("[1] Try again\n[2] Back to Mod plan Menu\n[else] Return to menu\nEnter your choice: "))
@@ -267,10 +271,15 @@ class AdminCLI(User):
                     return
                 del self.web.vps_packages[key]
                 print("plan deleted")
-                break
+                choice = input("[1] Remove more vps plan\n[2] Back to Mod plan Menu\n[else] Return to menu\nEnter your choice: ")
+                match choice:
+                    case "1": self.remove_vps_plan()
+                    case "2": self.modify_plan()
+                    case _: self.admin_menu()
+
         else:
             print("plan not found")
-            remove_id = int(input("[1] Try again\n[2] Back to Mod plan Menu\n[else] Return to menu\nEnter your choice: "))
+            remove_id = input("[1] Try again\n[2] Back to Mod plan Menu\n[else] Return to menu\nEnter your choice: ")
             match remove_id:
                 case "1": self.remove_vps_plan()
                 case "2": self.modify_plan()
@@ -288,7 +297,11 @@ class AdminCLI(User):
                     return
                 del self.web.vpn_packages[key]
                 print("plan deleted")
-                break
+                choice = input("[1] Remove more vpn plan\n[2] Back to Mod plan Menu\n[else] Return to menu\nEnter your choice: ")
+                match choice:
+                    case "1": self.remove_vpn_plan()
+                    case "2": self.modify_plan()
+                    case _: self.admin_menu()
         else:
             print("plan not found")
             remove_id = int(input("[1] Try again\n[2] Back to Mod plan Menu\n[else] Return to menu\nEnter your choice: "))
