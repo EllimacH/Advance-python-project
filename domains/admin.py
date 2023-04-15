@@ -131,13 +131,14 @@ class AdminCLI(User):
     #add new mobile plan into the system
     def add_mobile_plan(self) -> None:
         print(" ==Add mobile plan== ")
+        #print all existing mobile plans
+        for plan_id, plan in self.system.mobile_plans.items():
+            print(f"{plan_id} : {plan['name']}, {plan['price']}, {plan['gb']}, {plan['description']}")
         plan_id = int(input("Add new plan id : "))
         plan_name = input("Add new plan name : ")
         plan_price = int(input("Add new plan price : "))
         plan_gb = int(input("Add new plan gb : "))
         plan_description = input("Add new plan description : ")
-        
-
         #Check if plan id or plan name already exists in the system
         #If existed, ask user to retry with a different plan or return to modify plan menu
         for key in self.system.mobile_plans.items():
@@ -169,6 +170,8 @@ class AdminCLI(User):
     #add new vps plan into the system (same as add mobile plan)
     def add_vps_plan(self) -> None:
         print(" ==Add VPS plan== ")
+        for plan_id, plan in self.web.vps_packages.items():
+            print(f"{plan_id} : {plan['name']}, {plan['price']}, {plan['description']}")
         plan_id = int(input("Add new plan id : "))
         plan_name = input("Add new plan name : ")
         plan_price = int(input("Add new plan price : "))
@@ -203,6 +206,8 @@ class AdminCLI(User):
     #add new vpn plan into the system (same as add mobile plan and vps plan)
     def add_vpn_plan(self) -> None:
         print(" ==Add VPN plan== ")
+        for plan_id, plan in self.web.vpn_packages.items():
+            print(f"{plan_id} : {plan['name']}, {plan['price']}, {plan['description']}")
         plan_id = int(input("Add new plan id : "))
         plan_name = input("Add new plan name : ")
         plan_price = int(input("Add new plan price : "))
@@ -305,7 +310,8 @@ class AdminCLI(User):
                 case _: self.admin_menu()
 
 
-
+    
+    #remove vpn plan from the system(same method as remove mobile plan)
     def remove_vpn_plan(self) -> None:
         print(" ==Remove VPN plan== ")
         for plan_id, plan in self.web.vpn_packages.items():
