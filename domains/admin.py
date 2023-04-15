@@ -22,31 +22,33 @@ class AdminCLI(User):
             print("[3] Delete mobile plan from a user")
             print("[4] Change balance of a user")
             print("-"*10)
-            print("[5] Remove domain from a user")
-            print("[6] Modify plans (add/remove/edit a plan)")
-            print("-"*10)
+            print("[5] Modify plans (add/remove/edit a plan)")
             print("[else] Go back")
+            print("-"*10)
+
             choice: str = input("\nEnter your choice: ")
             match choice:
                 case "1": self.check_all_users_info()
                 case "2": self.delete_user()
                 case "3": self.delete_user_mobile_plan()
                 case "4": self.change_balance()
-                case "5": self.remove_domain()
-                case "6": self.modify_plan()
+                case "5": self.modify_plan()
                 case _: return
             input("\nPress Enter to continue...")
 
 
     def check_all_users_info(self) -> None:
+        #print all users info, including username and balance
         for user in self.system.users:
             print(f"Username: {user.username}, Balance: {user.balance}")
 
 
 
+    #delete user from the system
     def delete_user(self) -> None:
         username: str = input("Enter username account that you want to delete: ")
         for user in self.system.users:
+            #find the username in the system and delete the account
             if user.username == username:
                 confirm = input(f"Are you sure you want to delete {user.username} account? (y/N): ")
                 if confirm.lower() != "y":
@@ -57,9 +59,12 @@ class AdminCLI(User):
         else:
             print("User not found")
 
+
+    #delete mobile plan from a user
     def delete_user_mobile_plan(self) -> None:
         username: str = input("Enter username that you want to delete mobile plan: ")
         for user in self.system.users:
+            #find the username in the system and delete the mobile plan
             if user.username == username:
                 user.mobile_plan_id = 0
                 print("User plan deleted")
@@ -67,6 +72,8 @@ class AdminCLI(User):
         else:
             print("User not found")
 
+
+    #change balance of a user(adding or subtracting, used for promotion or service fee)
     def change_balance(self) -> None:
         username: str = input("Enter username of the user whose balance you want to change: ")
         selected_user: User = User() # blank placeholder
@@ -95,33 +102,24 @@ class AdminCLI(User):
 
 
 
-    def remove_domain(self) -> None:
-        username: str = input("Enter username of the user whose domain you want to remove: ")
-        for del_user in self.system.users:
-            if del_user.username == username:
-                confirm = input(f"Are you sure you want to delete {del_user.username}'s domain? (y/N): ")
-                if confirm.upper() != "N":
-                    return
-                del_user.domain_name = ""
-                print("Domain deleted")
-                break
-
-
-
+    #modify plans, add new or delete existing plans
     def modify_plan(self) -> None:
         print(" ==Modify plan== ")
         mod_id = input("[1] Edit plan\n[2] Remove plan\n[else] Return to menu\nEnter your choice: ")
+        #choose to add or remove plan
         if mod_id == "1":
-            self.edit_plan()
+            self.add_plan()
         elif mod_id == "2":
             self.remove_plan()
         else:
             return
 
 
-    def edit_plan(self) -> None:
+    #add new plan into the system
+    def add_plan(self) -> None:
         print(" ==Edit plan== ")
         add_id = input("[1] Add mobile plan\n[2] Add VPS plan\n[3] Add VPN Plan\n[4] Back to Mod Plan Menu\n[else] Return to menu\nEnter your choice: ")
+        #choose to add mobile, vps or vpn plan
         match add_id:
             case "1": self.add_mobile_plan()
             case "2": self.add_vps_plan()
@@ -129,6 +127,8 @@ class AdminCLI(User):
             case "4": self.modify_plan()
             case _: self.admin_menu()
 
+
+    #add new mobile plan into the system
     def add_mobile_plan(self) -> None:
         print(" ==Add mobile plan== ")
         plan_id = int(input("Add new plan id : "))
@@ -137,6 +137,9 @@ class AdminCLI(User):
         plan_gb = int(input("Add new plan gb : "))
         plan_description = input("Add new plan description : ")
         
+
+        #Check if plan id or plan name already exists in the system
+        #If existed, ask user to retry with a different plan or return to modify plan menu
         for key in self.system.mobile_plans.items():
             if plan_id == key:
                 print("Plan id already exists")
@@ -152,16 +155,18 @@ class AdminCLI(User):
                     self.add_mobile_plan()
                 self.modify_plan()
 
-    
+        #If not existed, add the plan into the system
         self.system.mobile_plans[plan_id] = {"id": plan_id, "name": plan_name, "price": plan_price, "gb": plan_gb, "description": plan_description}
         print("Plan added")
         more_id = input("[1] Add more mobile plan\n[2] Return to Mod plan Menu\n[else] Return to menu\nEnter your choice: ")
+        #choose to add more mobile plan or return to modify plan menu or straight up return to admin menu
         match more_id:
             case "1": self.add_mobile_plan()
             case "2": self.modify_plan()
             case _: self.admin_menu()
 
 
+    #add new vps plan into the system (same as add mobile plan)
     def add_vps_plan(self) -> None:
         print(" ==Add VPS plan== ")
         plan_id = int(input("Add new plan id : "))
@@ -195,6 +200,7 @@ class AdminCLI(User):
             self.admin_menu()
 
 
+    #add new vpn plan into the system (same as add mobile plan and vps plan)
     def add_vpn_plan(self) -> None:
         print(" ==Add VPN plan== ")
         plan_id = int(input("Add new plan id : "))
@@ -225,9 +231,11 @@ class AdminCLI(User):
 
 
 
+    #remove plan from the system
     def remove_plan(self) -> None:
         print(" ==Remove plan== ")
         remove_id = input("[1] Remove mobile plan\n[2] Remove VPS plan\n[3] Remove VPN Plan\n[4] Back to Mod plan Menu\n[else] Return to menu \n Enter your choice: ")
+        #choose to remove mobile plan, vps plan, vpn plan or return to modify plan menu or return straight to admin menu
         match remove_id:
             case "1": self.remove_mobile_plan()
             case "2": self.remove_vps_plan()
@@ -236,10 +244,17 @@ class AdminCLI(User):
             case _: self.admin_menu()
 
 
+    #remove mobile plan from the system
     def remove_mobile_plan(self) -> None:
         print(" ==Remove mobile plan== ")
+        #print all available mobile plans in the system
+        for plan_id, plan in self.system.mobile_plans.items():
+            print(f"{plan_id} : {plan['name']}, {plan['price']}, {plan['gb']}, {plan['description']}")
+
+        #type in the plan id to remove
         mb_plan_id = int(input("Enter plan id : "))
         for key, plan in self.system.mobile_plans.items():
+            #if plan id is found, ask for confirmation to delete the plan
             if key == mb_plan_id:
                 confirm = input(f"Are you sure you want to delete {plan['name']} plan? (y/N): ")
                 if confirm.lower() != "y":
@@ -252,6 +267,7 @@ class AdminCLI(User):
                     case "2": self.modify_plan()
                     case _: self.admin_menu()
         else:
+            #if plan id is not found, ask for retry or return to modify plan menu or return to admin menu
             print("plan not found")
             remove_id = int(input("[1] Try again\n[2] Back to Mod plan Menu\n[else] Return to menu\nEnter your choice: "))
             match remove_id:
@@ -261,8 +277,11 @@ class AdminCLI(User):
 
 
 
+    #remove vps plan from the system(same method as remove mobile plan)
     def remove_vps_plan(self) -> None:
         print(" ==Remove VPS plan== ")
+        for plan_id, plan in self.web.vps_packages.items():
+            print(f"{plan_id} : {plan['name']}, {plan['price']}, {plan['description']}")
         vps_plan_id = int(input("Enter plan id : "))
         for key, plan in self.web.vps_packages.items():
             if key == vps_plan_id:
@@ -289,9 +308,11 @@ class AdminCLI(User):
 
     def remove_vpn_plan(self) -> None:
         print(" ==Remove VPN plan== ")
-        plan_id = int(input("Enter plan id : "))
+        for plan_id, plan in self.web.vpn_packages.items():
+            print(f"{plan_id} : {plan['name']}, {plan['price']}, {plan['description']}")
+        rev_id = int(input("Enter plan id : "))
         for key, plan in self.web.vpn_packages.items():
-            if key == plan_id:
+            if key == rev_id:
                 confirm = input(f"Are you sure you want to delete {plan['name']} plan? (y/N): ")
                 if confirm.lower() != "y":
                     return
