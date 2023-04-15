@@ -10,7 +10,9 @@ from tkinter import messagebox
 import domains.gui_helpers.BateMain
 from domains.system import System
 from domains.web import Web
+from datetime import datetime
 
+system = System()
 class BateMoney:
     def __init__(self, system: System, web: Web):
         self.root = ctk.CTk()
@@ -46,6 +48,12 @@ class BateMoney:
         self.rep = messagebox.askyesno("B.A.T.E", f"Do you want to deposit: {amount} VND?")
         if self.rep == 1:
             self.system.logged_in_user.balance += amount
+            #save transaction to user's transaction history
+            self.system.logged_in_user.transaction_history.append({
+                "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                "amount": amount,
+                "description": "deposit"
+            })
             messagebox.showinfo("B.A.T.E", "Deposit Successful!")
             self.deposit_bar.delete(0, END)
             self.system.flush_data_to_json()

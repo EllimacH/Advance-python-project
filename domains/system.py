@@ -236,8 +236,16 @@ class System:
             return
 
         self.logged_in_user.balance += int(amount)  # add amount to balance
+        #save to transaction history
+        self.logged_in_user.transaction_history.append({
+            "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            "amount": int(amount),
+            "description": "Deposit"
+        })
         print("Recharge successful!")
         print(f"Your balance: {self.logged_in_user.balance} VND")
+        #flush date to json file
+        self.flush_data_to_json()
 
     # MOBILE PLAN MANAGEMENT
 
@@ -336,7 +344,7 @@ class System:
             # adds transaction to user's transaction history
             self.logged_in_user.transaction_history.append({
                 "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                "amount": int(self.mobile_plans[input_mobile_plan_id]['price']),
+                "amount": -int(self.mobile_plans[input_mobile_plan_id]['price']),
                 "description": f"Purchase {self.mobile_plans[input_mobile_plan_id]['name']}"
             })
             return

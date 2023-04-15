@@ -163,7 +163,7 @@ class Web:
 
         # get selected package for convenience variable calling
         selected_package = packages[int(selected_package_id)]
-        package_price = int(selected_package['price'])
+        package_price = -int(selected_package['price'])
         package_name = selected_package['name']
 
         # check user balance
