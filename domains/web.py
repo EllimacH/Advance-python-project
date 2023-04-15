@@ -18,11 +18,11 @@ class Web:
             5: {"name": "VIP+", "price": 2000000, "description": "- CPU: Intel® Xeon® Six CoreProcessor E5-2620 2.0 GHz\n- Ram: 16GB\n- HDD: 800GB\n- Bandwidth: 100Mbps/10Mbps"}
         }
         self.vpn_packages: dict[int, dict[str, str | int]] = {
-            1: {"name": "Basic", "price": 100000, "description": "Basic VPN service"},
-            2: {"name": "Advanced", "price": 150000, "description": "Advanced VPN service"},
-            3: {"name": "High End", "price": 200000, "description": "High End VPN service"},
-            4: {"name": "VIP", "price": 300000, "description": "VIP VPN service"},
-            5: {"name": "VIP+", "price": 500000, "description": "VIP+ VPN service"}
+            1: {"name": "Basic", "price": 150000, "description": "Basic VPN service, 1 device"},
+            2: {"name": "Advanced", "price": 200000, "description": "Advanced VPN service, 3 devices"},
+            3: {"name": "High End", "price": 250000, "description": "High End VPN service, 5 devices"},
+            4: {"name": "VIP", "price": 350000, "description": "VIP VPN service, 10 devices"},
+            5: {"name": "VIP+", "price": 550000, "description": "VIP+ VPN service, 20 devices"}
         }
         self.system: System = system
 
