@@ -1,5 +1,6 @@
 import hashlib
 
+
 class User:
     def __init__(self):
         # Basic info
@@ -18,10 +19,11 @@ class User:
         self.current_vpn_plan_id: int = 0
         self.current_vps_plan_id: int = 0
 
-
     def encrypt_password(self, password: str) -> str:
         """Only use when creating a new user"""
-        return str(hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), b'salt', 100000))
+        return str(
+            hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), b"salt", 100000)
+        )
 
     def is_valid_password(self, password: str) -> bool:
         """Only use when logging in"""
@@ -45,11 +47,9 @@ class User:
             "password": self.password,
             "balance": self.balance,
             "is_admin": self.is_admin,
-
             # In System
             "mobile_plan_id": self.mobile_plan_id,
             "transaction_history": self.transaction_history,
-
             # In Web
             "domain_name": self.domain_name,
             "domain_ip": self.domain_ip,

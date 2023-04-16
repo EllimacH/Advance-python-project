@@ -1,5 +1,6 @@
 if __name__ == "__main__":
     import sys
+
     print("\nTHIS FILE IS NOT INTENDED TO BE RUN DIRECTLY.\n")
     sys.exit(1)
 
@@ -11,6 +12,7 @@ from domains.web import Web
 from domains.gui_helpers.BateMarket import BateMarket
 from domains.gui_helpers.BateInfo import BateInfo
 from domains.gui_helpers.BateMoney import BateMoney
+
 
 class BateMain:
     def __init__(self, system: System, web: Web):
@@ -27,18 +29,36 @@ class BateMain:
         self.currentTime = datetime.datetime.now()
         self.currentTime.hour
         if self.currentTime.hour < 12:
-            self.morn_text = ctk.CTkLabel(self.main_menu_title_frame, text="-Good morning! What would you like to do today?-", font=("Helvetica",16,"italic"), fg_color="light blue", text_color="black")
+            self.morn_text = ctk.CTkLabel(
+                self.main_menu_title_frame,
+                text="-Good morning! What would you like to do today?-",
+                font=("Helvetica", 16, "italic"),
+                fg_color="light blue",
+                text_color="black",
+            )
             self.morn_text.pack(pady=5)
         elif self.currentTime.hour >= 12 and self.currentTime.hour < 18:
-            self.aft_text = ctk.CTkLabel(self.main_menu_title_frame, text="-Good afternoon! What would you like to do today?-", font=("Helvetica",16,"italic"), fg_color="light blue", text_color="black")
+            self.aft_text = ctk.CTkLabel(
+                self.main_menu_title_frame,
+                text="-Good afternoon! What would you like to do today?-",
+                font=("Helvetica", 16, "italic"),
+                fg_color="light blue",
+                text_color="black",
+            )
             self.aft_text.pack(pady=5)
         else:
-            self.eve_text = ctk.CTkLabel(self.main_menu_title_frame, text="-Good evening! What would you like to do tonight?-", font=("Helvetica",16,"italic"), fg_color="light blue", text_color="black")
+            self.eve_text = ctk.CTkLabel(
+                self.main_menu_title_frame,
+                text="-Good evening! What would you like to do tonight?-",
+                font=("Helvetica", 16, "italic"),
+                fg_color="light blue",
+                text_color="black",
+            )
             self.eve_text.pack(pady=5)
 
     # Import the correct GUI with the correct class name
     def deposit(self):
-        #import deposit_GUI
+        # import deposit_GUI
         self.root1.destroy()
         BateMoney(system=self.system, web=self.web).run()
 
@@ -49,7 +69,7 @@ class BateMain:
 
     def user_info(self):
         self.root1.destroy()
-        #BateInfo().run()
+        # BateInfo().run()
         BateInfo(system=self.system, web=self.web).run()
 
     # Import the Sign In GUI with the correct class name
@@ -62,23 +82,68 @@ class BateMain:
         self.m_frame.pack(fill=BOTH, expand=TRUE)
         self.m_frame.pack_propagate(FALSE)
 
-        self.main_menu_title_frame = ctk.CTkFrame(self.m_frame, height=100, width=440, fg_color="light blue", corner_radius=10)
+        self.main_menu_title_frame = ctk.CTkFrame(
+            self.m_frame, height=100, width=440, fg_color="light blue", corner_radius=10
+        )
         self.main_menu_title_frame.pack(pady=6)
         self.main_menu_title_frame.pack_propagate(FALSE)
-        self.main_menu_title = ctk.CTkLabel(self.main_menu_title_frame, text="---Welcome to B.A.T.E Internet---", font=("Bodoni",26,"bold"), fg_color="light blue", text_color="black")
+        self.main_menu_title = ctk.CTkLabel(
+            self.main_menu_title_frame,
+            text="---Welcome to B.A.T.E Internet---",
+            font=("Bodoni", 26, "bold"),
+            fg_color="light blue",
+            text_color="black",
+        )
         self.main_menu_title.pack(pady=12)
         self.greeting()
 
-        self.go_to_deposit = ctk.CTkButton(self.m_frame, text="Deposit Menu", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10, command=self.deposit)
+        self.go_to_deposit = ctk.CTkButton(
+            self.m_frame,
+            text="Deposit Menu",
+            font=("Bodoni", 16, "bold"),
+            width=150,
+            height=54,
+            fg_color="light blue",
+            text_color="black",
+            corner_radius=10,
+            command=self.deposit,
+        )
         self.go_to_deposit.pack(pady=10)
-        self.go_to_market = ctk.CTkButton(self.m_frame, text="Market Menu", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10, command=self.market)
+        self.go_to_market = ctk.CTkButton(
+            self.m_frame,
+            text="Market Menu",
+            font=("Bodoni", 16, "bold"),
+            width=150,
+            height=54,
+            fg_color="light blue",
+            text_color="black",
+            corner_radius=10,
+            command=self.market,
+        )
         self.go_to_market.pack(pady=10)
-        self.go_to_user_info = ctk.CTkButton(self.m_frame, text="User Info", font=("Bodoni",16,"bold"),width=150, height=54, fg_color="light blue", text_color="black", corner_radius=10, command=self.user_info)
+        self.go_to_user_info = ctk.CTkButton(
+            self.m_frame,
+            text="User Info",
+            font=("Bodoni", 16, "bold"),
+            width=150,
+            height=54,
+            fg_color="light blue",
+            text_color="black",
+            corner_radius=10,
+            command=self.user_info,
+        )
         self.go_to_user_info.pack(pady=10)
 
-        self.return_button = ctk.CTkButton(self.m_frame, text="Return", width=10, fg_color="light blue", text_color="black", corner_radius=10, command=self.sign_out)
+        self.return_button = ctk.CTkButton(
+            self.m_frame,
+            text="Return",
+            width=10,
+            fg_color="light blue",
+            text_color="black",
+            corner_radius=10,
+            command=self.sign_out,
+        )
         self.return_button.pack(side=BOTTOM, pady=6)
-
 
     def run(self):
         self.root1.mainloop()

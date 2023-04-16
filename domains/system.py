@@ -3,26 +3,46 @@ import os
 import json
 import random
 from domains.user import User
-import customtkinter as ctk
-from customtkinter import *
-from tkinter import messagebox
 from datetime import datetime
+
 
 class System:
     def __init__(self):
         self.users: list[User] = []
 
         self.mobile_plans = {
-            1: {"name": "Diamond", "price": 2500000, "gb": 500, "description": "Diamond package: 2500000 VND with 500GB for 1 month, suitable for small and medium companies. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price."},
-            2: {"name": "Gold", "price": 500000, "gb": 100, "description": "Gold package: 500000 VND with 100GB for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price."},
-            3: {"name": "Silver", "price": 250000, "gb": 50, "description": "Silver package: 250000 VND with 50GB for 1 month, suitable people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price."},
-            4: {"name": "Bronze", "price": 150000, "gb": 30, "description": "Bronze package: 150000 VND with 30GB for 1 month, suitable for students or pupils. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price."},
+            1: {
+                "name": "Diamond",
+                "price": 2500000,
+                "gb": 500,
+                "description": "Diamond package: 2500000 VND with 500GB for 1 month, suitable for small and medium companies. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.",
+            },
+            2: {
+                "name": "Gold",
+                "price": 500000,
+                "gb": 100,
+                "description": "Gold package: 500000 VND with 100GB for 1 month, suitable for people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.",
+            },
+            3: {
+                "name": "Silver",
+                "price": 250000,
+                "gb": 50,
+                "description": "Silver package: 250000 VND with 50GB for 1 month, suitable people who go to work need to use the internet. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.",
+            },
+            4: {
+                "name": "Bronze",
+                "price": 150000,
+                "gb": 30,
+                "description": "Bronze package: 150000 VND with 30GB for 1 month, suitable for students or pupils. When you buy 6 months or more, you will get 1 month promotion at the same price. When you buy 1 year or more, you will get 2 months promotion at the same price.",
+            },
         }
 
         if os.path.exists("users.json"):
             self.load_data_from_json("users.json")
 
-        self.logged_in_user = User() # This is a blank user object, to be assigned to the logged in user object
+        self.logged_in_user = (
+            User()
+        )  # This is a blank user object, to be assigned to the logged in user object
 
     # ===================================================================
     #
@@ -51,7 +71,7 @@ class System:
                     user_obj.current_vpn_plan_id = user["current_vpn_plan_id"]
                     user_obj.current_vps_plan_id = user["current_vps_plan_id"]
 
-                except: # if the data is not complete, skip it
+                except:  # if the data is not complete, skip it
                     pass
 
                 # append to the list in System
@@ -85,7 +105,10 @@ class System:
         """Check if domain is vaid + loop through all users and check if domain_name is available"""
 
         # 2 conditions to check if domain_name is valid
-        is_valid = re.match(r"^(?=.{1,255}$)[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$", domain_name)
+        is_valid = re.match(
+            r"^(?=.{1,255}$)[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$",
+            domain_name,
+        )
         is_taken = False
 
         # iterate users to check if domain_name is taken
@@ -110,22 +133,27 @@ class System:
             # - a list of private IP ranges
             private_ip_ranges = ["10.", "172.16.", "192.168."]
             # - a list containing True or False depending on whether the random_ip starts with any of the private IP ranges
-            private_range_match = [random_ip.startswith(private_ip_range) for private_ip_range in private_ip_ranges]
-            if any(private_range_match): # if any of the private IP ranges match,
-                continue # skip the rest of the loop and start again
+            private_range_match = [
+                random_ip.startswith(private_ip_range)
+                for private_ip_range in private_ip_ranges
+            ]
+            if any(private_range_match):  # if any of the private IP ranges match,
+                continue  # skip the rest of the loop and start again
 
             # check if the random_ip is already assigned to a user
             ip_taken = False
-            for user in self.users: # loop through all users
-                if user.domain_ip == random_ip: # if the random_ip is already assigned to a user,
+            for user in self.users:  # loop through all users
+                if (
+                    user.domain_ip == random_ip
+                ):  # if the random_ip is already assigned to a user,
                     ip_taken = True
-                    break # break out of the for loop
+                    break  # break out of the for loop
             if ip_taken:
                 continue
 
             # if the loop ends and no other user has the random_ip, return it
             return random_ip
-        
+
     # =================================================
     #
     #      METHODS FOR THIS CLASS [ABOVE] THIS LINE
@@ -159,7 +187,9 @@ class System:
             if password == "":
                 return
             if len(password) < 8:
-                password = input("Password must be 8 or more characters! Please try again: ")
+                password = input(
+                    "Password must be 8 or more characters! Please try again: "
+                )
             else:
                 password_confirm = input("Confirm your password: ")
                 if password == password_confirm:
@@ -184,9 +214,13 @@ class System:
         while True:
             # sign_in attempts handler
             if attempts >= 3:
-                print("You have exceeded the number of attempts. Please try again later.")
+                print(
+                    "You have exceeded the number of attempts. Please try again later."
+                )
                 return False
-            input_username = input("\nEnter your username (leave blank to return to main menu): ")
+            input_username = input(
+                "\nEnter your username (leave blank to return to main menu): "
+            )
 
             # if user accidentally hit login, they can return to main menu by not entering username
             if input_username == "":
@@ -203,7 +237,9 @@ class System:
                 continue
 
             # password handler
-            input_password = input("Enter your password (leave blank to return to main menu): ")
+            input_password = input(
+                "Enter your password (leave blank to return to main menu): "
+            )
             if input_password == "":
                 return False
             for user in self.users:
@@ -211,7 +247,7 @@ class System:
                 valid_password = user.is_valid_password(input_password)
                 if valid_username and valid_password:
                     print("Login successful!")
-                    self.logged_in_user = user # so we don't have to loop through all users to find the logged in user every time we need to access their data
+                    self.logged_in_user = user  # so we don't have to loop through all users to find the logged in user every time we need to access their data
                     return True
 
             attempts += 1
@@ -236,15 +272,17 @@ class System:
             return
 
         self.logged_in_user.balance += int(amount)  # add amount to balance
-        #save to transaction history
-        self.logged_in_user.transaction_history.append({
-            "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-            "amount": int(amount),
-            "description": "Deposit"
-        })
+        # save to transaction history
+        self.logged_in_user.transaction_history.append(
+            {
+                "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                "amount": int(amount),
+                "description": "Deposit",
+            }
+        )
         print("Recharge successful!")
         print(f"Your balance: {self.logged_in_user.balance} VND")
-        #flush date to json file
+        # flush date to json file
         self.flush_data_to_json()
 
     # MOBILE PLAN MANAGEMENT
@@ -267,7 +305,9 @@ class System:
         while True:
             print("\n== Mobile plans ==")
             for plan_id, plan in self.mobile_plans.items():
-                print(f"[{plan_id}] {plan['name']} - {plan['price']} VND - {plan['gb']} GB")
+                print(
+                    f"[{plan_id}] {plan['name']} - {plan['price']} VND - {plan['gb']} GB"
+                )
             choice = input("Select the plan you want to check more information: ")
             if not choice.isdigit():
                 print("Invalid input!")
@@ -287,8 +327,10 @@ class System:
             print("[else] Return to main menu")
             choice = input("Enter your choice: ")
             match choice:
-                case "1": continue
-                case _: break
+                case "1":
+                    continue
+                case _:
+                    break
 
     # DOMAIN MANAGEMENT
 
@@ -303,7 +345,7 @@ class System:
             # get user input for mobile plan id
 
             # checks if input is a number, converts to int
-            if not input_mobile_plan_id.isdigit(): # type: ignore (this comment is just for ignoring the error)
+            if not input_mobile_plan_id.isdigit():  # type: ignore (this comment is just for ignoring the error)
                 print("Invalid input. Please try again.")
                 continue
             input_mobile_plan_id = int(input_mobile_plan_id)
@@ -320,8 +362,12 @@ class System:
 
             # checks if user has a current plan
             if self.logged_in_user.mobile_plan_id != 0:
-                current_plan_name = self.mobile_plans[self.logged_in_user.mobile_plan_id]['name']
-                choice = input(f"Your current plan is: {current_plan_name}. Do you want to change? (Y/n)")
+                current_plan_name = self.mobile_plans[
+                    self.logged_in_user.mobile_plan_id
+                ]["name"]
+                choice = input(
+                    f"Your current plan is: {current_plan_name}. Do you want to change? (Y/n)"
+                )
                 if choice == "n":
                     print("Purchase cancelled.")
                     return
@@ -332,32 +378,33 @@ class System:
                 continue
 
             # checks if user has sufficient balance
-            if self.logged_in_user.balance < int(self.mobile_plans[input_mobile_plan_id]['price']):
+            if self.logged_in_user.balance < int(
+                self.mobile_plans[input_mobile_plan_id]["price"]
+            ):
                 print("Insufficient balance.")
                 return
 
             # updates user's product and balance
             self.logged_in_user.mobile_plan_id = input_mobile_plan_id
-            self.logged_in_user.balance -= int(self.mobile_plans[input_mobile_plan_id]['price'])
+            self.logged_in_user.balance -= int(
+                self.mobile_plans[input_mobile_plan_id]["price"]
+            )
             print("Purchase successful!")
             print(f"Your balance: {self.logged_in_user.balance} VND")
             # adds transaction to user's transaction history
-            self.logged_in_user.transaction_history.append({
-                "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                "amount": -int(self.mobile_plans[input_mobile_plan_id]['price']),
-                "description": f"Purchase {self.mobile_plans[input_mobile_plan_id]['name']}"
-            })
+            self.logged_in_user.transaction_history.append(
+                {
+                    "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                    "amount": -int(self.mobile_plans[input_mobile_plan_id]["price"]),
+                    "description": f"Purchase {self.mobile_plans[input_mobile_plan_id]['name']}",
+                }
+            )
             return
 
-
-    def transaction_history(self):
-        print("\n== Transaction history ==")
-        for transaction in self.logged_in_user.transaction_history:
-            print(f"{transaction['date']} - {transaction['amount']} VND - {transaction['description']}")
     # COSMETIC
 
     def clear_screen(self):
-        if os.name == "nt": # If the host OS is Windows
+        if os.name == "nt":  # If the host OS is Windows
             os.system("cls")
         else:
             os.system("clear")
@@ -368,40 +415,8 @@ class System:
     #
     # ============================================================
 
-    # ==========================================
-    #
-    #      METHODS FOR GUI [BELOW] THIS LINE
-    #
-    # ==========================================
-
-    def purchase_mobile_plan(self, mobile_plan_id):
-        # checks if user has a current plan
-        if self.logged_in_user.mobile_plan_id != 0:
-            current_plan_name = self.mobile_plans[self.logged_in_user.mobile_plan_id]['name']
-            choice = messagebox.askyesno("Bate", f"Your current plan is: {current_plan_name}. Do you want to change?")
-            if not choice:
-                messagebox.showinfo("Bate", "Purchase cancelled.")
-                return
-
-        # checks if user has sufficient balance
-        if self.logged_in_user.balance < int(self.mobile_plans[mobile_plan_id]['price']):
-            messagebox.showerror("Bate", f"Insufficient balance. Your balance: {self.logged_in_user.balance} VND")
-            return
-
-        # updates user's product and balance
-        self.logged_in_user.mobile_plan_id = mobile_plan_id
-        self.logged_in_user.balance -= int(self.mobile_plans[mobile_plan_id]['price'])
-        messagebox.showinfo("Bate", "Purchase successful!")
-        return
-
     def add_user(self, username, hashed_password):
         user = User()
         user.username = username
         user.password = hashed_password
         self.users.append(user)
-
-    # ===========================================
-    #
-    #      METHODS FOR GUI [ABOVE] THIS LINE
-    #
-    # ===========================================

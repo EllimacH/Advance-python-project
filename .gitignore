@@ -1,1 +1,6 @@
 __pycache__
+.ruff.toml
+Lint.ps1
+Pipfile
+.ruff_cache
+Pipfile.lock
