@@ -74,8 +74,8 @@ class BateMoney:
                 "amount": amount,
                 "description": "deposit",
             }
-            self.system.logged_in_user.transaction_history.append(transaction)
             self.update_transaction_history(transaction)
+            self.system.logged_in_user.transaction_history.append(transaction)
             self.deposit_bar.delete(0, END)
             self.system.flush_data_to_json()
 
@@ -132,7 +132,7 @@ class BateMoney:
 
         self.main_title = ctk.CTkLabel(
             self.main_title_frame,
-            text="---Money Management System---",
+            text="Money Management System",
             font=("Bodoni", 32, "bold"),
             text_color="black",
         )
@@ -161,7 +161,7 @@ class BateMoney:
 
         self.deposit_frame_title = ctk.CTkLabel(
             self.deposit_frame,
-            text="---Deposit Menu---",
+            text="Deposit Menu",
             font=("Bodoni", 25, "bold"),
             text_color="black",
             fg_color="light blue",
@@ -227,7 +227,7 @@ class BateMoney:
 
         self.balance_frame_title = ctk.CTkLabel(
             self.balance_frame,
-            text="---Current Balance---",
+            text="Current Balance",
             font=("Bodoni", 25, "bold"),
             text_color="black",
             fg_color="light blue",
@@ -263,7 +263,7 @@ class BateMoney:
 
         self.history_title = ctk.CTkLabel(
             self.history_frame,
-            text="---Transaction History---",
+            text="Transaction History",
             font=("Bodoni", 25, "bold"),
             text_color="black",
             fg_color="light blue",
@@ -274,13 +274,6 @@ class BateMoney:
         )
         self.transaction_history_frame.pack(pady=3)
         self.transaction_history_frame.pack_propagate(FALSE)
-
-        # NEED TO ADD FUNCTION TO SHOW HISTORY (PRINT OUT MONEY DEPOSITED AND WITHDRAWN WITH CORRECT TIME AND DATE)
-        # transactions = self.system.logged_in_user.transaction_history
-        # for i in range(len(transactions)):
-        #     print(transactions[i])
-        #     transaction = transactions[i]
-        #     self.history = ctk.CTkLabel(self.history_frame, text="Transaction " + str(i + 1) + ": " + str(transaction["amount"]) + " VND", font=("Helvetica",16,"bold"), text_color="black").pack(pady=5)
 
     def run(self):
         self.root.mainloop()

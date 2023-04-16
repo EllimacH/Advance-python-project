@@ -59,7 +59,7 @@ class BateInfo:
         self.info_title_frame.pack_propagate(FALSE)
         self.title = ctk.CTkLabel(
             self.info_title_frame,
-            text="---User's Information Menu---",
+            text="User's Information Menu",
             font=("Bodoni", 30, "bold"),
             fg_color="light blue",
             text_color="black",
@@ -116,14 +116,30 @@ class BateInfo:
             text_color="black",
         )
         self.current_plans.pack(pady=10)
-        self.registered_domain = ctk.CTkLabel(
+        self.current_VPN_package = ctk.CTkLabel(
             self.user_info_frame,
-            text="Registered domain: ",
+            text=f"Current VPN package: {self.web.vpn_packages[self.system.logged_in_user.current_vpn_plan_id]['name']}",
             font=("Helvetica", 20, "bold"),
             fg_color="light blue",
             text_color="black",
         )
-        self.registered_domain.pack(pady=10)
+        self.current_VPN_package.pack(pady=10)
+        self.current_VPS_package = ctk.CTkLabel(
+            self.user_info_frame,
+            text=f"Current VPS package: {self.web.vps_packages[self.system.logged_in_user.current_vps_plan_id]['name']}",
+            font=("Helvetica", 20, "bold"),
+            fg_color="light blue",
+            text_color="black",
+        )
+        self.current_VPS_package.pack(pady=10)
+        self.current_domain = ctk.CTkLabel(
+            self.user_info_frame,
+            text=f"Current domain: {self.system.logged_in_user.domain_name}",
+            font=("Helvetica", 20, "bold"),
+            fg_color="light blue",
+            text_color="black",
+        )
+        self.current_domain.pack(pady=10)
         self.custom_ip = ctk.CTkLabel(
             self.user_info_frame,
             text=f"Current IP: {self.system.logged_in_user.domain_ip}",

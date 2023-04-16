@@ -57,7 +57,6 @@ class BateSignIn:
     # Function to log in
     def log_in(self):
         user = User()  # just to use the encrypt_password method
-
         input_username = self.Username_bar.get()
         input_password = self.Password_bar.get()
         hashed_password = user.encrypt_password(input_password)
@@ -87,40 +86,6 @@ class BateSignIn:
 
     # Function to open the account creation menu
     def open1(self):
-        #     self.top = Toplevel()
-        #     self.top.geometry("340x230")
-        #     self.top.title("B.A.T.E Internet")
-        #     self.top.resizable(0,0)
-        #     self.frame = LabelFrame(self.top, padx=10, pady=10)
-        #     self.frame.pack(padx=10, pady=3)
-
-        #     self.Title = Label(self.frame, text="---ACCOUNT CREATION MENU---", font=("Bodoni",13,"bold"))
-        #     self.Title.grid(row=0, column=0, columnspan=3)
-
-        #     self.objective = Label(self.frame, text="Please enter information to create an account!")
-        #     self.objective.grid(row=1, column=0, columnspan=3)
-
-        #     self.Username = Label(self.frame, text="Username", font="Bodoni")
-        #     self.Username.grid(row=2, column=0)
-        #     self.Username_bar = Entry(self.frame, width=24, borderwidth=3)
-        #     self.Username_bar.grid(row=2, column=1, columnspan=2, padx=3, pady=3)
-
-        #     self.Password = Label(self.frame, text="Password", font="Bodoni")
-        #     self.Password.grid(row=3, column=0)
-        #     self.Password_bar = Entry(self.frame, width=24, borderwidth=3, show="*")
-        #     self.Password_bar.grid(row=3, column=1, columnspan=2, padx=3, pady=3)
-
-        #     self.Re_Password = Label(self.frame, text="Confirm Password", font="Bodoni")
-        #     self.Re_Password.grid(row=4, column=0)
-        #     self.Re_Password_bar = Entry(self.frame, width=24, borderwidth=3, show="*")
-        #     self.Re_Password_bar.grid(row=4, column=1, columnspan=2, padx=3, pady=3)
-
-        #     self.create_button = Button(self.top, text="Create account", font=("Bodoni",12,"bold"), command=self.create_account)
-        #     self.create_button.pack()
-
-        #     self.exit_button = Button(self.top, text="Return", command=self.top.destroy)
-        #     self.exit_button.pack()
-
         self.top = ctk.CTkToplevel()
         self.top.geometry("400x300")
         self.top.title("B.A.T.E Internet")
@@ -171,35 +136,6 @@ class BateSignIn:
 
     # Function to open the login menu
     def open2(self):
-        #     self.top = Toplevel()
-        #     self.top.geometry("340x200")
-        #     self.top.title("B.A.T.E Internet")
-        #     self.top.resizable(0,0)
-        #     self.frame = LabelFrame(self.top, padx=10, pady=10)
-        #     self.frame.pack(padx=10, pady=3)
-
-        #     self.Title = Label(self.frame, text="---ACCOUNT LOGIN MENU---", font=("Bodoni",13,"bold"))
-        #     self.Title.grid(row=0, column=0, columnspan=3)
-
-        #     self.objective = Label(self.frame, text="Please enter information to login!")
-        #     self.objective.grid(row=1, column=0, columnspan=3)
-
-        #     self.Username = Label(self.frame, text="Username", font="Bodoni")
-        #     self.Username.grid(row=2, column=0)
-        #     self.Username_bar = Entry(self.frame, width=24, borderwidth=3)
-        #     self.Username_bar.grid(row=2, column=1, columnspan=2, padx=3, pady=3)
-
-        #     self.Password = Label(self.frame, text="Password", font="Bodoni")
-        #     self.Password.grid(row=3, column=0)
-        #     self.Password_bar = Entry(self.frame, width=24, borderwidth=3, show="*")
-        #     self.Password_bar.grid(row=3, column=1, columnspan=2, padx=3, pady=3)
-
-        #     self.login_button = Button(self.top, text="Login", font=("Bodoni",12,"bold"), command=self.log_in)
-        #     self.login_button.pack()
-
-        #     self.exit_button = Button(self.top, text="Return", command=self.top.destroy)
-        #     self.exit_button.pack()
-
         self.top = ctk.CTkToplevel()
         self.top.geometry("400x300")
         self.top.title("B.A.T.E Internet")
@@ -268,31 +204,6 @@ class BateSignIn:
 
     # Main function
     def run(self):
-        # self.root = Tk()
-        # self.root.title("B.A.T.E Internet")
-        # self.root.geometry("300x166")
-        # self.root.config(bg="light cyan")
-        # self.root.resizable(0,0)
-
-        # self.frame = LabelFrame(self.root, padx=10, pady=10)
-        # self.frame.pack(padx=10, pady=10)
-
-        # self.Title1 = Label(self.frame, text="---WELCOME TO B.A.T.E---", font=("Bodoni",14,"bold"))
-        # self.Title1.grid(row=0, column=0, columnspan=3)
-
-        # self.SubTitle1 = Label(self.frame, text="Welcome customer! Please select your action!")
-        # self.SubTitle1.grid(row=1, column=0, columnspan=2)
-
-        # self.Create_Acc_Menu = Button(self.frame, text="Register", font=("Bodoni",12,"bold"), pady=5, command=self.open1)
-        # self.Create_Acc_Menu.grid(row=2, column=0)
-
-        # self.Login_Menu = Button(self.frame, text="Login", font=("Bodoni",12,"bold"), pady=5, command=self.open2)
-        # self.Login_Menu.grid(row=2, column=1)
-
-        # self.exit_button = Button(self.root, text="Exit", command=self.exit).pack()
-
-        # self.root.mainloop()
-
         self.root = ctk.CTk()
         self.root.title("B.A.T.E Internet")
         self.root.geometry("400x300")
