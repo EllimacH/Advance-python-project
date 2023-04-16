@@ -30,6 +30,8 @@ class BateMoney:
         self.balance_menu()
         self.history_menu()
 
+        # Display existing transaction history
+        self.display_transaction_history()
 
     def deposit(self):
         amount_input_field = self.deposit_bar.get() # get the input box object
@@ -48,16 +50,43 @@ class BateMoney:
         self.rep = messagebox.askyesno("B.A.T.E", f"Do you want to deposit: {amount} VND?")
         if self.rep == 1:
             self.system.logged_in_user.balance += amount
+            self.show_current_balance = ctk.CTkLabel(self.balance_frame, text="Current balance: " + str(self.system.logged_in_user.balance) + " VND", font=("Helvetica",19,"bold"), text_color="black").place(x=20,y=120)
+
             #save transaction to user's transaction history
-            self.system.logged_in_user.transaction_history.append({
+            # self.system.logged_in_user.transaction_history.append({
+            #     "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            #     "amount": amount,
+            #     "description": "deposit"
+            # })
+            # messagebox.showinfo("B.A.T.E", "Deposit Successful!")
+            # transaction = self.system.logged_in_user.transaction_history
+            transaction = {
                 "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
                 "amount": amount,
                 "description": "deposit"
-            })
-            messagebox.showinfo("B.A.T.E", "Deposit Successful!")
+            }
+            self.system.logged_in_user.transaction_history.append(transaction)
+            self.update_transaction_history(transaction)
+            # for i in range(len(transactions)):
+            #     print(transactions[i])
+            #     transaction = transactions[i]
+            #     self.history = ctk.CTkLabel(self.transaction_history_frame, text="Transaction " + str(i + 1) + ": " + str(transaction["amount"]) + " VND", font=("Helvetica",16,"bold"), text_color="black").grid(row=i, column=0, pady=5)
             self.deposit_bar.delete(0, END)
             self.system.flush_data_to_json()
+    
+    # Function to display transaction history
+    def display_transaction_history(self):
+        transactions = self.system.logged_in_user.transaction_history
+        for i, transaction in enumerate(transactions):
+            self.history = ctk.CTkLabel(self.transaction_history_frame, text="Transaction " + str(i + 1) + ": " + str(transaction["amount"]) + " VND", font=("Helvetica",16,"bold"), text_color="black").grid(row=i, column=0, pady=5)
 
+    # Function to update transaction history
+    def update_transaction_history(self, transaction):
+        if isinstance(transaction, dict) and "amount" in transaction:
+            num_transactions = len(self.system.logged_in_user.transaction_history)
+            self.history = ctk.CTkLabel(self.transaction_history_frame, text="Transaction " + str(num_transactions) + ": " + str(transaction["amount"]) + " VND", font=("Helvetica",16,"bold"), text_color="black").grid(row=num_transactions - 1, column=0, pady=5)
+        else:
+            print("Error updating transaction history: invalid transaction")
 
     def main_frame(self):
         self.main_title_frame = ctk.CTkFrame(self.root, height=80, fg_color="light blue")
@@ -108,9 +137,9 @@ class BateMoney:
         self.balance_frame_title.pack()
         self.balance_frame_text = ctk.CTkLabel(self.balance_frame, text="Please check your account's balance\nIf there's any problem, report to an admin!", font=("Helvetica",16,"italic"), text_color="black").pack()
 
-        self.show_current_user = ctk.CTkLabel(self.balance_frame, text="Current user:", font=("Helvetica",19,"bold"), text_color="black").place(x=20,y=80)
+        self.show_current_user = ctk.CTkLabel(self.balance_frame, text="Current user:" + self.system.logged_in_user.username, font=("Helvetica",19,"bold"), text_color="black").place(x=20,y=80)
 
-        self.show_current_balance = ctk.CTkLabel(self.balance_frame, text="Current balance: " + " VND", font=("Helvetica",19,"bold"), text_color="black").place(x=20,y=120)
+        self.show_current_balance = ctk.CTkLabel(self.balance_frame, text="Current balance: " + str(self.system.logged_in_user.balance) + " VND", font=("Helvetica",19,"bold"), text_color="black").place(x=20,y=120)
 
 
     def history_menu(self):
@@ -120,13 +149,17 @@ class BateMoney:
 
         self.history_title = ctk.CTkLabel(self.history_frame, text="---Transaction History---", font=("Bodoni",25,"bold"), text_color="black", fg_color="light blue")
         self.history_title.pack(pady=3)
+        self.transaction_history_frame = ctk.CTkScrollableFrame(self.history_frame, height=230, width=400, fg_color="light blue")
+        self.transaction_history_frame.pack(pady=3)
+        self.transaction_history_frame.pack_propagate(FALSE)
+
         # NEED TO ADD FUNCTION TO SHOW HISTORY (PRINT OUT MONEY DEPOSITED AND WITHDRAWN WITH CORRECT TIME AND DATE)
-
-        transactions = self.system.logged_in_user.transaction_history
-        for i in range(len(transactions)):
-            print(transactions[i])
-            transaction = transactions[i]
-            self.history = ctk.CTkLabel(self.history_frame, text="Transaction " + str(i + 1) + ": " + str(transaction["amount"]) + " VND", font=("Helvetica",16,"bold"), text_color="black").pack(pady=5)
-
+        # transactions = self.system.logged_in_user.transaction_history
+        # for i in range(len(transactions)):
+        #     print(transactions[i])
+        #     transaction = transactions[i]
+        #     self.history = ctk.CTkLabel(self.history_frame, text="Transaction " + str(i + 1) + ": " + str(transaction["amount"]) + " VND", font=("Helvetica",16,"bold"), text_color="black").pack(pady=5)
+        
+        
     def run(self):
         self.root.mainloop()
