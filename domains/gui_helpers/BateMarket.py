@@ -252,7 +252,7 @@ class BateMarket:
                 width=10,
                 state="normal",
                 fg_color="dark cyan",
-                command=lambda vps_id=vps_id: self.buy_a_service("vps", vps_id)
+                command=lambda vps_id=vps_id: self.buy_a_service("vps", vps_id),
             ).place(x=50, y=90)
 
     # Create the frame for the VPN Packages page

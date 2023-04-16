@@ -1,8 +1,8 @@
-if __name__ == "__main__":
-    import sys
+# if __name__ == "__main__":
+#     import sys
 
-    print("\nTHIS FILE IS NOT INTENDED TO BE RUN DIRECTLY.\n")
-    sys.exit(1)
+#     print("\nTHIS FILE IS NOT INTENDED TO BE RUN DIRECTLY.\n")
+#     sys.exit(1)
 
 import customtkinter as ctk
 
