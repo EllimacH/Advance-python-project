@@ -56,7 +56,17 @@ class BateMarket:
             command=self.go_to_mobile,
             state=ctk.DISABLED,
         )
-        self.select_mobile_plans.pack(padx=10, pady=40)
+        self.select_mobile_plans.pack(padx=10, pady=20)
+        self.register_domain = ctk.CTkButton(
+            self.options_frame,
+            text="Register Domain",
+            font=("Bodoni", 16, "bold"),
+            fg_color="dark cyan",
+            width=280,
+            height=50,
+            command=self.go_to_domain,
+        )
+        self.register_domain.pack(padx=10, pady=20)
         self.select_vps_packages = ctk.CTkButton(
             self.options_frame,
             text="VPS Packages",
@@ -66,7 +76,7 @@ class BateMarket:
             height=50,
             command=self.go_to_vps,
         )
-        self.select_vps_packages.pack(padx=10, pady=40)
+        self.select_vps_packages.pack(padx=10, pady=20)
         self.select_vpn_packages = ctk.CTkButton(
             self.options_frame,
             text="VPN Packages",
@@ -76,7 +86,7 @@ class BateMarket:
             height=50,
             command=self.go_to_vpn,
         )
-        self.select_vpn_packages.pack(padx=10, pady=40)
+        self.select_vpn_packages.pack(padx=10, pady=20)
 
         # Creating the return button
         self.return_button = ctk.CTkButton(
@@ -93,6 +103,7 @@ class BateMarket:
         self.select_mobile_plans.configure(state=ctk.DISABLED)
         self.select_vps_packages.configure(state=ctk.NORMAL)
         self.select_vpn_packages.configure(state=ctk.NORMAL)
+        self.register_domain.configure(state=ctk.NORMAL)
         # Erasing the current frame
         self.current_frame.pack_forget()
         # Adding the Mobile Plans page
@@ -100,12 +111,25 @@ class BateMarket:
         # Assigning current frame with mobile frame
         self.current_frame = self.mobile_frame
 
+    def go_to_domain(self):
+        # Disable the "Register Domain" button and enable the rest of the buttons
+        self.register_domain.configure(state=ctk.DISABLED)
+        self.select_mobile_plans.configure(state=ctk.NORMAL)
+        self.select_vps_packages.configure(state=ctk.NORMAL)
+        self.select_vpn_packages.configure(state=ctk.NORMAL)
+        # Erasing the current frame
+        self.current_frame.pack_forget()
+        # Adding the Register Domain page
+        self.create_domain_frame()
+        # Assigning current frame with domain frame
+        self.current_frame = self.domain_frame
+
     def go_to_vps(self):
         # Disable the "VPS Packages" button and enable the rest of the buttons
         self.select_vps_packages.configure(state=ctk.DISABLED)
         self.select_mobile_plans.configure(state=ctk.NORMAL)
         self.select_vpn_packages.configure(state=ctk.NORMAL)
-
+        self.register_domain.configure(state=ctk.NORMAL)
         # Erasing the current frame
         self.current_frame.pack_forget()
         # Adding the VPS Packages page
@@ -118,6 +142,7 @@ class BateMarket:
         self.select_vpn_packages.configure(state=ctk.DISABLED)
         self.select_mobile_plans.configure(state=ctk.NORMAL)
         self.select_vps_packages.configure(state=ctk.NORMAL)
+        self.register_domain.configure(state=ctk.NORMAL)
         # Erasing the current frame
         self.current_frame.pack_forget()
         # Creating a new frame for the VPN Packages page
@@ -194,6 +219,44 @@ class BateMarket:
                 fg_color="dark cyan",
                 command=lambda id=id: self.purchase_mobile_plan(id),
             ).pack(pady=10)
+
+    def create_domain_frame(self):
+        self.domain_frame = ctk.CTkFrame(
+            self.buy_product_frame, fg_color="dark cyan", width=740
+        )
+        self.domain_frame.pack(side=ctk.LEFT, fill="y")
+        self.domain_frame.pack_propagate(ctk.FALSE)
+        self.domain_title = ctk.CTkLabel(
+            self.domain_frame,
+            text="---Register Domain---",
+            font=("Bodoni", 24, "bold"),
+            text_color="black",
+        ).pack(pady=12)
+        self.frame = ctk.CTkFrame(
+            self.domain_frame, width=740, height=132, fg_color="light blue"
+        )
+        self.frame.pack_propagate(ctk.FALSE)
+        self.frame.pack(pady=10) 
+        # Creating the items of Register Domain
+        self.domain_bar = ctk.CTkEntry(
+            self.frame, 
+            placeholder_text=".com, .org, ... EX: bate.com", 
+            font=("Bodoni", 16, "bold"), 
+            width=320, 
+            border_color="dark cyan",
+            fg_color="light cyan",
+        )
+        self.domain_bar.pack(pady=20)
+        self.domain_button = ctk.CTkButton(
+            self.frame,
+            text="Register",
+            font=("Bodoni", 14, "bold"),
+            width=15,
+            state="normal",
+            fg_color="dark cyan",
+            command=self.buy_a_domain,
+        )
+        self.domain_button.pack(pady=10)
 
     # Create the frame for the VPS Packages page
     def create_vps_frame(self):
@@ -332,6 +395,38 @@ class BateMarket:
         )
         return
 
+    def buy_a_domain(self):
+        """Register a new domain and IP address, return True if success, False otherwise"""
+        # Check balance
+        if self.system.logged_in_user.balance < 200000:
+            messagebox.showerror("B.A.T.E","You must have at least 200.000 VND to buy a domain")
+            return
+        
+        # Register a new domain
+        domain_input = self.domain_bar.get()
+        if self.system.is_valid_domain(domain_input):
+            messagebox.showinfo(
+            "B.A.T.E","Domain is invalid or already taken. Please try again."
+            )
+        else:
+            self.domain_bar.delete(0, "end")
+
+        # Assign domain and IP to user and deduct balance
+        self.system.logged_in_user.domain_name = domain_input
+        self.system.logged_in_user.domain_ip = self.system.get_random_ip()
+        self.system.logged_in_user.balance -= 200000
+        self.system.logged_in_user.transaction_history.append(
+            {
+                "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                "amount": -200000,
+                "description": "Register a new domain",
+            }
+        )
+
+        messagebox.showinfo("B.A.T.E", "Domain registered successfully!")
+        return 
+
+    # Logic for purchasing a service
     def buy_a_service(self, service_type: str, service_id: int) -> None:
         service_type = service_type.upper()
 

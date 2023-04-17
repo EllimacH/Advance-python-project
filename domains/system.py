@@ -70,6 +70,7 @@ class System:
                     user_obj.domain_ip = user["domain_ip"]
                     user_obj.current_vpn_plan_id = user["current_vpn_plan_id"]
                     user_obj.current_vps_plan_id = user["current_vps_plan_id"]
+                    user_obj.transaction_history = user["transaction_history"]
 
                 except:  # if the data is not complete, skip it
                     pass
@@ -400,6 +401,15 @@ class System:
                 }
             )
             return
+    
+    # TRANSACTION HISTORY
+
+    def transaction_history(self):
+        print("\n== Transaction history ==")
+        for transaction in self.logged_in_user.transaction_history:
+            print(
+                f"{transaction['date']} - {transaction['amount']} VND - {transaction['description']}"
+            )
 
     # COSMETIC
 

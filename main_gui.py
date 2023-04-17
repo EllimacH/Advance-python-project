@@ -88,10 +88,11 @@ class BateSignIn:
     def open1(self):
         self.top = ctk.CTkToplevel()
         self.top.geometry("400x300")
+        self.top.configure(fg_color="dark cyan")
         self.top.title("B.A.T.E Internet")
         self.top.resizable(FALSE, FALSE)
         self.frame = ctk.CTkFrame(self.top)
-        self.frame.configure(fg_color="dark cyan")
+        self.frame.configure(fg_color="light blue")
         self.frame.pack(padx=10, pady=30)
 
         self.Title = ctk.CTkLabel(
@@ -138,9 +139,11 @@ class BateSignIn:
     def open2(self):
         self.top = ctk.CTkToplevel()
         self.top.geometry("400x300")
+        self.top.configure(fg_color="dark cyan")
         self.top.title("B.A.T.E Internet")
         self.top.resizable(FALSE, FALSE)
         self.frame = ctk.CTkFrame(self.top)
+        self.frame.configure(fg_color="light blue")
         self.frame.pack(padx=10, pady=40)
 
         self.Title = ctk.CTkLabel(
@@ -206,10 +209,12 @@ class BateSignIn:
     def run(self):
         self.root = ctk.CTk()
         self.root.title("B.A.T.E Internet")
+        self.root.configure(fg_color="dark cyan")
         self.root.geometry("400x300")
         self.root.resizable(FALSE, FALSE)
 
         self.frame = ctk.CTkFrame(self.root)
+        self.frame.configure(fg_color="light blue")
         self.frame.pack(padx=5, pady=80)
 
         self.Title1 = ctk.CTkLabel(
