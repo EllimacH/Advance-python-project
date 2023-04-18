@@ -73,7 +73,7 @@ class BateMoney:
             transaction = {
                 "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
                 "amount": amount,
-                "description": "deposit",
+                "description": "Deposit",
             }
             self.update_transaction_history(transaction)
             self.system.logged_in_user.transaction_history.append(transaction)
@@ -94,7 +94,7 @@ class BateMoney:
             self.history.grid(row=0, column=0, pady=5)
             return
         for i, transaction in enumerate(transactions):
-            if transaction["description"] == "deposit":
+            if transaction["description"] == "Deposit":
                 transaction_amount = "+ {} VND".format(abs(int(transaction["amount"])))
             else:
                 transaction_amount = "- {} VND".format(transaction["amount"])
@@ -111,7 +111,7 @@ class BateMoney:
     def update_transaction_history(self, transaction):
         if isinstance(transaction, dict) and "amount" in transaction:
             num_transactions = len(self.system.logged_in_user.transaction_history)
-            if transaction["description"] == "deposit":
+            if transaction["description"] == "Deposit":
                 transaction_amount = "+ {} VND".format(abs(transaction["amount"]))
             else:
                 transaction_amount = "- {} VND".format(transaction["amount"])
