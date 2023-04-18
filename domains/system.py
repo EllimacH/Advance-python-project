@@ -11,6 +11,10 @@ class System:
         self.users: list[User] = []
 
         self.mobile_plans = {
+            0: {"name": "N/A", 
+                "price": 0, 
+                "gb": 0, 
+                "description": "Free package: 0 VND with 0GB for 1 month, suitable for people who go to work need to use the internet."},
             1: {
                 "name": "Diamond",
                 "price": 2500000,
@@ -306,6 +310,8 @@ class System:
         while True:
             print("\n== Mobile plans ==")
             for plan_id, plan in self.mobile_plans.items():
+                if plan_id ==0:
+                    continue
                 print(
                     f"[{plan_id}] {plan['name']} - {plan['price']} VND - {plan['gb']} GB"
                 )
@@ -339,6 +345,8 @@ class System:
         # list all mobile plans
         print("\n== Mobile plans ==")
         for plan_id, plan in self.mobile_plans.items():
+            if plan_id ==0:
+                    continue
             print(f"[{plan_id}] {plan['name']} - {plan['price']} VND - {plan['gb']} GB")
 
         input_mobile_plan_id = input("Enter product ID to purchase (0 to cancel): ")
