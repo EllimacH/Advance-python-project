@@ -476,6 +476,10 @@ class BateMarket:
                 return
 
         # deduct user balance and assign new service plan to user
+        #check if user has enough balance to purchase this service plan
+        if self.system.logged_in_user.balance < int(self.web.vpn_packages[service_id]["price"]):
+            messagebox.showinfo("Bate","You don't have enough balance to purchase this product")
+            return
         self.system.logged_in_user.balance -= int(
             self.web.vpn_packages[service_id]["price"]
         )
