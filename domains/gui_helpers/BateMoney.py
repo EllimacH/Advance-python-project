@@ -73,85 +73,70 @@ class BateMoney:
             transaction = {
                 "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
                 "amount": amount,
-                "description": "deposit",
+                "description": "Deposit",
             }
             self.update_transaction_history(transaction)
             self.system.logged_in_user.transaction_history.append(transaction)
             self.deposit_bar.delete(0, END)
             self.system.flush_data_to_json()
 
+    
     # Function to display transaction history
     def display_transaction_history(self):
         transactions = self.system.logged_in_user.transaction_history
-        # check if the list is empty
         if not transactions:  
-         self.history = ctk.CTkLabel(
-             self.transaction_history_frame,
-             text="No transactions available",
-             font=("Helvetica", 16, "bold"),
-             text_color="black",
-         )
-         self.history.grid(row=0, column=0, pady=5)
-         return
-        for i, transaction in enumerate(transactions):
-            if transaction["description"] == "deposit":
-                transaction_amount = "+ {} VND".format(abs(int(transaction["amount"])))
-            else:
-                transaction_amount = "- {} VND".format(transaction["amount"])
             self.history = ctk.CTkLabel(
                 self.transaction_history_frame,
-                text="Transaction "
-                + str(i + 1)
-                + ": "
-                + transaction_amount,
+                text="No transactions available",
                 font=("Helvetica", 16, "bold"),
                 text_color="black",
             )
+            self.history.grid(row=0, column=0, pady=5)
+            return
+        for i, transaction in enumerate(transactions):
+            if transaction["description"] == "Deposit":
+                transaction_amount = "+ {} VND".format(abs(int(transaction["amount"])))
+            else:
+                transaction_amount = "- {} VND".format(transaction["amount"])
+            self.history = ctk.CTkLabel(self.transaction_history_frame, 
+                                        text="Transaction " 
+                                        + str(i + 1) 
+                                        + ": " 
+                                        + transaction_amount,
+                                        font=("Helvetica",16,"bold"), 
+                                        text_color="black")
             self.history.grid(row=i, column=0, pady=5)
+
+    # Function to update transaction history
+    def update_transaction_history(self, transaction):
+        if isinstance(transaction, dict) and "amount" in transaction:
+            num_transactions = len(self.system.logged_in_user.transaction_history)
+            if transaction["description"] == "Deposit":
+                transaction_amount = "+ {} VND".format(abs(transaction["amount"]))
+            else:
+                transaction_amount = "- {} VND".format(transaction["amount"])
+            if num_transactions == 0:
+                self.history = ctk.CTkLabel(self.transaction_history_frame, 
+                                            text="No transactions available", 
+                                            font=("Helvetica",16,"bold"), 
+                                            text_color="black")
+                self.history.grid(row=0, column=0, pady=5)
+            else:
+                self.history = ctk.CTkLabel(self.transaction_history_frame, 
+                                            text="Transaction " 
+                                            + str(num_transactions +1) 
+                                            + ": " 
+                                            + transaction_amount,
+                                            font=("Helvetica",16,"bold"), 
+                                            text_color="black")
+                self.history.grid(row=num_transactions, column=0, pady=5)
+        else:
+            print("Error updating transaction history: invalid transaction")
 
     # Destroy the current window and return to the main window
     def back_to_main(self):
         self.root.destroy()
         domains.gui_helpers.BateMain.BateMain(system=self.system, web=self.web).run()
-
-    def update_transaction_history(self, transaction):
-        """Update transaction history into logged in user's account"""
-        if isinstance(transaction, dict) and "amount" in transaction:
-            num_transactions = len(self.system.logged_in_user.transaction_history)
-            self.system.logged_in_user.transaction_history.append(transaction) 
-            if transaction["description"] == "deposit":
-                transaction_amount = "+ {} VND".format(abs(transaction["amount"]))
-            else:
-                transaction_amount = "- {} VND".format(transaction["amount"])
-            if num_transactions == 0:
-                self.history = ctk.CTkLabel(
-                    self.transaction_history_frame,
-                    text="Transaction "
-                    + str(num_transactions)
-                    + ": "
-                    + transaction_amount
-                    + " Date: "
-                    + datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                    font=("Helvetica", 16, "bold"),
-                    text_color="black",
-                )
-                self.history.grid(row=0, column=0, pady=5)
-            else: # if the transaction history is not empty
-                self.history = ctk.CTkLabel(
-                    self.transaction_history_frame,
-                    text="Transaction "
-                    + str(num_transactions)
-                    + ": "
-                    + transaction_amount
-                    + " Date: "
-                    + datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                    font=("Helvetica", 16, "bold"),
-                    text_color="black",
-                )
-                self.history.grid(row=num_transactions - 1, column=0, pady=5)
-        else:
-            print("Error updating transaction history: invalid transaction")
-
 
     def main_frame(self):
         self.main_title_frame = ctk.CTkFrame(

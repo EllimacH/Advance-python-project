@@ -389,10 +389,19 @@ class BateMarket:
         # updates user's product and balance
         logged_in_user.mobile_plan_id = new_plan_id
         logged_in_user.balance -= int(mobile_plans[new_plan_id]["price"])
+        # add transaction to user's transaction history
+        logged_in_user.transaction_history.append(
+                {
+                    "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                    "amount": int(int(mobile_plans[new_plan_id]["price"])),
+                    "description": f"Purchase {mobile_plans[new_plan_id]['name']}",
+                }
+            )
         messagebox.showinfo(
             "Bate",
             f"Moble plan {mobile_plans[new_plan_id]['name']} purchased successfully.",
         )
+        self.system.flush_data_to_json()
         return
 
     def buy_a_domain(self):
@@ -418,12 +427,13 @@ class BateMarket:
         self.system.logged_in_user.transaction_history.append(
             {
                 "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                "amount": -200000,
+                "amount": 200000,
                 "description": "Register a new domain",
             }
         )
 
         messagebox.showinfo("B.A.T.E", "Domain registered successfully!")
+        self.system.flush_data_to_json()
         return 
 
     # Logic for purchasing a service
@@ -485,7 +495,7 @@ class BateMarket:
         )
 
         messagebox.showinfo("Bate", f"You have purchase your {service_type} plan")
-
+        self.system.flush_data_to_json()
     # Function to run the program
     def run(self):
         self.screen.mainloop()
