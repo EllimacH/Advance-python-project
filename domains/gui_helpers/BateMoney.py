@@ -102,7 +102,9 @@ class BateMoney:
                                         text="Transaction " 
                                         + str(i + 1) 
                                         + ": " 
-                                        + transaction_amount,
+                                        + transaction_amount
+                                        + " Date: "
+                                        + datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
                                         font=("Helvetica",16,"bold"), 
                                         text_color="black")
             self.history.grid(row=i, column=0, pady=5)
@@ -126,7 +128,9 @@ class BateMoney:
                                             text="Transaction " 
                                             + str(num_transactions +1) 
                                             + ": " 
-                                            + transaction_amount,
+                                            + transaction_amount
+                                            + " Date: "
+                                            + datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
                                             font=("Helvetica",16,"bold"), 
                                             text_color="black")
                 self.history.grid(row=num_transactions, column=0, pady=5)

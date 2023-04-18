@@ -413,27 +413,25 @@ class BateMarket:
         
         # Register a new domain
         domain_input = self.domain_bar.get()
-        if self.system.is_valid_domain(domain_input):
+        if not self.system.is_valid_domain(domain_input):
             messagebox.showinfo(
             "B.A.T.E","Domain is invalid or already taken. Please try again."
             )
         else:
+            # domain is valid, so assign domain and IP to user and deduct balance
+            self.system.logged_in_user.domain_name = domain_input
+            self.system.logged_in_user.domain_ip = self.system.get_random_ip()
+            self.system.logged_in_user.balance -= 200000
+            self.system.logged_in_user.transaction_history.append(
+                {
+                    "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                    "amount": 200000,
+                    "description": "Register a new domain",
+                }
+            )
             self.domain_bar.delete(0, "end")
-
-        # Assign domain and IP to user and deduct balance
-        self.system.logged_in_user.domain_name = domain_input
-        self.system.logged_in_user.domain_ip = self.system.get_random_ip()
-        self.system.logged_in_user.balance -= 200000
-        self.system.logged_in_user.transaction_history.append(
-            {
-                "date": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                "amount": 200000,
-                "description": "Register a new domain",
-            }
-        )
-
-        messagebox.showinfo("B.A.T.E", "Domain registered successfully!")
-        self.system.flush_data_to_json()
+            messagebox.showinfo("B.A.T.E", "Domain registered successfully!")
+            self.system.flush_data_to_json()
         return 
 
     # Logic for purchasing a service
