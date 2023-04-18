@@ -9,6 +9,9 @@ class Web:
 
     def __init__(self, system: System):
         self.vps_packages = {
+            0: {"name": "None", 
+                "price": 0, 
+                "description": "No VPS package"},
             1: {
                 "name": "Basic",
                 "price": 500000,
@@ -36,6 +39,10 @@ class Web:
             },
         }
         self.vpn_packages: dict[int, dict[str, str | int]] = {
+            0: {"name": "None", 
+                "price": 0, 
+                "description": 
+                "No VPN package"},
             1: {
                 "name": "Basic",
                 "price": 150000,
@@ -123,6 +130,8 @@ class Web:
         while True:
             print(f"\n== {type} Service Packages Information Center ==")
             for id, package in service_info.items():
+                if id ==0:
+                    continue
                 print(f"[{id}] {package['name']}")
             print("[else] Back to main menu")
 
@@ -194,6 +203,8 @@ class Web:
         # print every available service package
         print(f"\n== {type} Service Packages ==")
         for id, package in packages.items():
+            if id ==0:
+                    continue
             print(f"[{id}] {package['name']} ({package['price']} VND)")
         print("[else] Back to main menu")
 

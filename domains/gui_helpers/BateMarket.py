@@ -277,6 +277,8 @@ class BateMarket:
 
         # Creating the items of VPS Packages
         for vps_id, vps_packge in self.web.vps_packages.items():
+            if vps_id == 0:
+                continue
             self.vps_item = ctk.CTkFrame(
                 self.vps_frame, width=180, height=132, fg_color="light blue"
             )
@@ -336,6 +338,8 @@ class BateMarket:
         positions = [[0, 0], [30, 65], [290, 65], [30, 215], [290, 215], [158, 365]]
 
         for vpn_id, vpn_packge in self.web.vpn_packages.items():
+            if vpn_id == 0:
+                continue
             self.vpn_item = ctk.CTkFrame(
                 self.vpn_frame, width=180, height=132, fg_color="light blue"
             )
@@ -465,7 +469,7 @@ class BateMarket:
         if current_package_id != 0:
             choice = messagebox.askyesno(
                 "Bate",
-                f"You current {service_type} plan is {self.web.vpn_packages[current_package_id]['name']}. Do you want to upgrade?",
+                f"You current {service_type} plan is {self.web.vpn_packages[current_package_id]['name']}. Do you want to change?",
             )
             if not choice:
                 messagebox.showinfo("Bate", "Purchase cancelled")
